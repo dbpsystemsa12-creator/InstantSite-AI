@@ -60,6 +60,7 @@
         body { font-family: 'Inter', sans-serif; background-color: #030303; color: #f8fafc; overflow-x: hidden; }
         h1, h2, h3, h4, h5 { font-family: 'Outfit', sans-serif; letter-spacing: -0.02em; }
         
+        /* Premium Background Grid - Uniform edge-to-edge */
         .bg-grid-pattern {
             background-image: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
                               linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
@@ -599,11 +600,12 @@
                 return () => { unsubscribeUsers(); unsubscribeRequests(); };
             }, []);
 
-            // Live Edit Event Listener (Saves silently to ref without reloading iframe)
+            // Live Edit Event Listener (Saves to ref AND state on blur for clean UX)
             useEffect(() => {
                 const handleIframeMessage = (event) => {
                     if (event.data && event.data.type === 'LIVE_EDIT_UPDATE') {
                         siteCodeRef.current = event.data.html; 
+                        setSiteCode(event.data.html); // Sync state so switching to mobile view keeps edits
                     }
                 };
                 window.addEventListener('message', handleIframeMessage);
@@ -704,13 +706,19 @@
             };
 
             const downloadHTML = () => {
-                // EXPORT FIX: Pull from Ref to ensure user edits are saved
-                const blob = new Blob([siteCodeRef.current], { type: 'text/html' });
+                // EXPORT FIX: Force regex cleanup on download
+                let finalExportCode = siteCodeRef.current;
+                
+                finalExportCode = finalExportCode.replace(/<script id="dbp-live-editor">[\s\S]*?<\/script>/gi, '');
+                finalExportCode = finalExportCode.replace(/ contenteditable="true"/gi, '');
+                finalExportCode = finalExportCode.replace(/ style="outline: none;"/gi, '');
+
+                const blob = new Blob([finalExportCode], { type: 'text/html' });
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(blob);
                 a.download = `${form.name.replace(/\s+/g, '_').toLowerCase()}_site.html`;
                 a.click();
-                showToast("Code exported successfully!");
+                showToast("Clean code exported successfully!");
             };
 
             const handlePaymentInit = () => {
@@ -1091,6 +1099,7 @@
                             </div>
                         )}
 
+                        {/* PREVIEW SCREEN */}
                         {view === 'preview' && (
                             <div className="flex-1 flex flex-col h-[calc(100vh-80px)] animate-fade-up">
                                 <div className="glass-panel border-b border-white/5 p-4 px-6 flex flex-wrap gap-4 items-center justify-between z-10 flex-shrink-0">
@@ -1126,6 +1135,7 @@
                             </div>
                         )}
 
+                        {/* PRICING SCREEN */}
                         {view === 'pricing' && (
                             <div className="flex-1 py-16 px-6 animate-fade-up overflow-y-auto">
                                 <div className="text-center max-w-3xl mx-auto mb-16">
@@ -1135,6 +1145,7 @@
                                 </div>
 
                                 <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8 items-start">
+                                    {/* Free Tier */}
                                     <div className="glass-panel rounded-[2rem] p-10 border border-white/10 hover:border-white/20 transition duration-300">
                                         <h3 className="font-display font-bold text-2xl mb-2 text-white">Starter Code</h3>
                                         <p className="text-slate-400 text-sm mb-8">Own your code completely.</p>
@@ -1147,6 +1158,7 @@
                                         <button onClick={downloadHTML} className="w-full py-4 rounded-xl font-bold text-sm bg-white/5 text-white hover:bg-white/10 border border-white/10 transition flex justify-center items-center gap-2"><i className="fa-solid fa-download"></i> Export Free</button>
                                     </div>
 
+                                    {/* Pro Tier (Highlight) */}
                                     <div className="bg-gradient-to-br from-brand-600 to-indigo-900 rounded-[2rem] p-10 border border-gold-400 shadow-[0_0_50px_rgba(251,191,36,0.2)] transform md:-translate-y-4 relative z-10">
                                         <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gold-500 text-black text-xs font-black px-5 py-1.5 rounded-full uppercase tracking-widest shadow-xl">DBP Pro Access</div>
                                         <h3 className="font-display font-bold text-2xl mb-2 text-white">Pro Editor</h3>
