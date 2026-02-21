@@ -56,7 +56,8 @@
         .glass-sidebar { background: rgba(10, 10, 10, 0.4); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 2rem; }
         .glass-nav { background: rgba(3,3,3,0.7); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
 
-        .pro-badge { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #000; font-weight: 900; font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 0.3rem; text-transform: uppercase; letter-spacing: 0.1em; box-shadow: 0 0 15px rgba(245, 158, 11, 0.4), inset 0 1px 1px rgba(255,255,255,0.5); display: inline-flex; align-items: center; justify-content: center; }
+        /* Golden PRO Badge */
+        .pro-badge { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #000; font-weight: 900; font-size: 0.7rem; padding: 0.2rem 0.75rem; border-radius: 0.3rem; text-transform: uppercase; letter-spacing: 0.15em; box-shadow: 0 0 20px rgba(245, 158, 11, 0.5), inset 0 1px 1px rgba(255,255,255,0.5); display: inline-flex; align-items: center; justify-content: center; border: 1px solid #78350f; }
 
         .input-wrapper { position: relative; display: flex; align-items: center; width: 100%; }
         .input-icon { position: absolute; left: 1.25rem; color: #64748b; font-size: 1rem; pointer-events: none; z-index: 10; }
@@ -82,9 +83,12 @@
         .terminal-window { background: #000; border: 1px solid #1e293b; border-radius: 12px; overflow: hidden; box-shadow: 0 0 40px rgba(16, 185, 129, 0.1); }
         .hacker-text { font-family: 'JetBrains Mono', monospace; color: #10b981; text-shadow: 0 0 5px rgba(16, 185, 129, 0.4); font-size: 13px; line-height: 1.6; }
         
-        /* Device Previews (Perfected) */
-        .device-mobile { width: 375px; height: 812px; border: 12px solid #111; border-radius: 40px; position: relative; overflow: hidden; background: white; display: flex; flex-direction: column; transition: all 0.5s ease; box-shadow: 0 30px 60px rgba(0,0,0,0.8);}
-        .device-mobile::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 120px; height: 28px; background: #111; border-bottom-left-radius: 18px; border-bottom-right-radius: 18px; z-index: 50; }
+        /* PERFECTED DEVICE PREVIEWS */
+        .device-mobile { width: 390px; height: 844px; border: 14px solid #111; border-radius: 48px; position: relative; overflow: hidden; background: white; display: flex; flex-direction: column; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 0 0 2px #333, 0 30px 60px rgba(0,0,0,0.8);}
+        .device-mobile::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 140px; height: 32px; background: #111; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; z-index: 50; }
+        .device-mobile::after { content: ''; position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 130px; height: 5px; background: #e5e5e5; border-radius: 10px; z-index: 50; mix-blend-mode: difference;}
+        
+        .device-desktop { width: 100%; height: 100%; border: none; border-radius: 0; overflow: hidden; background: #050505; display: flex; flex-direction: column; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);}
         .browser-bar { background: #111; height: 44px; display: flex; align-items: center; padding: 0 16px; gap: 8px; border-bottom: 1px solid #222; z-index: 50;}
         
         ::-webkit-scrollbar { width: 8px; height: 8px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; } ::-webkit-scrollbar-thumb:hover { background: #555; }
@@ -478,31 +482,50 @@
         });
     <\/script>
     <script id="dbp-live-editor">
-        document.querySelectorAll('h1, h2, h3, h4, p, span, li, div.font-display').forEach(el => {
+        let isEditMode = true;
+        const editableElements = document.querySelectorAll('h1, h2, h3, h4, p, span, li, div.font-display');
+        
+        function applyEditMode() {
+            editableElements.forEach(el => {
+                if (el.closest('nav') || el.closest('button') || el.closest('a') || el.classList.contains('fa-solid')) return;
+                if (isEditMode) {
+                    el.setAttribute('contenteditable', 'true');
+                    el.style.outline = 'none';
+                    el.style.cursor = 'text';
+                } else {
+                    el.removeAttribute('contenteditable');
+                    el.style.cursor = 'default';
+                    el.style.boxShadow = 'none';
+                }
+            });
+        }
+
+        function handleMouseEnter(e) { if(isEditMode && document.activeElement !== e.target) e.target.style.boxShadow = '0 0 0 2px rgba(168, 85, 247, 0.5)'; }
+        function handleMouseLeave(e) { if(isEditMode && document.activeElement !== e.target) e.target.style.boxShadow = 'none'; }
+        function handleFocus(e) { if(isEditMode) e.target.style.boxShadow = '0 0 0 2px rgba(168, 85, 247, 0.9)'; }
+        function handleBlur(e) {
+            e.target.style.boxShadow = 'none';
+            const cleanDoc = document.documentElement.cloneNode(true);
+            cleanDoc.querySelectorAll('[contenteditable]').forEach(node => { node.removeAttribute('contenteditable'); node.style.boxShadow = ''; });
+            window.parent.postMessage({ type: 'LIVE_EDIT_UPDATE', html: '<!DOCTYPE html>\\n' + cleanDoc.outerHTML }, '*');
+        }
+
+        editableElements.forEach(el => {
             if (el.closest('nav') || el.closest('button') || el.closest('a') || el.classList.contains('fa-solid')) return;
-            
-            el.setAttribute('contenteditable', 'true');
-            el.style.outline = 'none';
-            
-            el.addEventListener('mouseenter', () => {
-                if(document.activeElement !== el) el.style.boxShadow = '0 0 0 2px rgba(168, 85, 247, 0.5)';
-            });
-            el.addEventListener('mouseleave', () => {
-                if(document.activeElement !== el) el.style.boxShadow = 'none';
-            });
-            el.addEventListener('focus', () => {
-                el.style.boxShadow = '0 0 0 2px rgba(168, 85, 247, 0.9)';
-            });
-            el.addEventListener('blur', () => {
-                el.style.boxShadow = 'none';
-                const cleanDoc = document.documentElement.cloneNode(true);
-                cleanDoc.querySelectorAll('[contenteditable]').forEach(node => {
-                    node.removeAttribute('contenteditable');
-                    node.style.boxShadow = '';
-                });
-                window.parent.postMessage({ type: 'LIVE_EDIT_UPDATE', html: '<!DOCTYPE html>\\n' + cleanDoc.outerHTML }, '*');
-            });
+            el.addEventListener('mouseenter', handleMouseEnter);
+            el.addEventListener('mouseleave', handleMouseLeave);
+            el.addEventListener('focus', handleFocus);
+            el.addEventListener('blur', handleBlur);
         });
+
+        window.addEventListener('message', (event) => {
+            if (event.data && event.data.type === 'TOGGLE_EDIT_MODE') {
+                isEditMode = event.data.value;
+                applyEditMode();
+            }
+        });
+
+        applyEditMode();
     <\/script>
     <script id="dbp-preview-helper">
         document.addEventListener('click', function(e) {
@@ -538,15 +561,16 @@
             const siteCodeRef = useRef(''); 
             
             const [previewMode, setPreviewMode] = useState('desktop');
+            const [isEditMode, setIsEditMode] = useState(true);
+            const iframeRef = useRef(null);
+
             const [toast, setToast] = useState(null);
-            
             const [loadingLogs, setLoadingLogs] = useState([]);
             const [loadingProgress, setLoadingProgress] = useState(0);
             
             const [users, setUsers] = useState([]);
             const [requests, setRequests] = useState([]);
             const [currentUser, setCurrentUser] = useState(null);
-            
             const [userSites, setUserSites] = useState([]);
             
             const isAdmin = currentUser && currentUser.phone === '9827700975'; 
@@ -554,6 +578,7 @@
 
             const [authMode, setAuthMode] = useState('signup');
             const [authForm, setAuthForm] = useState({ name: '', phone: '', password: '' });
+            const [paymentModalOpen, setPaymentModalOpen] = useState(false);
 
             const presetColors = ['#a855f7', '#10b981', '#f59e0b', '#171717']; 
             const proColors = ['#e11d48', '#d946ef', '#0ea5e9', '#84cc16']; 
@@ -641,6 +666,13 @@
                     localStorage.removeItem('dbp-current-user');
                     setView('home');
                     window.scrollTo(0,0);
+                }
+            };
+
+            const toggleEditMode = (mode) => {
+                setIsEditMode(mode);
+                if (iframeRef.current && iframeRef.current.contentWindow) {
+                    iframeRef.current.contentWindow.postMessage({ type: 'TOGGLE_EDIT_MODE', value: mode }, '*');
                 }
             };
 
@@ -735,7 +767,10 @@
                         const finalCode = generateSiteHTML(form, isPro);
                         setSiteCode(finalCode);
                         siteCodeRef.current = finalCode; 
-                        setTimeout(() => setView('preview'), 800); 
+                        setTimeout(() => {
+                            setView('preview');
+                            setIsEditMode(true); // Reset to edit mode on new generation
+                        }, 800); 
                     }
                 }, 350); 
             };
@@ -758,6 +793,7 @@
                 siteCodeRef.current = htmlCode;
                 setForm(prev => ({...prev, name: projectName}));
                 setView('preview');
+                setIsEditMode(true);
                 showToast(`Loaded ${projectName}`, "success");
             };
             
@@ -776,6 +812,8 @@
                 finalExportCode = finalExportCode.replace(/<script id="dbp-preview-helper">[\s\S]*?<\/script>/gi, '');
                 finalExportCode = finalExportCode.replace(/ contenteditable="true"/gi, '');
                 finalExportCode = finalExportCode.replace(/ style="outline: none;"/gi, '');
+                finalExportCode = finalExportCode.replace(/ style="cursor: text;"/gi, '');
+                finalExportCode = finalExportCode.replace(/ style="cursor: default;"/gi, '');
 
                 const blob = new Blob([finalExportCode], { type: 'text/html' });
                 const a = document.createElement('a');
@@ -849,7 +887,6 @@
                         {currentUser ? (
                             <button onClick={() => setView('profile')} className="text-gray-400 hover:text-white flex items-center gap-2">
                                 <i className="fa-solid fa-user"></i>
-                                {isPro && <span className="pro-badge !text-[8px] !px-1">PRO</span>}
                             </button>
                         ) : (
                             <button onClick={() => setView('auth')} className="text-brand-400 font-bold text-xs">LOGIN</button>
@@ -872,7 +909,7 @@
 
                         {siteCode && (
                             <button onClick={() => setView('preview')} className={`nav-item ${view === 'preview' ? 'active' : ''}`}>
-                                <i className="fa-solid fa-eye drop-shadow-[0_0_8px_rgba(168,85,247,0.8)] text-brand-400"></i>
+                                <i className={`fa-solid fa-eye ${view !== 'preview' ? 'text-brand-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.8)] animate-pulse' : ''}`}></i>
                                 <span className="nav-tooltip">Current Site</span>
                             </button>
                         )}
@@ -924,8 +961,8 @@
                 <div className="flex flex-col md:flex-row h-screen overflow-hidden bg-black text-white relative">
                     
                     {currentUser && isPro && (
-                        <div className="fixed top-6 right-6 z-[100] hidden md:block animate-fade-in pointer-events-none">
-                            <span className="pro-badge text-xs px-4 py-1.5 font-black shadow-[0_0_20px_rgba(251,191,36,0.4)]">PRO</span>
+                        <div className="fixed top-6 right-8 z-[100] hidden md:block animate-fade-in pointer-events-none">
+                            <span className="pro-badge px-4 py-2 font-black shadow-[0_0_20px_rgba(251,191,36,0.4)]">PRO</span>
                         </div>
                     )}
 
@@ -1121,7 +1158,7 @@
                                                     </div>
                                                     
                                                     <div className="pt-6 border-t border-white/5">
-                                                        <label className="flex justify-between text-[10px] font-bold text-gray-500 mb-3 uppercase tracking-widest"><span>Custom RGB / Hex</span>{!isPro && <span className="pro-badge !text-[8px] !px-1">PRO</span>}</label>
+                                                        <label className="flex justify-between text-[10px] font-bold text-gray-500 mb-3 uppercase tracking-widest"><span>Custom RGB / Hex</span>{!isPro && <span className="text-yellow-500 font-bold"><i className="fa-solid fa-lock"></i> PRO</span>}</label>
                                                         <div className="flex items-center gap-3">
                                                             <div className={`relative w-10 h-10 rounded-xl overflow-hidden border border-white/20 flex-shrink-0 transition ${!isPro ? 'opacity-30 cursor-not-allowed' : 'hover:border-white shadow-inner'}`}>
                                                                 {!isPro && <i className="fa-solid fa-lock text-[10px] text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20"></i>}
@@ -1168,6 +1205,118 @@
                             </div>
                         )}
 
+                        {/* GENERATING TERMINAL */}
+                        {view === 'generating' && (
+                            <div className="flex-1 flex flex-col items-center justify-center p-6 animate-fade-in">
+                                <div className="w-full max-w-3xl terminal-window border border-white/10 shadow-2xl">
+                                    <div className="bg-black border-b border-white/10 p-4 flex items-center gap-4">
+                                        <div className="flex gap-2"><div className="w-3 h-3 rounded-full bg-red-500/80"></div><div className="w-3 h-3 rounded-full bg-yellow-500/80"></div><div className="w-3 h-3 rounded-full bg-green-500/80"></div></div>
+                                        <div className="text-xs text-gray-500 font-mono pl-4 border-l border-white/10">root@dbp-neural-engine:~</div>
+                                    </div>
+                                    <div className="p-8 h-[400px] overflow-y-auto space-y-3 hacker-text text-sm bg-black/90">
+                                        {loadingLogs.map((log, index) => (<div key={index} className="opacity-80">{log}</div>))}
+                                        <div ref={terminalEndRef} className="animate-pulse inline-block">█</div>
+                                    </div>
+                                </div>
+                                <div className="w-full max-w-3xl mt-8">
+                                    <div className="flex justify-between text-xs font-mono font-bold text-brand-400 mb-3 tracking-widest">
+                                        <span>SYSTEM COMPILING</span><span>{loadingProgress}%</span>
+                                    </div>
+                                    <div className="w-full bg-black border border-white/10 h-1.5 overflow-hidden rounded-full">
+                                        <div className="bg-brand-500 h-full shadow-[0_0_15px_#8b5cf6] transition-all duration-200 ease-out" style={{width: `${loadingProgress}%`}}></div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* FULL SCREEN PREVIEW WITH EDIT/VIEW TOGGLE */}
+                        {view === 'preview' && (
+                            <div className="flex-1 flex flex-col h-screen overflow-hidden animate-fade-in">
+                                <div className="glass-nav border-x-0 border-t-0 p-3 px-6 flex flex-wrap gap-4 items-center justify-between z-10 flex-shrink-0 shadow-lg">
+                                    <div className="flex items-center gap-4">
+                                        <div className="flex items-center bg-black/50 rounded-lg p-1 border border-white/5 shadow-inner">
+                                            <button onClick={() => setPreviewMode('desktop')} className={`px-4 py-1.5 rounded-md text-xs font-bold tracking-widest transition flex items-center gap-2 ${previewMode === 'desktop' ? 'bg-white/10 text-white shadow-md border border-white/5' : 'text-gray-500 hover:text-gray-300'}`}><i className="fa-solid fa-desktop text-sm"></i> <span className="hidden sm:block">DESKTOP</span></button>
+                                            <button onClick={() => setPreviewMode('mobile')} className={`px-4 py-1.5 rounded-md text-xs font-bold tracking-widest transition flex items-center gap-2 ${previewMode === 'mobile' ? 'bg-white/10 text-white shadow-md border border-white/5' : 'text-gray-500 hover:text-gray-300'}`}><i className="fa-solid fa-mobile-screen text-sm"></i> <span className="hidden sm:block">MOBILE</span></button>
+                                        </div>
+                                        <div className="h-6 w-px bg-white/10 hidden sm:block"></div>
+                                        <div className="flex items-center bg-black/50 rounded-lg p-1 border border-white/5 shadow-inner">
+                                            <button onClick={() => toggleEditMode(true)} className={`px-4 py-1.5 rounded-md text-xs font-bold tracking-widest transition flex items-center gap-2 ${isEditMode ? 'bg-brand-600 text-white shadow-md' : 'text-gray-500 hover:text-gray-300'}`}><i className="fa-solid fa-pen-nib"></i> <span className="hidden sm:block">EDIT</span></button>
+                                            <button onClick={() => toggleEditMode(false)} className={`px-4 py-1.5 rounded-md text-xs font-bold tracking-widest transition flex items-center gap-2 ${!isEditMode ? 'bg-green-600 text-white shadow-md' : 'text-gray-500 hover:text-gray-300'}`}><i className="fa-solid fa-eye"></i> <span className="hidden sm:block">VIEW</span></button>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-4 items-center">
+                                        <button onClick={saveProjectToCloud} className="text-brand-400 hover:text-white px-4 py-2 rounded-lg text-xs font-bold tracking-widest transition flex items-center gap-2 border border-brand-500/30 bg-brand-500/10 hover:bg-brand-500/20"><i className="fa-solid fa-cloud-arrow-up"></i> <span className="hidden sm:block">SAVE</span></button>
+                                        <button onClick={() => setView('pricing')} className="bg-white text-black px-6 py-2 rounded-lg text-xs font-bold tracking-widest hover:bg-gray-200 transition shadow-[0_0_20px_rgba(255,255,255,0.2)] flex items-center gap-2">EXPORT <i className="fa-solid fa-arrow-right"></i></button>
+                                    </div>
+                                </div>
+                                
+                                <div className={`flex-1 flex justify-center items-center overflow-hidden relative ${previewMode === 'mobile' ? 'p-4 lg:p-10' : 'p-0'}`}>
+                                    {previewMode === 'mobile' && isEditMode && (
+                                        <div className="absolute top-6 right-6 z-50 bg-brand-600 border border-brand-400 text-white text-xs font-bold tracking-widest px-5 py-2.5 rounded-lg shadow-[0_10px_25px_rgba(139,92,246,0.4)] flex items-center gap-3 animate-bounce pointer-events-none">
+                                            <i className="fa-solid fa-pen-nib"></i> CLICK TEXT TO EDIT
+                                        </div>
+                                    )}
+                                    <div className={`transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${previewMode === 'mobile' ? 'device-mobile' : 'device-desktop'}`}>
+                                        {previewMode === 'desktop' && (
+                                            <div className="browser-bar flex-shrink-0">
+                                                <div className="flex gap-2"><div className="w-3 h-3 rounded-full bg-red-500/80"></div><div className="w-3 h-3 rounded-full bg-yellow-500/80"></div><div className="w-3 h-3 rounded-full bg-green-500/80"></div></div>
+                                                <div className="flex-1 flex justify-center">
+                                                    <div className="bg-black border border-white/5 text-[10px] font-mono text-gray-500 px-6 py-1 rounded w-1/2 max-w-sm text-center flex items-center justify-center gap-2 shadow-inner"><i className="fa-solid fa-lock text-brand-500"></i>{form.name.toLowerCase().replace(/\s+/g, '')}.dbpsites.in</div>
+                                                </div>
+                                            </div>
+                                        )}
+                                        <iframe ref={iframeRef} srcDoc={siteCode} className={`w-full h-full flex-1 border-none bg-white`}></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* EXPORT / PRICING SCREEN */}
+                        {view === 'pricing' && (
+                            <div className="flex-1 py-16 px-6 animate-fade-up overflow-y-auto relative">
+                                <div className="hero-glow opacity-50"></div>
+                                <div className="text-center max-w-3xl mx-auto mb-16 relative z-10">
+                                    <button onClick={() => setView('preview')} className="text-gray-500 hover:text-white text-xs font-bold tracking-widest flex items-center gap-2 mx-auto transition mb-8 uppercase"><i className="fa-solid fa-arrow-left"></i> Back to Editor</button>
+                                    <h2 className="font-display text-4xl md:text-6xl font-bold mb-4 text-white tracking-tighter flex items-center justify-center gap-4">Export Architecture</h2>
+                                    <p className="text-gray-400 text-lg font-light">Download the enterprise-grade source code for free, or upgrade to PRO to remove watermarks and unlock the full matrix.</p>
+                                </div>
+
+                                <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8 items-start relative z-10">
+                                    <div className="premium-panel p-10 border border-white/5 hover:border-white/10 transition duration-300">
+                                        <h3 className="font-display font-bold text-2xl mb-2 text-white">Starter Code</h3>
+                                        <p className="text-gray-500 text-sm mb-8">Own your code completely.</p>
+                                        <div className="flex items-end gap-1 mb-8"><span className="text-5xl font-display font-bold text-white tracking-tighter">₹0</span></div>
+                                        <ul className="space-y-4 text-sm text-gray-300 mb-10 font-medium border-t border-white/5 pt-8">
+                                            <li className="flex gap-4 items-center"><i className="fa-solid fa-code text-gray-500 w-4"></i> Download HTML/CSS file</li>
+                                            <li className="flex gap-4 items-center opacity-50"><i className="fa-solid fa-copyright text-red-400 w-4"></i> Forced DBP Watermark</li>
+                                            <li className="flex gap-4 items-center opacity-50"><i className="fa-solid fa-lock text-red-400 w-4"></i> 8 Premium Templates Locked</li>
+                                        </ul>
+                                        <button onClick={downloadHTML} className="btn-secondary w-full py-4 text-xs font-bold tracking-widest uppercase flex justify-center items-center gap-2 hover:bg-white hover:text-black transition"><i className="fa-solid fa-download"></i> Export Free HTML</button>
+                                    </div>
+
+                                    <div className="premium-panel p-10 border border-brand-500/50 shadow-[0_30px_60px_rgba(139,92,246,0.2)] transform md:-translate-y-4 relative z-10">
+                                        <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-brand-400 to-brand-600 text-white text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg">Professional Access</div>
+                                        <h3 className="font-display font-bold text-2xl mb-2 text-white">Pro Editor</h3>
+                                        <p className="text-brand-300 text-sm mb-8">No watermark. Full feature unlock.</p>
+                                        <div className="flex items-end gap-1 mb-8"><span className="text-5xl font-display font-bold text-white tracking-tighter">₹999</span><span className="text-gray-500 font-light mb-1">/yr</span></div>
+                                        <ul className="space-y-4 text-sm text-white mb-10 font-medium border-t border-white/10 pt-8">
+                                            <li className="flex gap-4 items-center"><i className="fa-solid fa-unlock text-brand-400 w-4"></i> All 10 Templates Unlocked</li>
+                                            <li className="flex gap-4 items-center"><i className="fa-solid fa-droplet-slash text-brand-400 w-4"></i> Watermark Completely Removed</li>
+                                            <li className="flex gap-4 items-center"><i className="fa-solid fa-palette text-brand-400 w-4"></i> Custom Color Engine</li>
+                                            <li className="flex gap-4 items-center"><i className="fa-solid fa-chart-line text-brand-400 w-4"></i> Custom SEO & Services</li>
+                                        </ul>
+                                        {isPro ? (
+                                            <button onClick={downloadHTML} className="w-full py-4 rounded-xl text-xs font-bold tracking-widest bg-white text-black hover:bg-gray-200 transition flex justify-center items-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.2)]"><i className="fa-solid fa-code"></i> Export Pro HTML</button>
+                                        ) : (
+                                            <button onClick={handlePaymentInit} className="w-full py-4 rounded-xl text-xs font-bold tracking-widest btn-shine flex justify-center items-center gap-2">
+                                                <i className="fa-solid fa-bolt"></i> GET PRO VIA RAZORPAY
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
                         {/* AUTH SCREEN */}
                         {view === 'auth' && (
                             <div className="flex-1 flex items-center justify-center p-6 animate-fade-up">
@@ -1210,7 +1359,7 @@
                             </div>
                         )}
 
-                        {/* DASHBOARD SCREEN - SPLIT PANEL DESIGN */}
+                        {/* DASHBOARD SCREEN */}
                         {view === 'dashboard' && currentUser && (
                             <div className="flex-1 p-6 lg:p-12 animate-fade-up max-w-7xl mx-auto w-full">
                                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 border-b border-white/10 pb-8 gap-6">
@@ -1394,115 +1543,6 @@
                                 </div>
                             </div>
                         )}
-
-                        {/* GENERATING TERMINAL */}
-                        {view === 'generating' && (
-                            <div className="flex-1 flex flex-col items-center justify-center p-6 animate-fade-in">
-                                <div className="w-full max-w-3xl terminal-window border border-white/10 shadow-2xl">
-                                    <div className="bg-black border-b border-white/10 p-4 flex items-center gap-4">
-                                        <div className="flex gap-2"><div className="w-3 h-3 rounded-full bg-red-500/80"></div><div className="w-3 h-3 rounded-full bg-yellow-500/80"></div><div className="w-3 h-3 rounded-full bg-green-500/80"></div></div>
-                                        <div className="text-xs text-gray-500 font-mono pl-4 border-l border-white/10">root@dbp-neural-engine:~</div>
-                                    </div>
-                                    <div className="p-8 h-[400px] overflow-y-auto space-y-3 hacker-text text-sm bg-black/90">
-                                        {loadingLogs.map((log, index) => (<div key={index} className="opacity-80">{log}</div>))}
-                                        <div ref={terminalEndRef} className="animate-pulse inline-block">█</div>
-                                    </div>
-                                </div>
-                                <div className="w-full max-w-3xl mt-8">
-                                    <div className="flex justify-between text-xs font-mono font-bold text-brand-400 mb-3 tracking-widest">
-                                        <span>SYSTEM COMPILING</span><span>{loadingProgress}%</span>
-                                    </div>
-                                    <div className="w-full bg-black border border-white/10 h-1.5 overflow-hidden rounded-full">
-                                        <div className="bg-brand-500 h-full shadow-[0_0_15px_#8b5cf6] transition-all duration-200 ease-out" style={{width: `${loadingProgress}%`}}></div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* FULL SCREEN PREVIEW */}
-                        {view === 'preview' && (
-                            <div className="flex-1 flex flex-col h-screen overflow-hidden animate-fade-in">
-                                <div className="glass-nav border-x-0 border-t-0 p-3 px-6 flex flex-wrap gap-4 items-center justify-between z-10 flex-shrink-0 shadow-lg">
-                                    <div className="flex items-center bg-black/50 rounded-lg p-1 border border-white/5 shadow-inner">
-                                        <button onClick={() => { setSiteCode(siteCodeRef.current); setPreviewMode('desktop'); }} className={`px-5 py-2 rounded-md text-xs font-bold tracking-widest transition flex items-center gap-2 ${previewMode === 'desktop' ? 'bg-white/10 text-white shadow-md border border-white/5' : 'text-gray-500 hover:text-gray-300'}`}><i className="fa-solid fa-desktop text-sm"></i> DESKTOP</button>
-                                        <button onClick={() => { setSiteCode(siteCodeRef.current); setPreviewMode('mobile'); }} className={`px-5 py-2 rounded-md text-xs font-bold tracking-widest transition flex items-center gap-2 ${previewMode === 'mobile' ? 'bg-white/10 text-white shadow-md border border-white/5' : 'text-gray-500 hover:text-gray-300'}`}><i className="fa-solid fa-mobile-screen text-sm"></i> MOBILE</button>
-                                    </div>
-                                    <div className="text-center hidden md:block">
-                                        <span className="text-[10px] font-mono font-bold text-green-400 bg-green-500/10 px-4 py-1.5 rounded border border-green-500/20 tracking-widest uppercase"><i className="fa-solid fa-check mr-1"></i> LIVE EDIT MODE</span>
-                                    </div>
-                                    <div className="flex gap-4 items-center">
-                                        <button onClick={saveProjectToCloud} className="text-brand-400 hover:text-white px-4 py-2 rounded-lg text-xs font-bold tracking-widest transition flex items-center gap-2 border border-brand-500/30 bg-brand-500/10 hover:bg-brand-500/20"><i className="fa-solid fa-cloud-arrow-up"></i> SAVE</button>
-                                        <button onClick={() => setView('pricing')} className="bg-white text-black px-6 py-2 rounded-lg text-xs font-bold tracking-widest hover:bg-gray-200 transition shadow-[0_0_20px_rgba(255,255,255,0.2)] flex items-center gap-2">EXPORT <i className="fa-solid fa-arrow-right"></i></button>
-                                    </div>
-                                </div>
-                                
-                                <div className={`flex-1 flex justify-center items-center overflow-hidden relative ${previewMode === 'mobile' ? 'p-4 lg:p-10' : 'p-0'}`}>
-                                    {previewMode === 'mobile' && (
-                                        <div className="absolute top-6 right-6 z-50 bg-brand-600 border border-brand-400 text-white text-xs font-bold tracking-widest px-5 py-2.5 rounded-lg shadow-[0_10px_25px_rgba(139,92,246,0.4)] flex items-center gap-3 animate-bounce pointer-events-none">
-                                            <i className="fa-solid fa-pen-nib"></i> CLICK TEXT TO EDIT
-                                        </div>
-                                    )}
-                                    <div className={`transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${previewMode === 'mobile' ? 'device-mobile' : 'w-full h-full flex flex-col'}`}>
-                                        {previewMode === 'desktop' && (
-                                            <div className="browser-bar flex-shrink-0">
-                                                <div className="flex gap-2"><div className="w-3 h-3 rounded-full bg-red-500/80"></div><div className="w-3 h-3 rounded-full bg-yellow-500/80"></div><div className="w-3 h-3 rounded-full bg-green-500/80"></div></div>
-                                                <div className="flex-1 flex justify-center">
-                                                    <div className="bg-black border border-white/5 text-[10px] font-mono text-gray-500 px-6 py-1 rounded w-1/2 max-w-sm text-center flex items-center justify-center gap-2 shadow-inner"><i className="fa-solid fa-lock text-brand-500"></i>{form.name.toLowerCase().replace(/\s+/g, '')}.dbpsites.in</div>
-                                                </div>
-                                            </div>
-                                        )}
-                                        <iframe srcDoc={siteCode} className={`w-full h-full flex-1 border-none bg-white ${previewMode === 'mobile' ? 'rounded-[28px]' : ''}`}></iframe>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* EXPORT / PRICING SCREEN */}
-                        {view === 'pricing' && (
-                            <div className="flex-1 py-16 px-6 animate-fade-up overflow-y-auto relative">
-                                <div className="hero-glow opacity-50"></div>
-                                <div className="text-center max-w-3xl mx-auto mb-16 relative z-10">
-                                    <button onClick={() => setView('preview')} className="text-gray-500 hover:text-white text-xs font-bold tracking-widest flex items-center gap-2 mx-auto transition mb-8 uppercase"><i className="fa-solid fa-arrow-left"></i> Back to Editor</button>
-                                    <h2 className="font-display text-4xl md:text-6xl font-bold mb-4 text-white tracking-tighter flex items-center justify-center gap-4">Export Architecture</h2>
-                                    <p className="text-gray-400 text-lg font-light">Download the enterprise-grade source code for free, or upgrade to PRO to remove watermarks and unlock the full matrix.</p>
-                                </div>
-
-                                <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8 items-start relative z-10">
-                                    <div className="premium-panel p-10 border border-white/5 hover:border-white/10 transition duration-300">
-                                        <h3 className="font-display font-bold text-2xl mb-2 text-white">Starter Code</h3>
-                                        <p className="text-gray-500 text-sm mb-8">Own your code completely.</p>
-                                        <div className="flex items-end gap-1 mb-8"><span className="text-5xl font-display font-bold text-white tracking-tighter">₹0</span></div>
-                                        <ul className="space-y-4 text-sm text-gray-300 mb-10 font-medium border-t border-white/5 pt-8">
-                                            <li className="flex gap-4 items-center"><i className="fa-solid fa-code text-gray-500 w-4"></i> Download HTML/CSS file</li>
-                                            <li className="flex gap-4 items-center opacity-50"><i className="fa-solid fa-copyright text-red-400 w-4"></i> Forced DBP Watermark</li>
-                                            <li className="flex gap-4 items-center opacity-50"><i className="fa-solid fa-lock text-red-400 w-4"></i> 8 Premium Templates Locked</li>
-                                        </ul>
-                                        <button onClick={downloadHTML} className="btn-secondary w-full py-4 text-xs font-bold tracking-widest uppercase flex justify-center items-center gap-2 hover:bg-white hover:text-black transition"><i className="fa-solid fa-download"></i> Export Free HTML</button>
-                                    </div>
-
-                                    <div className="premium-panel p-10 border border-brand-500/50 shadow-[0_30px_60px_rgba(139,92,246,0.2)] transform md:-translate-y-4 relative z-10">
-                                        <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-brand-400 to-brand-600 text-white text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg">Professional Access</div>
-                                        <h3 className="font-display font-bold text-2xl mb-2 text-white">Pro Editor</h3>
-                                        <p className="text-brand-300 text-sm mb-8">No watermark. Full feature unlock.</p>
-                                        <div className="flex items-end gap-1 mb-8"><span className="text-5xl font-display font-bold text-white tracking-tighter">₹999</span><span className="text-gray-500 font-light mb-1">/yr</span></div>
-                                        <ul className="space-y-4 text-sm text-white mb-10 font-medium border-t border-white/10 pt-8">
-                                            <li className="flex gap-4 items-center"><i className="fa-solid fa-unlock text-brand-400 w-4"></i> All 10 Templates Unlocked</li>
-                                            <li className="flex gap-4 items-center"><i className="fa-solid fa-droplet-slash text-brand-400 w-4"></i> Watermark Completely Removed</li>
-                                            <li className="flex gap-4 items-center"><i className="fa-solid fa-palette text-brand-400 w-4"></i> Custom Color Engine</li>
-                                            <li className="flex gap-4 items-center"><i className="fa-solid fa-chart-line text-brand-400 w-4"></i> Custom SEO & Services</li>
-                                        </ul>
-                                        {isPro ? (
-                                            <button onClick={downloadHTML} className="w-full py-4 rounded-xl text-xs font-bold tracking-widest bg-white text-black hover:bg-gray-200 transition flex justify-center items-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.2)]"><i className="fa-solid fa-code"></i> Export Pro HTML</button>
-                                        ) : (
-                                            <button onClick={handlePaymentInit} className="w-full py-4 rounded-xl text-xs font-bold tracking-widest btn-shine flex justify-center items-center gap-2">
-                                                <i className="fa-solid fa-bolt"></i> GET PRO VIA RAZORPAY
-                                            </button>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
                     </main>
                 </div>
             );
