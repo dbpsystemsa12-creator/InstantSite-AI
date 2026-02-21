@@ -53,9 +53,9 @@
         .hero-glow { position: absolute; top: -10%; left: 50%; transform: translateX(-50%); width: 800px; height: 400px; background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.15) 0%, transparent 70%); pointer-events: none; z-index: 0; }
 
         .premium-panel { background: linear-gradient(145deg, rgba(20,20,22,0.8), rgba(10,10,12,0.95)); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1); border-radius: 1.5rem; }
-        .glass-nav { background: rgba(3,3,3,0.7); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-
-        .pro-badge { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #000; font-weight: 900; font-size: 0.65rem; padding: 0.2rem 0.5rem; border-radius: 0.3rem; text-transform: uppercase; letter-spacing: 0.1em; box-shadow: 0 0 15px rgba(245, 158, 11, 0.4), inset 0 1px 1px rgba(255,255,255,0.5); display: inline-flex; align-items: center; justify-content: center; }
+        .glass-sidebar { background: rgba(10, 10, 10, 0.4); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: inset 0 0 20px rgba(255,255,255,0.02); border-radius: 2rem; }
+        
+        .pro-badge { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #000; font-weight: 900; font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 0.3rem; text-transform: uppercase; letter-spacing: 0.1em; box-shadow: 0 0 15px rgba(245, 158, 11, 0.4), inset 0 1px 1px rgba(255,255,255,0.5); display: inline-flex; align-items: center; justify-content: center; }
 
         .input-wrapper { position: relative; display: flex; align-items: center; width: 100%; }
         .input-icon { position: absolute; left: 1.25rem; color: #64748b; transition: color 0.3s ease; font-size: 1rem; pointer-events: none; z-index: 10; }
@@ -69,12 +69,18 @@
         .btn-shine { position: relative; overflow: hidden; background: linear-gradient(90deg, #7c3aed, #a855f7, #7c3aed); background-size: 200% 100%; animation: shimmer 3s infinite linear; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 10px 30px rgba(139, 92, 246, 0.25), inset 0 1px 0 rgba(255,255,255,0.3); border-radius: 0.75rem; color: white; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
         .btn-shine:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(168, 85, 247, 0.4), inset 0 1px 0 rgba(255,255,255,0.4); }
         
+        .nav-item { width: 3.5rem; height: 3.5rem; display: flex; align-items: center; justify-content: center; border-radius: 1rem; color: #64748b; font-size: 1.25rem; transition: all 0.3s ease; position: relative; }
+        .nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+        .nav-item.active { background: rgba(139, 92, 246, 0.15); color: #a855f7; border: 1px solid rgba(139, 92, 246, 0.3); box-shadow: 0 0 20px rgba(139, 92, 246, 0.2); }
+        .nav-tooltip { position: absolute; left: 120%; background: #fff; color: #000; padding: 0.4rem 0.8rem; font-size: 0.75rem; font-weight: bold; border-radius: 0.5rem; opacity: 0; pointer-events: none; transform: translateX(-10px); transition: all 0.2s ease; white-space: nowrap; font-family: 'Inter', sans-serif; letter-spacing: 0.05em; }
+        .nav-item:hover .nav-tooltip { opacity: 1; transform: translateX(0); }
+
         .terminal-window { background: #000; border: 1px solid #1e293b; border-radius: 12px; overflow: hidden; box-shadow: 0 0 40px rgba(16, 185, 129, 0.1); }
         .hacker-text { font-family: 'JetBrains Mono', monospace; color: #10b981; text-shadow: 0 0 5px rgba(16, 185, 129, 0.4); font-size: 13px; line-height: 1.6; }
         
-        .device-mobile { width: 375px; height: 812px; border: 12px solid #111; border-radius: 40px; box-shadow: 0 0 0 1px #333, 0 30px 60px rgba(0,0,0,0.8); position: relative; overflow: hidden; background: white; display: flex; flex-direction: column; transition: all 0.5s ease;}
+        .device-mobile { width: 375px; height: 812px; border: 12px solid #111; border-radius: 40px; box-shadow: 0 0 0 1px #333, 0 30px 60px rgba(0,0,0,0.8); position: relative; overflow: hidden; background: white; display: flex; flex-direction: column; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);}
         .device-mobile::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 120px; height: 28px; background: #111; border-bottom-left-radius: 18px; border-bottom-right-radius: 18px; z-index: 50; }
-        .device-desktop { width: 100%; max-width: 1400px; height: 85vh; border: 1px solid #333; border-radius: 12px; box-shadow: 0 30px 60px rgba(0,0,0,0.8); overflow: hidden; background: #050505; display: flex; flex-direction: column; transition: all 0.5s ease;}
+        .device-desktop { width: 100%; max-width: 1400px; height: 85vh; border: 1px solid #333; border-radius: 12px; box-shadow: 0 30px 60px rgba(0,0,0,0.8); overflow: hidden; background: #050505; display: flex; flex-direction: column; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);}
         .browser-bar { background: #111; height: 44px; display: flex; align-items: center; padding: 0 16px; gap: 8px; border-bottom: 1px solid #222; z-index: 50; position: relative;}
         
         ::-webkit-scrollbar { width: 8px; height: 8px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; } ::-webkit-scrollbar-thumb:hover { background: #555; }
@@ -87,7 +93,7 @@
         @keyframes toastIn { from { transform: translate(-50%, -100%); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
     </style>
 </head>
-<body class="font-sans antialiased">
+<body class="font-sans antialiased overflow-hidden">
 
     <div id="dbp-splash">
         <div class="splash-logo mb-6">D</div>
@@ -99,7 +105,7 @@
         </div>
     </div>
 
-    <div id="root" class="min-h-screen flex flex-col relative bg-grid"></div>
+    <div id="root" class="h-screen flex bg-grid"></div>
 
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -468,7 +474,6 @@
         });
     <\/script>
     <script id="dbp-live-editor">
-        // LIVE EDITOR LOGIC 
         document.querySelectorAll('h1, h2, h3, h4, p, span, li, div.font-display').forEach(el => {
             if (el.closest('nav') || el.closest('button') || el.closest('a') || el.classList.contains('fa-solid')) return;
             
@@ -481,33 +486,24 @@
             el.addEventListener('mouseleave', () => {
                 if(document.activeElement !== el) el.style.boxShadow = 'none';
             });
-            
             el.addEventListener('focus', () => {
                 el.style.boxShadow = '0 0 0 2px rgba(168, 85, 247, 0.9)';
             });
-
             el.addEventListener('blur', () => {
                 el.style.boxShadow = 'none';
-                
                 const cleanDoc = document.documentElement.cloneNode(true);
                 cleanDoc.querySelectorAll('[contenteditable]').forEach(node => {
                     node.removeAttribute('contenteditable');
                     node.style.boxShadow = '';
                 });
-                
-                window.parent.postMessage({ 
-                    type: 'LIVE_EDIT_UPDATE', 
-                    html: '<!DOCTYPE html>\\n' + cleanDoc.outerHTML 
-                }, '*');
+                window.parent.postMessage({ type: 'LIVE_EDIT_UPDATE', html: '<!DOCTYPE html>\\n' + cleanDoc.outerHTML }, '*');
             });
         });
     <\/script>
     <script id="dbp-preview-helper">
-        // INTERCEPTS CLICKS IN PREVIEW
         document.addEventListener('click', function(e) {
             const link = e.target.closest('a');
             if (!link) return;
-            
             const href = link.getAttribute('href');
             if (href && href.startsWith('#')) {
                 e.preventDefault();
@@ -532,6 +528,7 @@
 
         const App = () => {
             const [view, setView] = useState('home'); 
+            const [isBuilderRevealed, setIsBuilderRevealed] = useState(false);
             
             const [siteCode, setSiteCode] = useState('');
             const siteCodeRef = useRef(''); 
@@ -622,39 +619,40 @@
                         splash.style.opacity = '0';
                         setTimeout(() => splash.style.display = 'none', 800);
                     }
-                }, 2800);
+                }, 1500);
             }, []);
 
             const showToast = (msg, type='success') => { setToast({msg, type}); setTimeout(() => setToast(null), 3500); };
 
-            const scrollToBuilder = () => {
-                const el = document.getElementById('builder-section');
-                if(el) el.scrollIntoView({ behavior: 'smooth' });
+            const handleGetStarted = () => {
+                setIsBuilderRevealed(true);
+                setTimeout(() => {
+                    const el = document.getElementById('builder-section');
+                    if(el) el.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
             };
 
             const handleAuth = async () => {
                 if (authMode === 'signup') {
                     if (!authForm.name || !authForm.phone || !authForm.password) return showToast("All fields required", "error");
-                    
                     try {
                         const docRef = db.collection('users').doc(authForm.phone);
                         const docSnap = await docRef.get();
                         if (docSnap.exists) return showToast("Phone already registered!", "error");
 
                         const newUser = { name: authForm.name, phone: authForm.phone, password: authForm.password, isPro: false, joined: new Date().toLocaleDateString() };
-                        
                         await docRef.set(newUser);
                         setCurrentUser(newUser);
                         localStorage.setItem('dbp-current-user', JSON.stringify(newUser));
                         setForm(prev => ({...prev, name: newUser.name, phone: newUser.phone}));
                         
                         setView('home');
-                        setTimeout(scrollToBuilder, 100);
+                        setIsBuilderRevealed(true);
+                        setTimeout(() => document.getElementById('builder-section').scrollIntoView({ behavior: 'smooth' }), 100);
                         showToast(`Account created! Welcome, ${newUser.name}.`, "success");
                     } catch (err) { showToast("Database Error: Check Firebase Rules", "error"); }
                 } else {
                     if (!authForm.phone || !authForm.password) return showToast("Credentials required", "error");
-                    
                     try {
                         const docRef = db.collection('users').doc(authForm.phone);
                         const docSnap = await docRef.get();
@@ -666,7 +664,8 @@
                             setForm(prev => ({...prev, name: user.name, phone: user.phone}));
                             
                             setView('home');
-                            setTimeout(scrollToBuilder, 100);
+                            setIsBuilderRevealed(true);
+                            setTimeout(() => document.getElementById('builder-section').scrollIntoView({ behavior: 'smooth' }), 100);
                             showToast(`Welcome back, ${user.name}!`, "success");
                         } else { showToast("Invalid credentials.", "error"); }
                     } catch (err) { showToast("Database Error: Check Firebase Rules", "error"); }
@@ -683,7 +682,6 @@
             };
 
             const handleGenerate = () => {
-                // Intercept unauthenticated users
                 if(!currentUser) {
                     showToast("Please authenticate to securely compile your site.", "info");
                     setView('auth');
@@ -785,7 +783,6 @@
                             setToast({msg: "Processing payment...", type: "info"});
                             await db.collection('users').doc(currentUser.phone).update({ isPro: true });
                             showToast("Payment Successful! PRO features unlocked.", "success");
-                            
                             await db.collection('requests').add({ id: response.razorpay_payment_id, user: currentUser.name, phone: currentUser.phone, type: 'Razorpay Auto-Upgrade', status: 'Success', date: new Date().toLocaleDateString() });
                         } catch(err) { showToast("Database error post-payment. Contact admin.", "error"); }
                     },
@@ -824,16 +821,83 @@
             const terminalEndRef = useRef(null);
             useEffect(() => { if(terminalEndRef.current) terminalEndRef.current.scrollIntoView({ behavior: 'smooth' }); }, [loadingLogs]);
 
-            return (
-                <div className="flex-1 flex flex-col relative z-10 h-screen overflow-hidden">
+            // MOBILE NAVBAR COMPONENT
+            const MobileNav = () => (
+                <header className="md:hidden glass-nav h-16 flex items-center justify-between px-6 sticky top-0 z-[100]">
+                    <div className="flex items-center gap-3 cursor-pointer" onClick={() => { setView('home'); window.scrollTo(0,0); }}>
+                        <div className="w-8 h-8 bg-gradient-to-br from-brand-400 to-brand-600 rounded-lg flex items-center justify-center text-white font-display font-bold shadow-[0_0_10px_rgba(139,92,246,0.3)]">D</div>
+                        <span className="font-display font-bold text-lg text-white">DBP<span className="text-brand-400 font-medium">SYSTEMS</span></span>
+                    </div>
+                    <div className="flex gap-4 items-center">
+                        {currentUser ? (
+                            <button onClick={() => setView('profile')} className="text-gray-400 hover:text-white"><i className="fa-solid fa-user"></i></button>
+                        ) : (
+                            <button onClick={() => setView('auth')} className="text-brand-400 font-bold text-xs">LOGIN</button>
+                        )}
+                    </div>
+                </header>
+            );
+
+            // DESKTOP GLASS SIDEBAR COMPONENT
+            const GlassSidebar = () => (
+                <aside className="hidden md:flex flex-col items-center py-8 w-24 fixed left-4 top-4 bottom-4 glass-sidebar z-[100]">
+                    <div className="w-12 h-12 bg-gradient-to-br from-brand-400 to-brand-600 rounded-xl flex items-center justify-center text-white font-display font-bold text-2xl shadow-[0_0_15px_rgba(139,92,246,0.4)] cursor-pointer hover:scale-105 transition transform mb-10" onClick={() => { setView('home'); window.scrollTo(0,0); }}>
+                        D
+                    </div>
                     
-                    <div className="fixed inset-0 pointer-events-none z-[-1] bg-dark-950 bg-grid">
+                    <div className="flex flex-col gap-6 w-full px-4">
+                        <button onClick={() => { setView('home'); window.scrollTo(0,0); }} className={`nav-item ${view === 'home' ? 'active' : ''}`}>
+                            <i className="fa-solid fa-house"></i>
+                            <span className="nav-tooltip">Home Engine</span>
+                        </button>
+
+                        {currentUser && (
+                            <button onClick={() => setView('dashboard')} className={`nav-item ${view === 'dashboard' ? 'active' : ''}`}>
+                                <i className="fa-regular fa-folder-open"></i>
+                                <span className="nav-tooltip">My Assets</span>
+                            </button>
+                        )}
+                        
+                        {currentUser && (
+                            <button onClick={() => setView('profile')} className={`nav-item ${view === 'profile' ? 'active' : ''}`}>
+                                <i className="fa-regular fa-user"></i>
+                                {isPro && <div className="absolute top-0 right-0 w-2.5 h-2.5 bg-yellow-400 rounded-full border-2 border-[#111]"></div>}
+                                <span className="nav-tooltip">User Profile</span>
+                            </button>
+                        )}
+
+                        {isAdmin && (
+                            <button onClick={() => setView('admin')} className={`nav-item ${view === 'admin' ? 'active' : ''} !text-red-400 hover:!bg-red-500/10`}>
+                                <i className="fa-solid fa-shield-halved"></i>
+                                <span className="nav-tooltip">Root Admin</span>
+                            </button>
+                        )}
+                    </div>
+
+                    <div className="mt-auto w-full px-4">
+                        {!currentUser ? (
+                            <button onClick={() => setView('auth')} className="w-full h-12 bg-white text-black rounded-xl font-bold flex items-center justify-center hover:bg-gray-200 transition shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                                <i className="fa-solid fa-right-to-bracket"></i>
+                            </button>
+                        ) : (
+                            <button onClick={() => {setCurrentUser(null); localStorage.removeItem('dbp-current-user'); setView('home'); window.scrollTo(0,0);}} className="w-full h-12 text-gray-500 hover:text-white hover:bg-white/10 rounded-xl transition flex items-center justify-center">
+                                <i className="fa-solid fa-right-from-bracket"></i>
+                            </button>
+                        )}
+                    </div>
+                </aside>
+            );
+
+            return (
+                <div className="flex h-screen overflow-hidden bg-black text-white relative">
+                    
+                    <div className="fixed inset-0 pointer-events-none z-[-1] bg-grid">
                         <div className="absolute top-[-10%] left-[20%] w-[50%] h-[50%] bg-brand-600 rounded-full mix-blend-screen filter blur-[180px] opacity-[0.15] animate-blob"></div>
                         <div className="absolute bottom-[-10%] right-[10%] w-[40%] h-[40%] bg-indigo-500 rounded-full mix-blend-screen filter blur-[180px] opacity-[0.15] animate-blob" style={{animationDelay: '2s'}}></div>
                     </div>
 
                     {toast && (
-                        <div className="fixed top-24 left-1/2 transform -translate-x-1/2 z-[999] toast-enter">
+                        <div className="fixed top-8 left-1/2 transform -translate-x-1/2 z-[999] toast-enter">
                             <div className={`premium-panel px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 border ${toast.type === 'error' ? 'border-red-500/50' : 'border-brand-500/50'}`}>
                                 <i className={`fa-solid ${toast.type === 'error' ? 'fa-triangle-exclamation text-red-400' : 'fa-circle-check text-brand-400'}`}></i>
                                 <span className="font-medium text-sm text-white tracking-wide">{toast.msg}</span>
@@ -841,285 +905,254 @@
                         </div>
                     )}
 
-                    {paymentModalOpen && (
-                        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
-                            <div className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={() => setPaymentModalOpen(false)}></div>
-                            <div className="premium-panel p-10 max-w-md w-full relative z-10 animate-fade-up">
-                                <button onClick={() => setPaymentModalOpen(false)} className="absolute top-6 right-6 text-gray-500 hover:text-white transition"><i className="fa-solid fa-xmark text-xl"></i></button>
-                                <h3 className="font-display font-bold text-3xl text-white mb-2">Upgrade to PRO</h3>
-                                <p className="text-gray-400 text-sm mb-6 leading-relaxed">Unlock all 10 templates, custom SEO, colors, and completely remove the InstantSite watermarks.</p>
-                                
-                                <div className="bg-black/50 border border-white/10 rounded-2xl p-6 text-center mb-8 shadow-inner">
-                                    <div className="text-xs text-brand-400 uppercase tracking-widest mb-3 font-bold">Annual License</div>
-                                    <div className="text-5xl font-display font-bold text-white mb-4">₹999<span className="text-lg text-gray-500 font-sans font-normal">/yr</span></div>
-                                    <p className="text-xs text-gray-500 font-mono mt-4">SECURE RAZORPAY CHECKOUT</p>
-                                </div>
-                                <ul className="text-sm text-gray-400 space-y-2 mb-8 font-mono">
-                                    <li>> 1. Send ₹999 on GPay.</li>
-                                    <li>> 2. Screenshot the transaction.</li>
-                                    <li>> 3. WhatsApp it to us to activate.</li>
-                                </ul>
-                                <div className="flex flex-col gap-3">
-                                    <a href={`https://wa.me/918209772163?text=Hi, I paid ₹999 for PRO. My registered number is ${currentUser?.phone}.`} target="_blank" className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white py-4 rounded-xl font-bold text-center transition flex justify-center items-center gap-2">
-                                        <i className="fa-brands fa-whatsapp text-xl"></i> WhatsApp Screenshot
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    )}
+                    <MobileNav />
+                    <GlassSidebar />
 
-                    <header className="glass-nav h-20 flex items-center justify-between px-6 lg:px-12 sticky top-0 z-[100] flex-shrink-0 transition-all duration-300">
-                        <div className="flex items-center gap-3 cursor-pointer group" onClick={() => { setView('home'); window.scrollTo(0,0); }}>
-                            <div className="w-10 h-10 bg-gradient-to-br from-brand-400 to-brand-600 rounded-xl flex items-center justify-center text-white font-display font-bold text-xl shadow-[0_0_15px_rgba(139,92,246,0.3)] group-hover:scale-105 transition transform">D</div>
-                            <span className="font-display font-bold text-xl tracking-tighter text-white hidden sm:block">DBP<span className="text-brand-400 font-medium">SYSTEMS</span></span>
-                        </div>
-                        <div className="flex items-center gap-6 sm:gap-10 text-xs font-bold text-slate-300 tracking-widest">
-                            {isAdmin && <button onClick={() => setView('admin')} className="text-red-400 hover:text-red-300 transition flex items-center gap-2"><i className="fa-solid fa-shield-halved"></i> ADMIN</button>}
-                            
-                            {/* Pro Badge logic for Header */}
-                            {currentUser && (
-                                <div className="hidden md:flex items-center gap-2 text-brand-200">
-                                    <i className="fa-regular fa-user"></i> {currentUser.name} 
-                                    {isPro && <span className="pro-badge ml-1">PRO</span>}
-                                </div>
-                            )}
-
-                            {currentUser && <button onClick={() => setView('dashboard')} className="hover:text-white transition">DASHBOARD</button>}
-                            
-                            {currentUser ? (
-                                <div className="flex items-center gap-4 pl-4 sm:pl-6 border-l border-white/10">
-                                    <button onClick={() => {setCurrentUser(null); localStorage.removeItem('dbp-current-user'); setView('home'); window.scrollTo(0,0);}} className="text-gray-400 hover:text-white transition"><i className="fa-solid fa-right-from-bracket text-lg"></i></button>
-                                </div>
-                            ) : (
-                                <button onClick={() => setView('auth')} className="bg-white text-black px-6 py-2.5 rounded-full hover:bg-gray-200 transition shadow-[0_0_20px_rgba(255,255,255,0.2)] transform hover:-translate-y-0.5">LOGIN</button>
-                            )}
-                        </div>
-                    </header>
-
-                    <main className="flex-1 overflow-y-auto flex flex-col relative z-10">
+                    {/* MAIN CONTENT AREA - Margin left on desktop for sidebar */}
+                    <main className="flex-1 md:ml-[112px] overflow-y-auto relative z-10 flex flex-col scroll-smooth">
                         
-                        {/* THE UNIFIED SCROLLABLE HOME & BUILDER SCREEN */}
+                        {/* UNIFIED HOME & BUILDER */}
                         {view === 'home' && (
-                            <div className="w-full">
+                            <div className="w-full pb-20">
                                 {/* HERO SECTION */}
-                                <div className="min-h-[calc(100vh-80px)] flex flex-col items-center justify-center text-center p-6 relative overflow-hidden animate-fade-up">
+                                <div className="min-h-[90vh] flex flex-col items-center justify-center text-center p-6 relative overflow-hidden animate-fade-up">
                                     <div className="hero-glow animate-glow-pulse"></div>
-                                    <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center">
+                                    <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center pt-10 md:pt-0">
                                         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-500/10 text-brand-400 text-xs font-bold mb-8 border border-brand-500/20 shadow-[0_0_15px_rgba(139,92,246,0.15)]">
                                             <span className="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
                                             V7 Engine: Pure CSS Generation
                                         </div>
                                         
-                                        <h1 className="font-display text-6xl md:text-8xl lg:text-[7rem] font-black mb-8 tracking-tighter text-white leading-[1.05] drop-shadow-2xl">
-                                            Build SaaS sites.<br/>
-                                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-indigo-400 italic font-semibold">Automated.</span>
+                                        <h1 className="font-display text-5xl md:text-7xl lg:text-[6.5rem] font-black mb-8 tracking-tighter text-white leading-[1.05] drop-shadow-2xl">
+                                            From Vision to Enterprise.<br/>
+                                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-indigo-400 italic font-semibold">In 5 Seconds.</span>
                                         </h1>
                                         
                                         <p className="text-lg md:text-xl text-gray-400 mb-12 max-w-2xl mx-auto font-light leading-relaxed">
-                                            Stop paying agencies ₹50,000. Input your business details and our proprietary AI will write the copy, apply your brand design, and output a flawless enterprise website in seconds.
+                                            Stop burning capital on slow development agencies. InstantSite AI harnesses advanced CSS architectures to deploy elite, production-ready websites instantly.
                                         </p>
                                         
                                         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                                            <button onClick={scrollToBuilder} className="btn-shine px-12 py-5 rounded-2xl text-white font-bold text-sm tracking-widest shadow-2xl flex items-center justify-center gap-3">
+                                            <button onClick={handleGetStarted} className="btn-shine px-12 py-5 rounded-2xl text-white font-bold text-sm tracking-widest shadow-2xl flex items-center justify-center gap-3">
                                                 GET STARTED <i className="fa-solid fa-arrow-down"></i>
                                             </button>
-                                            {currentUser && (
-                                                <button onClick={() => setView('dashboard')} className="btn-secondary px-10 py-5 rounded-2xl text-sm tracking-widest flex items-center justify-center gap-3">
-                                                    <i className="fa-solid fa-folder-open"></i> MY ASSETS
-                                                </button>
-                                            )}
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* BUILDER SECTION (Scrolls down here) */}
-                                <div id="builder-section" className="min-h-screen flex flex-col items-center justify-start p-6 py-20 max-w-6xl mx-auto w-full">
-                                    <div className="text-center max-w-4xl mb-14">
-                                        <h2 className="font-display text-4xl md:text-5xl font-bold mb-4 tracking-tight text-white">
-                                            Configure Architecture.
-                                        </h2>
-                                        <p className="text-gray-400 text-lg font-light">Input structural details below to initialize the CSS generation engine.</p>
+                                {/* CINEMATIC ABOUT SECTIONS */}
+                                <div className="max-w-6xl mx-auto px-6 py-10 z-10 relative">
+                                    <div className="grid md:grid-cols-2 gap-8">
+                                        <div className="premium-panel p-10 relative overflow-hidden group">
+                                            <div className="absolute -right-10 -top-10 w-40 h-40 bg-brand-500/10 blur-[50px] rounded-full group-hover:bg-brand-500/20 transition duration-700"></div>
+                                            <div className="w-14 h-14 bg-black border border-white/10 rounded-2xl flex items-center justify-center mb-6 shadow-inner relative z-10">
+                                                <i className="fa-solid fa-bolt text-2xl text-brand-400"></i>
+                                            </div>
+                                            <h3 className="font-display font-bold text-2xl text-white mb-4 relative z-10">The InstantSite Engine</h3>
+                                            <p className="text-gray-400 leading-relaxed font-light relative z-10">A proprietary AI engine designed to eliminate the friction of web development. By leveraging pre-compiled, pure-CSS architectures, we guarantee perfect lighthouse scores, flawless mobile responsiveness, and zero-dependency deployments right out of the box.</p>
+                                        </div>
+                                        
+                                        <div className="premium-panel p-10 relative overflow-hidden group">
+                                            <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-indigo-500/10 blur-[50px] rounded-full group-hover:bg-indigo-500/20 transition duration-700"></div>
+                                            <div className="w-14 h-14 bg-black border border-white/10 rounded-2xl flex items-center justify-center mb-6 shadow-inner relative z-10">
+                                                <i className="fa-solid fa-microchip text-2xl text-indigo-400"></i>
+                                            </div>
+                                            <h3 className="font-display font-bold text-2xl text-white mb-4 relative z-10">About DBP Systems</h3>
+                                            <p className="text-gray-400 leading-relaxed font-light relative z-10">DBP Systems is a forward-thinking technology hub specializing in next-generation web platforms, hardware automation, and robotics interfaces. We build elite, high-performance tools engineered specifically for the modern entrepreneur and visionary.</p>
+                                        </div>
                                     </div>
+                                </div>
 
-                                    <div className="w-full flex flex-col lg:flex-row gap-8 relative z-10">
-                                        {/* Core Data Panel */}
-                                        <div className="flex-1 premium-panel p-8 md:p-10">
-                                            <h2 className="font-display font-bold text-xl mb-8 flex items-center gap-4 text-white border-b border-white/10 pb-6">
-                                                <div className="w-8 h-8 rounded-full bg-brand-500/20 text-brand-400 border border-brand-500/30 flex items-center justify-center text-sm font-bold shadow-inner">1</div> 
-                                                Core Data
+                                {/* HIDDEN BUILDER SECTION (Revealed on click) */}
+                                {isBuilderRevealed && (
+                                    <div id="builder-section" className="flex flex-col items-center justify-start p-6 py-20 max-w-6xl mx-auto w-full animate-fade-up">
+                                        <div className="text-center max-w-4xl mb-14 border-t border-white/5 pt-20">
+                                            <h2 className="font-display text-4xl md:text-5xl font-bold mb-4 tracking-tight text-white">
+                                                Configure Architecture.
                                             </h2>
-                                            <div className="space-y-6">
-                                                <div>
-                                                    <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Business Name *</label>
-                                                    <div className="input-wrapper">
-                                                        <i className="fa-solid fa-building input-icon"></i>
-                                                        <input type="text" placeholder="e.g. DBP Electronics" value={form.name} onChange={e => setForm({...form, name: e.target.value})} className="input-glass"/>
-                                                    </div>
-                                                </div>
-                                                <div className="grid grid-cols-2 gap-4">
+                                            <p className="text-gray-400 text-lg font-light">Input structural details below to initialize the CSS generation engine.</p>
+                                        </div>
+
+                                        <div className="w-full flex flex-col lg:flex-row gap-8 relative z-10">
+                                            {/* Core Data Panel */}
+                                            <div className="flex-1 premium-panel p-8 md:p-10">
+                                                <h2 className="font-display font-bold text-xl mb-8 flex items-center gap-4 text-white border-b border-white/10 pb-6">
+                                                    <div className="w-8 h-8 rounded-full bg-brand-500/20 text-brand-400 border border-brand-500/30 flex items-center justify-center text-sm font-bold shadow-inner">1</div> 
+                                                    Core Data
+                                                </h2>
+                                                <div className="space-y-6">
                                                     <div>
-                                                        <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Category *</label>
+                                                        <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Business Name *</label>
                                                         <div className="input-wrapper">
-                                                            <i className="fa-solid fa-tags input-icon"></i>
-                                                            <input type="text" placeholder="e.g. Repair Shop" value={form.type} onChange={e => setForm({...form, type: e.target.value})} className="input-glass"/>
+                                                            <i className="fa-solid fa-building input-icon"></i>
+                                                            <input type="text" placeholder="e.g. DBP Electronics" value={form.name} onChange={e => setForm({...form, name: e.target.value})} className="input-glass"/>
                                                         </div>
                                                     </div>
-                                                    <div>
-                                                        <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">City *</label>
-                                                        <div className="input-wrapper">
-                                                            <i className="fa-solid fa-location-dot input-icon"></i>
-                                                            <input type="text" placeholder="e.g. Patna" value={form.city} onChange={e => setForm({...form, city: e.target.value})} className="input-glass"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
-                                                <div className="grid grid-cols-2 gap-4">
-                                                    <div className="col-span-2 sm:col-span-1">
-                                                        <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Pricing Section?</label>
-                                                        <div className="input-wrapper">
-                                                            <select value={form.hasPricing} onChange={e => setForm({...form, hasPricing: e.target.value})} className="input-glass">
-                                                                <option value="no">Disable</option>
-                                                                <option value="yes">Enable Pricing</option>
-                                                            </select>
-                                                            <i className="fa-solid fa-chevron-down absolute right-4 text-gray-500 pointer-events-none text-xs"></i>
-                                                        </div>
-                                                    </div>
-                                                    {form.hasPricing === 'yes' && (
-                                                        <div className="col-span-2 sm:col-span-1 animate-fade-in">
-                                                            <label className="block text-xs font-bold text-brand-400 mb-2 uppercase tracking-widest">Pricing Info *</label>
+                                                    <div className="grid grid-cols-2 gap-4">
+                                                        <div>
+                                                            <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Category *</label>
                                                             <div className="input-wrapper">
-                                                                <i className="fa-solid fa-indian-rupee-sign input-icon text-brand-400"></i>
-                                                                <input type="text" placeholder="e.g. Starts at ₹499" value={form.pricingDetails} onChange={e => setForm({...form, pricingDetails: e.target.value})} className="input-glass border-brand-500/30 focus:border-brand-500"/>
+                                                                <i className="fa-solid fa-tags input-icon"></i>
+                                                                <input type="text" placeholder="e.g. Repair Shop" value={form.type} onChange={e => setForm({...form, type: e.target.value})} className="input-glass"/>
                                                             </div>
                                                         </div>
-                                                    )}
-                                                </div>
-
-                                                <div>
-                                                    <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">WhatsApp No. *</label>
-                                                    <div className="input-wrapper">
-                                                        <i className="fa-brands fa-whatsapp input-icon"></i>
-                                                        <input type="tel" placeholder="e.g. 9827700975" value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} className="input-glass"/>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Detailed Address <span className="opacity-50">(Optional)</span></label>
-                                                    <div className="input-wrapper">
-                                                        <i className="fa-solid fa-map-pin input-icon"></i>
-                                                        <input type="text" placeholder="Optional exact location..." value={form.address} onChange={e => setForm({...form, address: e.target.value})} className="input-glass"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* AI Tuning Panel */}
-                                        <div className="flex-1 premium-panel p-8 md:p-10 flex flex-col relative overflow-hidden">
-                                            <div className="absolute top-0 right-0 p-8 opacity-[0.02]"><i className="fa-solid fa-microchip text-[12rem]"></i></div>
-                                            <h2 className="font-display font-bold text-xl mb-8 flex items-center gap-4 text-white border-b border-white/10 pb-6 relative z-10">
-                                                <div className="w-8 h-8 rounded-full bg-black border border-white/10 flex items-center justify-center text-sm font-bold shadow-inner text-gray-500">2</div> 
-                                                AI Tuning
-                                            </h2>
-                                            <div className="space-y-6 flex-1 relative z-10">
-                                                <div>
-                                                    <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Custom Description</label>
-                                                    <div className="input-wrapper items-start">
-                                                        <i className="fa-solid fa-pen-nib input-icon textarea-icon"></i>
-                                                        <textarea placeholder="Describe unique features. AI will rewrite into professional copy..." value={form.description} onChange={e => setForm({...form, description: e.target.value})} className="input-glass h-24 resize-none"></textarea>
-                                                    </div>
-                                                </div>
-                                                
-                                                <div className="space-y-6 border-t border-white/5 pt-6">
-                                                    <div>
-                                                        <label className="flex justify-between text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest"><span>Specific Services (CSV)</span>{!isPro && <span className="pro-badge"><i className="fa-solid fa-lock text-[8px] mr-1"></i>PRO</span>}</label>
-                                                        <div className="input-wrapper items-start">
-                                                            <i className="fa-solid fa-list-check input-icon textarea-icon"></i>
-                                                            <textarea placeholder={isPro ? "e.g. Screen Repair, Data Recovery" : "Locked in Free Tier"} value={form.services} onChange={e => setForm({...form, services: e.target.value})} disabled={!isPro} className={`input-glass h-16 resize-none ${!isPro && 'bg-black/50 border-white/5'}`}></textarea>
+                                                        <div>
+                                                            <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">City *</label>
+                                                            <div className="input-wrapper">
+                                                                <i className="fa-solid fa-location-dot input-icon"></i>
+                                                                <input type="text" placeholder="e.g. Patna" value={form.city} onChange={e => setForm({...form, city: e.target.value})} className="input-glass"/>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     
+                                                    <div className="grid grid-cols-2 gap-4">
+                                                        <div className="col-span-2 sm:col-span-1">
+                                                            <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Pricing Section?</label>
+                                                            <div className="input-wrapper">
+                                                                <select value={form.hasPricing} onChange={e => setForm({...form, hasPricing: e.target.value})} className="input-glass">
+                                                                    <option value="no">Disable</option>
+                                                                    <option value="yes">Enable Pricing</option>
+                                                                </select>
+                                                                <i className="fa-solid fa-chevron-down absolute right-4 text-gray-500 pointer-events-none text-xs"></i>
+                                                            </div>
+                                                        </div>
+                                                        {form.hasPricing === 'yes' && (
+                                                            <div className="col-span-2 sm:col-span-1 animate-fade-in">
+                                                                <label className="block text-xs font-bold text-brand-400 mb-2 uppercase tracking-widest">Pricing Info *</label>
+                                                                <div className="input-wrapper">
+                                                                    <i className="fa-solid fa-indian-rupee-sign input-icon text-brand-400"></i>
+                                                                    <input type="text" placeholder="e.g. Starts at ₹499" value={form.pricingDetails} onChange={e => setForm({...form, pricingDetails: e.target.value})} className="input-glass border-brand-500/30 focus:border-brand-500"/>
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+
                                                     <div>
-                                                        <label className="flex justify-between text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest"><span>SEO Meta Tags</span>{!isPro && <span className="pro-badge"><i className="fa-solid fa-lock text-[8px] mr-1"></i>PRO</span>}</label>
+                                                        <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">WhatsApp No. *</label>
                                                         <div className="input-wrapper">
-                                                            <i className="fa-solid fa-magnifying-glass input-icon"></i>
-                                                            <input type="text" placeholder={isPro ? "e.g. best repair patna, quick fix" : "Locked in Free Tier"} value={form.seo} onChange={e => setForm({...form, seo: e.target.value})} disabled={!isPro} className={`input-glass ${!isPro && 'bg-black/50 border-white/5'}`}/>
+                                                            <i className="fa-brands fa-whatsapp input-icon"></i>
+                                                            <input type="tel" placeholder="e.g. 9827700975" value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} className="input-glass"/>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Detailed Address <span className="opacity-50">(Optional)</span></label>
+                                                        <div className="input-wrapper">
+                                                            <i className="fa-solid fa-map-pin input-icon"></i>
+                                                            <input type="text" placeholder="Optional exact location..." value={form.address} onChange={e => setForm({...form, address: e.target.value})} className="input-glass"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* AI Tuning Panel */}
+                                            <div className="flex-1 premium-panel p-8 md:p-10 flex flex-col relative overflow-hidden">
+                                                <div className="absolute top-0 right-0 p-8 opacity-[0.02]"><i className="fa-solid fa-microchip text-[12rem]"></i></div>
+                                                <h2 className="font-display font-bold text-xl mb-8 flex items-center gap-4 text-white border-b border-white/10 pb-6 relative z-10">
+                                                    <div className="w-8 h-8 rounded-full bg-black border border-white/10 flex items-center justify-center text-sm font-bold shadow-inner text-gray-500">2</div> 
+                                                    AI Tuning
+                                                </h2>
+                                                <div className="space-y-6 flex-1 relative z-10">
+                                                    <div>
+                                                        <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Custom Description</label>
+                                                        <div className="input-wrapper items-start">
+                                                            <i className="fa-solid fa-pen-nib input-icon textarea-icon"></i>
+                                                            <textarea placeholder="Describe unique features. AI will rewrite into professional copy..." value={form.description} onChange={e => setForm({...form, description: e.target.value})} className="input-glass h-24 resize-none"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div className="space-y-6 border-t border-white/5 pt-6">
+                                                        <div>
+                                                            <label className="flex justify-between text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest"><span>Specific Services (CSV)</span>{!isPro && <span className="pro-badge"><i className="fa-solid fa-lock text-[8px] mr-1"></i>PRO</span>}</label>
+                                                            <div className="input-wrapper items-start">
+                                                                <i className="fa-solid fa-list-check input-icon textarea-icon"></i>
+                                                                <textarea placeholder={isPro ? "e.g. Screen Repair, Data Recovery" : "Locked in Free Tier"} value={form.services} onChange={e => setForm({...form, services: e.target.value})} disabled={!isPro} className={`input-glass h-16 resize-none ${!isPro && 'bg-black/50 border-white/5'}`}></textarea>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div>
+                                                            <label className="flex justify-between text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest"><span>SEO Meta Tags</span>{!isPro && <span className="pro-badge"><i className="fa-solid fa-lock text-[8px] mr-1"></i>PRO</span>}</label>
+                                                            <div className="input-wrapper">
+                                                                <i className="fa-solid fa-magnifying-glass input-icon"></i>
+                                                                <input type="text" placeholder={isPro ? "e.g. best repair patna, quick fix" : "Locked in Free Tier"} value={form.seo} onChange={e => setForm({...form, seo: e.target.value})} disabled={!isPro} className={`input-glass ${!isPro && 'bg-black/50 border-white/5'}`}/>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    
-                                    {/* 10 Template Design Matrix */}
-                                    <div className="w-full premium-panel p-8 md:p-10 mt-8 relative z-10">
-                                        <h2 className="font-display font-bold text-xl mb-8 flex items-center gap-4 text-white border-b border-white/10 pb-6">
-                                            <div className="w-8 h-8 rounded-full bg-black border border-white/10 flex items-center justify-center text-sm font-bold shadow-inner text-gray-500">3</div> 
-                                            Design Matrix
-                                        </h2>
-                                        <div className="grid lg:grid-cols-3 gap-12">
-                                            <div className="lg:col-span-1 border-r border-white/5 pr-8">
-                                                <label className="block text-xs font-bold text-gray-500 mb-4 uppercase tracking-widest">Brand Palette</label>
-                                                <div className="flex flex-wrap gap-4">
-                                                    {presetColors.map(c => (
-                                                        <button key={c} onClick={() => handleColorSelect(c)} className={`w-10 h-10 rounded-full cursor-pointer transition transform ${form.color === c ? 'scale-110 ring-2 ring-white ring-offset-4 ring-offset-[#0a0a0a] shadow-[0_0_15px_currentColor]' : 'opacity-50 hover:opacity-100 hover:scale-110 shadow-inner border border-white/10'}`} style={{backgroundColor: c}}/>
-                                                    ))}
-                                                    <div className="w-px h-10 bg-white/10 mx-1"></div>
-                                                    {proColors.map(c => (
-                                                        <button key={c} onClick={() => handleColorSelect(c)} className={`relative w-10 h-10 rounded-full cursor-pointer transition transform ${form.color === c ? 'scale-110 ring-2 ring-white ring-offset-4 ring-offset-[#0a0a0a] shadow-[0_0_15px_currentColor]' : 'opacity-50 hover:opacity-100 hover:scale-110 shadow-inner border border-white/10'} ${!isPro && 'pro-locked'}`} style={{backgroundColor: c}}>
-                                                            {!isPro && <i className="fa-solid fa-lock text-[10px] text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 opacity-80"></i>}
+                                        
+                                        {/* 10 Template Design Matrix */}
+                                        <div className="w-full premium-panel p-8 md:p-10 mt-8 relative z-10">
+                                            <h2 className="font-display font-bold text-xl mb-8 flex items-center gap-4 text-white border-b border-white/10 pb-6">
+                                                <div className="w-8 h-8 rounded-full bg-black border border-white/10 flex items-center justify-center text-sm font-bold shadow-inner text-gray-500">3</div> 
+                                                Design Matrix
+                                            </h2>
+                                            <div className="grid lg:grid-cols-3 gap-12">
+                                                <div className="lg:col-span-1 border-r border-white/5 pr-8">
+                                                    <label className="block text-xs font-bold text-gray-500 mb-4 uppercase tracking-widest">Brand Palette</label>
+                                                    <div className="flex flex-wrap gap-4">
+                                                        {presetColors.map(c => (
+                                                            <button key={c} onClick={() => handleColorSelect(c)} className={`w-10 h-10 rounded-full cursor-pointer transition transform ${form.color === c ? 'scale-110 ring-2 ring-white ring-offset-4 ring-offset-[#0a0a0a] shadow-[0_0_15px_currentColor]' : 'opacity-50 hover:opacity-100 hover:scale-110 shadow-inner border border-white/10'}`} style={{backgroundColor: c}}/>
+                                                        ))}
+                                                        <div className="w-px h-10 bg-white/10 mx-1"></div>
+                                                        {proColors.map(c => (
+                                                            <button key={c} onClick={() => handleColorSelect(c)} className={`relative w-10 h-10 rounded-full cursor-pointer transition transform ${form.color === c ? 'scale-110 ring-2 ring-white ring-offset-4 ring-offset-[#0a0a0a] shadow-[0_0_15px_currentColor]' : 'opacity-50 hover:opacity-100 hover:scale-110 shadow-inner border border-white/10'} ${!isPro && 'pro-locked'}`} style={{backgroundColor: c}}>
+                                                                {!isPro && <i className="fa-solid fa-lock text-[10px] text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 opacity-80"></i>}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                                <div className="lg:col-span-2">
+                                                    <label className="block text-xs font-bold text-gray-500 mb-4 uppercase tracking-widest">10 System Architectures</label>
+                                                    <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                                                        <button onClick={() => handleTemplateSelect('minimal')} className={`p-4 rounded-xl border ${form.template === 'minimal' ? 'border-brand-500 bg-brand-500/10 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'border-white/5 bg-black/50 hover:border-white/20'} transition flex flex-col items-center gap-3`}>
+                                                            <div className="w-full h-8 bg-gray-200 rounded-sm opacity-80 flex flex-col gap-1.5 p-1.5"><div className="h-1 bg-gray-400 w-3/4"></div><div className="h-1 bg-gray-400 w-1/2"></div></div><span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Minimal</span>
                                                         </button>
-                                                    ))}
+                                                        <button onClick={() => handleTemplateSelect('bento')} className={`p-4 rounded-xl border ${form.template === 'bento' ? 'border-brand-500 bg-brand-500/10 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'border-white/5 bg-black/50 hover:border-white/20'} transition flex flex-col items-center gap-3`}>
+                                                            <div className="w-full h-8 bg-white rounded-md opacity-80 grid grid-cols-2 gap-1 p-1"><div className="bg-gray-300 rounded-sm"></div><div className="bg-gray-300 rounded-sm"></div></div><span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Bento</span>
+                                                        </button>
+                                                        <button onClick={() => handleTemplateSelect('dark')} className={`relative p-4 rounded-xl border ${form.template === 'dark' ? 'border-brand-500 bg-brand-500/10 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'border-white/5 bg-black/50 hover:border-white/20'} transition flex flex-col items-center gap-3 ${!isPro && 'opacity-60 cursor-not-allowed'}`}>
+                                                            {!isPro && <span className="absolute -top-2 right-0 text-[8px] text-red-400 bg-red-400/10 px-1 rounded border border-red-400/20 font-bold"><i className="fa-solid fa-lock"></i> PRO</span>}
+                                                            <div className="w-full h-8 bg-gray-900 border border-gray-700 rounded-md flex items-center justify-center p-1"><div className="w-2 h-2 rounded-full bg-brand-500 shadow-[0_0_8px_#a855f7]"></div></div><span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Dark</span>
+                                                        </button>
+                                                        <button onClick={() => handleTemplateSelect('corporate')} className={`relative p-4 rounded-xl border ${form.template === 'corporate' ? 'border-brand-500 bg-brand-500/10 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'border-white/5 bg-black/50 hover:border-white/20'} transition flex flex-col items-center gap-3 ${!isPro && 'opacity-60 cursor-not-allowed'}`}>
+                                                            {!isPro && <span className="absolute -top-2 right-0 text-[8px] text-red-400 bg-red-400/10 px-1 rounded border border-red-400/20 font-bold"><i className="fa-solid fa-lock"></i> PRO</span>}
+                                                            <div className="w-full h-8 bg-slate-100 border border-slate-300 rounded-sm flex flex-col gap-1 p-1"><div className="h-2 bg-slate-400 w-full rounded-sm"></div><div className="h-2 bg-slate-300 w-full rounded-sm"></div></div><span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Corp</span>
+                                                        </button>
+                                                        <button onClick={() => handleTemplateSelect('creative')} className={`relative p-4 rounded-xl border ${form.template === 'creative' ? 'border-brand-500 bg-brand-500/10 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'border-white/5 bg-black/50 hover:border-white/20'} transition flex flex-col items-center gap-3 lg:col-span-1 col-span-2 ${!isPro && 'opacity-60 cursor-not-allowed'}`}>
+                                                            {!isPro && <span className="absolute -top-2 right-0 text-[8px] text-red-400 bg-red-400/10 px-1 rounded border border-red-400/20 font-bold"><i className="fa-solid fa-lock"></i> PRO</span>}
+                                                            <div className="w-full h-8 bg-white border-2 border-black rounded-[10px] flex items-center justify-center p-1 transform -rotate-3"><div className="w-4 h-1 bg-black"></div></div><span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Creative</span>
+                                                        </button>
+                                                        
+                                                        <button onClick={() => handleTemplateSelect('neon')} className={`relative p-4 rounded-xl border ${form.template === 'neon' ? 'border-brand-500 bg-brand-500/10 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'border-white/5 bg-black/50 hover:border-white/20'} transition flex flex-col items-center gap-3 ${!isPro && 'opacity-60 cursor-not-allowed'}`}>
+                                                            {!isPro && <span className="absolute -top-2 right-0 text-[8px] text-red-400 bg-red-400/10 px-1 rounded border border-red-400/20 font-bold"><i className="fa-solid fa-lock"></i> PRO</span>}
+                                                            <div className="text-2xl mb-1 text-green-400 drop-shadow-[0_0_10px_#4ade80]"><i className="fa-solid fa-bolt"></i></div><span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Neon</span>
+                                                        </button>
+                                                        <button onClick={() => handleTemplateSelect('midnight')} className={`relative p-4 rounded-xl border ${form.template === 'midnight' ? 'border-brand-500 bg-brand-500/10 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'border-white/5 bg-black/50 hover:border-white/20'} transition flex flex-col items-center gap-3 ${!isPro && 'opacity-60 cursor-not-allowed'}`}>
+                                                            {!isPro && <span className="absolute -top-2 right-0 text-[8px] text-red-400 bg-red-400/10 px-1 rounded border border-red-400/20 font-bold"><i className="fa-solid fa-lock"></i> PRO</span>}
+                                                            <div className="text-2xl mb-1 text-indigo-300"><i className="fa-solid fa-star"></i></div><span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Midnight</span>
+                                                        </button>
+                                                        <button onClick={() => handleTemplateSelect('matrix')} className={`relative p-4 rounded-xl border ${form.template === 'matrix' ? 'border-brand-500 bg-brand-500/10 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'border-white/5 bg-black/50 hover:border-white/20'} transition flex flex-col items-center gap-3 ${!isPro && 'opacity-60 cursor-not-allowed'}`}>
+                                                            {!isPro && <span className="absolute -top-2 right-0 text-[8px] text-red-400 bg-red-400/10 px-1 rounded border border-red-400/20 font-bold"><i className="fa-solid fa-lock"></i> PRO</span>}
+                                                            <div className="text-2xl mb-1 text-green-500"><i className="fa-solid fa-terminal"></i></div><span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Matrix</span>
+                                                        </button>
+                                                        <button onClick={() => handleTemplateSelect('glassmorphism')} className={`relative p-4 rounded-xl border ${form.template === 'glassmorphism' ? 'border-brand-500 bg-brand-500/10 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'border-white/5 bg-black/50 hover:border-white/20'} transition flex flex-col items-center gap-3 ${!isPro && 'opacity-60 cursor-not-allowed'}`}>
+                                                            {!isPro && <span className="absolute -top-2 right-0 text-[8px] text-red-400 bg-red-400/10 px-1 rounded border border-red-400/20 font-bold"><i className="fa-solid fa-lock"></i> PRO</span>}
+                                                            <div className="text-2xl mb-1 text-white/60 drop-shadow-sm"><i className="fa-regular fa-clone"></i></div><span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Glass</span>
+                                                        </button>
+                                                        <button onClick={() => handleTemplateSelect('brutalism')} className={`relative p-4 rounded-xl border ${form.template === 'brutalism' ? 'border-brand-500 bg-brand-500/10 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'border-white/5 bg-black/50 hover:border-white/20'} transition flex flex-col items-center gap-3 ${!isPro && 'opacity-60 cursor-not-allowed'}`}>
+                                                            {!isPro && <span className="absolute -top-2 right-0 text-[8px] text-red-400 bg-red-400/10 px-1 rounded border border-red-400/20 font-bold"><i className="fa-solid fa-lock"></i> PRO</span>}
+                                                            <div className="text-2xl mb-1 text-white font-black tracking-tighter">B</div><span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Brutalism</span>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div className="lg:col-span-2">
-                                                <label className="block text-xs font-bold text-gray-500 mb-4 uppercase tracking-widest">10 System Architectures</label>
-                                                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                                                    <button onClick={() => handleTemplateSelect('minimal')} className={`p-4 rounded-xl border ${form.template === 'minimal' ? 'border-brand-500 bg-brand-500/10 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'border-white/5 bg-black/50 hover:border-white/20'} transition flex flex-col items-center gap-3`}>
-                                                        <div className="w-full h-8 bg-gray-200 rounded-sm opacity-80 flex flex-col gap-1.5 p-1.5"><div className="h-1 bg-gray-400 w-3/4"></div><div className="h-1 bg-gray-400 w-1/2"></div></div><span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Minimal</span>
-                                                    </button>
-                                                    <button onClick={() => handleTemplateSelect('bento')} className={`p-4 rounded-xl border ${form.template === 'bento' ? 'border-brand-500 bg-brand-500/10 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'border-white/5 bg-black/50 hover:border-white/20'} transition flex flex-col items-center gap-3`}>
-                                                        <div className="w-full h-8 bg-white rounded-md opacity-80 grid grid-cols-2 gap-1 p-1"><div className="bg-gray-300 rounded-sm"></div><div className="bg-gray-300 rounded-sm"></div></div><span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Bento</span>
-                                                    </button>
-                                                    <button onClick={() => handleTemplateSelect('dark')} className={`relative p-4 rounded-xl border ${form.template === 'dark' ? 'border-brand-500 bg-brand-500/10 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'border-white/5 bg-black/50 hover:border-white/20'} transition flex flex-col items-center gap-3 ${!isPro && 'opacity-60 cursor-not-allowed'}`}>
-                                                        {!isPro && <span className="absolute -top-2 right-0 text-[8px] text-red-400 bg-red-400/10 px-1 rounded border border-red-400/20 font-bold"><i className="fa-solid fa-lock"></i> PRO</span>}
-                                                        <div className="w-full h-8 bg-gray-900 border border-gray-700 rounded-md flex items-center justify-center p-1"><div className="w-2 h-2 rounded-full bg-brand-500 shadow-[0_0_8px_#a855f7]"></div></div><span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Dark</span>
-                                                    </button>
-                                                    <button onClick={() => handleTemplateSelect('corporate')} className={`relative p-4 rounded-xl border ${form.template === 'corporate' ? 'border-brand-500 bg-brand-500/10 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'border-white/5 bg-black/50 hover:border-white/20'} transition flex flex-col items-center gap-3 ${!isPro && 'opacity-60 cursor-not-allowed'}`}>
-                                                        {!isPro && <span className="absolute -top-2 right-0 text-[8px] text-red-400 bg-red-400/10 px-1 rounded border border-red-400/20 font-bold"><i className="fa-solid fa-lock"></i> PRO</span>}
-                                                        <div className="w-full h-8 bg-slate-100 border border-slate-300 rounded-sm flex flex-col gap-1 p-1"><div className="h-2 bg-slate-400 w-full rounded-sm"></div><div className="h-2 bg-slate-300 w-full rounded-sm"></div></div><span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Corp</span>
-                                                    </button>
-                                                    <button onClick={() => handleTemplateSelect('creative')} className={`relative p-4 rounded-xl border ${form.template === 'creative' ? 'border-brand-500 bg-brand-500/10 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'border-white/5 bg-black/50 hover:border-white/20'} transition flex flex-col items-center gap-3 lg:col-span-1 col-span-2 ${!isPro && 'opacity-60 cursor-not-allowed'}`}>
-                                                        {!isPro && <span className="absolute -top-2 right-0 text-[8px] text-red-400 bg-red-400/10 px-1 rounded border border-red-400/20 font-bold"><i className="fa-solid fa-lock"></i> PRO</span>}
-                                                        <div className="w-full h-8 bg-white border-2 border-black rounded-[10px] flex items-center justify-center p-1 transform -rotate-3"><div className="w-4 h-1 bg-black"></div></div><span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Creative</span>
-                                                    </button>
-                                                    
-                                                    <button onClick={() => handleTemplateSelect('neon')} className={`relative p-4 rounded-xl border ${form.template === 'neon' ? 'border-brand-500 bg-brand-500/10 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'border-white/5 bg-black/50 hover:border-white/20'} transition flex flex-col items-center gap-3 ${!isPro && 'opacity-60 cursor-not-allowed'}`}>
-                                                        {!isPro && <span className="absolute -top-2 right-0 text-[8px] text-red-400 bg-red-400/10 px-1 rounded border border-red-400/20 font-bold"><i className="fa-solid fa-lock"></i> PRO</span>}
-                                                        <div className="text-2xl mb-1 text-green-400 drop-shadow-[0_0_10px_#4ade80]"><i className="fa-solid fa-bolt"></i></div><span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Neon</span>
-                                                    </button>
-                                                    <button onClick={() => handleTemplateSelect('midnight')} className={`relative p-4 rounded-xl border ${form.template === 'midnight' ? 'border-brand-500 bg-brand-500/10 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'border-white/5 bg-black/50 hover:border-white/20'} transition flex flex-col items-center gap-3 ${!isPro && 'opacity-60 cursor-not-allowed'}`}>
-                                                        {!isPro && <span className="absolute -top-2 right-0 text-[8px] text-red-400 bg-red-400/10 px-1 rounded border border-red-400/20 font-bold"><i className="fa-solid fa-lock"></i> PRO</span>}
-                                                        <div className="text-2xl mb-1 text-indigo-300"><i className="fa-solid fa-star"></i></div><span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Midnight</span>
-                                                    </button>
-                                                    <button onClick={() => handleTemplateSelect('matrix')} className={`relative p-4 rounded-xl border ${form.template === 'matrix' ? 'border-brand-500 bg-brand-500/10 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'border-white/5 bg-black/50 hover:border-white/20'} transition flex flex-col items-center gap-3 ${!isPro && 'opacity-60 cursor-not-allowed'}`}>
-                                                        {!isPro && <span className="absolute -top-2 right-0 text-[8px] text-red-400 bg-red-400/10 px-1 rounded border border-red-400/20 font-bold"><i className="fa-solid fa-lock"></i> PRO</span>}
-                                                        <div className="text-2xl mb-1 text-green-500"><i className="fa-solid fa-terminal"></i></div><span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Matrix</span>
-                                                    </button>
-                                                    <button onClick={() => handleTemplateSelect('glassmorphism')} className={`relative p-4 rounded-xl border ${form.template === 'glassmorphism' ? 'border-brand-500 bg-brand-500/10 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'border-white/5 bg-black/50 hover:border-white/20'} transition flex flex-col items-center gap-3 ${!isPro && 'opacity-60 cursor-not-allowed'}`}>
-                                                        {!isPro && <span className="absolute -top-2 right-0 text-[8px] text-red-400 bg-red-400/10 px-1 rounded border border-red-400/20 font-bold"><i className="fa-solid fa-lock"></i> PRO</span>}
-                                                        <div className="text-2xl mb-1 text-white/60 drop-shadow-sm"><i className="fa-regular fa-clone"></i></div><span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Glass</span>
-                                                    </button>
-                                                    <button onClick={() => handleTemplateSelect('brutalism')} className={`relative p-4 rounded-xl border ${form.template === 'brutalism' ? 'border-brand-500 bg-brand-500/10 shadow-[0_0_15px_rgba(168,85,247,0.2)]' : 'border-white/5 bg-black/50 hover:border-white/20'} transition flex flex-col items-center gap-3 ${!isPro && 'opacity-60 cursor-not-allowed'}`}>
-                                                        {!isPro && <span className="absolute -top-2 right-0 text-[8px] text-red-400 bg-red-400/10 px-1 rounded border border-red-400/20 font-bold"><i className="fa-solid fa-lock"></i> PRO</span>}
-                                                        <div className="text-2xl mb-1 text-white font-black tracking-tighter">B</div><span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Brutalism</span>
-                                                    </button>
-                                                </div>
-                                            </div>
+                                            <button onClick={handleGenerate} className="w-full mt-12 text-white font-display font-bold text-xl py-5 rounded-xl btn-shine flex justify-center items-center gap-4 tracking-widest">
+                                                <i className="fa-solid fa-microchip"></i> INITIALIZE COMPILATION
+                                            </button>
                                         </div>
-                                        <button onClick={handleGenerate} className="w-full mt-12 text-white font-display font-bold text-xl py-5 rounded-xl btn-shine flex justify-center items-center gap-4 tracking-widest">
-                                            <i className="fa-solid fa-microchip"></i> INITIALIZE COMPILATION
-                                        </button>
                                     </div>
-                                </div>
+                                )}
                             </div>
                         )}
 
@@ -1165,6 +1198,59 @@
                             </div>
                         )}
 
+                        {/* USER PROFILE SCREEN */}
+                        {view === 'profile' && currentUser && (
+                            <div className="flex-1 p-6 lg:p-12 animate-fade-up max-w-4xl mx-auto w-full">
+                                <div className="text-center mb-12">
+                                    <div className="w-24 h-24 bg-brand-500/10 border border-brand-500/30 rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_0_30px_rgba(139,92,246,0.2)] relative">
+                                        <i className="fa-solid fa-user text-4xl text-brand-400"></i>
+                                        {isPro && <div className="absolute top-0 right-0 w-4 h-4 bg-yellow-400 rounded-full border-2 border-[#111]"></div>}
+                                    </div>
+                                    <h1 className="font-display font-bold text-4xl text-white mb-2">{currentUser.name}</h1>
+                                    <p className="text-gray-400 font-mono">{currentUser.phone}</p>
+                                </div>
+
+                                <div className="grid md:grid-cols-2 gap-8">
+                                    <div className="premium-panel p-8">
+                                        <h3 className="text-gray-500 font-bold text-xs uppercase tracking-widest mb-6 border-b border-white/10 pb-4">Account Details</h3>
+                                        <div className="space-y-5">
+                                            <div className="flex justify-between items-center bg-black/30 p-4 rounded-xl border border-white/5">
+                                                <span className="text-gray-400 text-sm">Member Since</span>
+                                                <span className="text-white font-mono text-sm">{currentUser.joined || 'Recent'}</span>
+                                            </div>
+                                            <div className="flex justify-between items-center bg-black/30 p-4 rounded-xl border border-white/5">
+                                                <span className="text-gray-400 text-sm">Projects Generated</span>
+                                                <span className="text-white font-bold">{userSites.length}</span>
+                                            </div>
+                                            <div className="pt-4 mt-4">
+                                                <button onClick={() => {setCurrentUser(null); localStorage.removeItem('dbp-current-user'); setView('home'); window.scrollTo(0,0);}} className="w-full bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500 hover:text-white py-4 rounded-xl font-bold text-xs tracking-widest transition uppercase">LOGOUT CURRENT SESSION</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className={`premium-panel p-8 flex flex-col justify-center border ${isPro ? 'border-brand-500/50 shadow-[0_0_30px_rgba(139,92,246,0.15)]' : 'border-white/10'}`}>
+                                        <div className="text-center">
+                                            <h3 className="text-gray-500 font-bold text-xs uppercase tracking-widest mb-6 border-b border-white/10 pb-4 text-left">License Status</h3>
+                                            {isPro ? (
+                                                <div className="py-4">
+                                                    <div className="inline-block pro-badge text-lg px-6 py-2 mb-4 animate-glow-pulse shadow-[0_0_20px_rgba(251,191,36,0.4)]">ACTIVE PRO MEMBER</div>
+                                                    <p className="text-gray-400 text-sm leading-relaxed max-w-xs mx-auto">All enterprise architectures and SEO generation engines are fully unlocked and ready for deployment.</p>
+                                                </div>
+                                            ) : (
+                                                <div className="py-2">
+                                                    <div className="inline-block bg-gray-800 text-gray-400 font-bold text-xs px-3 py-1 rounded mb-4 tracking-widest uppercase border border-white/10">FREE TIER</div>
+                                                    <p className="text-gray-400 text-sm mb-8 leading-relaxed max-w-xs mx-auto">Upgrade to PRO to unlock all 10 templates, custom SEO, and remove generated watermarks.</p>
+                                                    <button onClick={handlePaymentInit} className="w-full btn-shine py-4 rounded-xl text-xs font-bold tracking-widest flex justify-center items-center gap-2">
+                                                        <i className="fa-solid fa-bolt"></i> UPGRADE TO PRO
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
                         {/* DASHBOARD SCREEN */}
                         {view === 'dashboard' && currentUser && (
                             <div className="flex-1 p-6 lg:p-12 animate-fade-up max-w-7xl mx-auto w-full">
@@ -1172,7 +1258,7 @@
                                     <div>
                                         <h1 className="font-display font-bold text-4xl text-white tracking-tight flex items-center gap-4">
                                             Project Matrix 
-                                            {isPro && <span className="pro-badge text-xs">PRO MEMBER</span>}
+                                            {isPro && <span className="pro-badge text-xs">PRO</span>}
                                         </h1>
                                         <p className="text-gray-400 mt-2 font-light">Welcome back, {currentUser.name}. Manage your cloud-saved architectures below.</p>
                                     </div>
@@ -1219,7 +1305,7 @@
                         {view === 'admin' && isAdmin && (
                             <div className="flex-1 p-6 lg:p-12 animate-fade-up max-w-7xl mx-auto w-full">
                                 <div className="flex justify-between items-end mb-10 border-b border-white/10 pb-6">
-                                    <div><h1 className="font-display font-bold text-4xl text-white flex items-center gap-4">System Admin <span className="pro-badge text-xs">ROOT</span></h1><p className="text-gray-400 mt-2">Total control over platform architecture.</p></div>
+                                    <div><h1 className="font-display font-bold text-4xl text-white flex items-center gap-4">System Admin <span className="pro-badge text-xs !bg-gradient-to-r !from-red-500 !to-red-700 !text-white !shadow-[0_0_15px_rgba(239,68,68,0.5)]">ROOT</span></h1><p className="text-gray-400 mt-2">Total control over platform architecture.</p></div>
                                 </div>
                                 
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
@@ -1235,7 +1321,7 @@
                                             {users.length === 0 ? <p className="text-gray-500 italic">No users yet.</p> : users.map(u => (
                                                 <div key={u.phone} className="flex justify-between items-center bg-black/50 p-5 rounded-2xl border border-white/5 hover:border-white/10 transition">
                                                     <div>
-                                                        <div className="font-bold text-white text-lg flex items-center gap-3">{u.name} {u.isPro && <span className="pro-badge">PRO</span>}</div>
+                                                        <div className="font-bold text-white text-lg flex items-center gap-3">{u.name} {u.isPro && <span className="pro-badge text-[8px]">PRO</span>}</div>
                                                         <div className="text-xs text-gray-500 font-mono mt-2"><i className="fa-solid fa-phone text-[10px] mr-1"></i> {u.phone} <span className="mx-2">•</span> {u.joined}</div>
                                                     </div>
                                                     <div className="flex gap-2">
@@ -1334,6 +1420,7 @@
                                 </div>
 
                                 <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8 items-start relative z-10">
+                                    {/* Free Tier */}
                                     <div className="premium-panel p-10 border border-white/5 hover:border-white/10 transition duration-300">
                                         <h3 className="font-display font-bold text-2xl mb-2 text-white">Starter Code</h3>
                                         <p className="text-gray-500 text-sm mb-8">Own your code completely.</p>
@@ -1346,6 +1433,7 @@
                                         <button onClick={downloadHTML} className="btn-secondary w-full py-4 text-xs font-bold tracking-widest uppercase flex justify-center items-center gap-2 hover:bg-white hover:text-black transition"><i className="fa-solid fa-download"></i> Export Free HTML</button>
                                     </div>
 
+                                    {/* Pro Tier (Highlight) */}
                                     <div className="premium-panel p-10 border border-brand-500/50 shadow-[0_30px_60px_rgba(139,92,246,0.2)] transform md:-translate-y-4 relative z-10">
                                         <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-brand-400 to-brand-600 text-white text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg">Professional Access</div>
                                         <h3 className="font-display font-bold text-2xl mb-2 text-white">Pro Editor</h3>
