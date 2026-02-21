@@ -18,7 +18,9 @@
             messagingSenderId: "669282499799",
             appId: "1:669282499799:web:9fe07b3bdfcc8da3acc492"
         };
-        firebase.initializeApp(firebaseConfig);
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         const db = firebase.firestore();
     </script>
 
@@ -46,7 +48,7 @@
     
     <style>
         html { scroll-behavior: smooth; }
-        body { font-family: 'Inter', sans-serif; background-color: #030303; color: #f8fafc; overflow-x: hidden; }
+        body { font-family: 'Inter', sans-serif; background-color: #030303; color: #f8fafc; overflow: hidden; }
         h1, h2, h3, h4, h5 { font-family: 'Outfit', sans-serif; letter-spacing: -0.02em; }
         
         .bg-grid { background-image: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 50px 50px; }
@@ -54,10 +56,9 @@
 
         .premium-panel { background: linear-gradient(145deg, rgba(20,20,22,0.8), rgba(10,10,12,0.95)); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1); border-radius: 1.5rem; }
         .glass-sidebar { background: rgba(10, 10, 10, 0.4); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 2rem; }
-        .glass-nav { background: rgba(3,3,3,0.7); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .glass-nav { background: rgba(3,3,3,0.7); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); z-index: 60; }
 
-        /* Golden PRO Badge */
-        .pro-badge { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #000; font-weight: 900; font-size: 0.7rem; padding: 0.2rem 0.75rem; border-radius: 0.3rem; text-transform: uppercase; letter-spacing: 0.15em; box-shadow: 0 0 20px rgba(245, 158, 11, 0.5), inset 0 1px 1px rgba(255,255,255,0.5); display: inline-flex; align-items: center; justify-content: center; border: 1px solid #78350f; }
+        .pro-badge { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #000; font-weight: 900; font-size: 0.75rem; padding: 0.25rem 0.85rem; border-radius: 0.4rem; text-transform: uppercase; letter-spacing: 0.15em; box-shadow: 0 0 20px rgba(245, 158, 11, 0.5), inset 0 1px 1px rgba(255,255,255,0.5); display: inline-flex; align-items: center; justify-content: center; border: 1px solid #78350f; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
 
         .input-wrapper { position: relative; display: flex; align-items: center; width: 100%; }
         .input-icon { position: absolute; left: 1.25rem; color: #64748b; font-size: 1rem; pointer-events: none; z-index: 10; }
@@ -69,7 +70,7 @@
         .input-glass:disabled { opacity: 0.3; cursor: not-allowed; }
         select.input-glass { appearance: none; cursor: pointer; } select.input-glass option { background: #0a0a0a; color: white; }
 
-        .btn-shine { position: relative; overflow: hidden; background: linear-gradient(90deg, #7c3aed, #a855f7, #7c3aed); background-size: 200% 100%; animation: shimmer 3s infinite linear; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 10px 30px rgba(139, 92, 246, 0.25), inset 0 1px 0 rgba(255,255,255,0.3); border-radius: 0.75rem; color: white; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; transition: all 0.3s ease; }
+        .btn-shine { position: relative; overflow: hidden; background: linear-gradient(90deg, #7c3aed, #a855f7, #7c3aed); background-size: 200% 100%; animation: shimmer 3s infinite linear; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 10px 30px rgba(139, 92, 246, 0.25), inset 0 1px 0 rgba(255,255,255,0.3); border-radius: 0.75rem; color: white; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; transition: transform 0.3s ease; }
         .btn-shine:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(168, 85, 247, 0.4), inset 0 1px 0 rgba(255,255,255,0.4); }
         .btn-secondary { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem; color: white; font-weight: 600; transition: all 0.3s ease; }
         .btn-secondary:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
@@ -83,22 +84,43 @@
         .terminal-window { background: #000; border: 1px solid #1e293b; border-radius: 12px; overflow: hidden; box-shadow: 0 0 40px rgba(16, 185, 129, 0.1); }
         .hacker-text { font-family: 'JetBrains Mono', monospace; color: #10b981; text-shadow: 0 0 5px rgba(16, 185, 129, 0.4); font-size: 13px; line-height: 1.6; }
         
-        /* PERFECTED DEVICE PREVIEWS */
-        .device-mobile { width: 390px; height: 844px; border: 14px solid #111; border-radius: 48px; position: relative; overflow: hidden; background: white; display: flex; flex-direction: column; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 0 0 2px #333, 0 30px 60px rgba(0,0,0,0.8);}
-        .device-mobile::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 140px; height: 32px; background: #111; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; z-index: 50; }
-        .device-mobile::after { content: ''; position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 130px; height: 5px; background: #e5e5e5; border-radius: 10px; z-index: 50; mix-blend-mode: difference;}
-        
-        .device-desktop { width: 100%; height: 100%; border: none; border-radius: 0; overflow: hidden; background: #050505; display: flex; flex-direction: column; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);}
-        .browser-bar { background: #111; height: 44px; display: flex; align-items: center; padding: 0 16px; gap: 8px; border-bottom: 1px solid #222; z-index: 50;}
-        
-        ::-webkit-scrollbar { width: 8px; height: 8px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; } ::-webkit-scrollbar-thumb:hover { background: #555; }
-        input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; } input[type="color"]::-webkit-color-swatch { border: none; border-radius: 4px; }
+        /* ULTIMATE DUAL-SCROLL & DEVICE MORPHING SYSTEM */
+        .preview-outer-wrapper { flex: 1; overflow-y: auto; overflow-x: hidden; background: rgba(0,0,0,0.3); display: flex; flex-direction: column; align-items: center; padding: 3rem 2rem 8rem 2rem; position: relative; }
+        .preview-outer-wrapper::-webkit-scrollbar { width: 12px; }
+        .preview-outer-wrapper::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-left: 1px solid rgba(255,255,255,0.05); }
+        .preview-outer-wrapper::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 6px; border: 3px solid #000; }
+        .preview-outer-wrapper::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 0.5); }
+
+        .device-morph { position: relative; background: #000; display: flex; flex-direction: column; flex-shrink: 0; overflow: hidden; transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 0 0 2px #262626, 0 40px 80px rgba(0,0,0,0.9); margin: 0 auto; box-sizing: border-box; }
+        .mode-mobile { width: 390px; max-width: 90vw; height: 844px; border: 14px solid #141414; border-radius: 45px; }
+        .mode-desktop { width: 100%; max-width: 1150px; height: 80vh; min-height: 600px; border: 14px solid #141414; border-bottom-width: 24px; border-radius: 16px 16px 0 0; }
+
+        .device-camera { position: absolute; left: 50%; transform: translateX(-50%); background: #000; z-index: 50; transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+        .mode-mobile .device-camera { top: 14px; width: 125px; height: 32px; border-radius: 20px; box-shadow: inset 0 0 4px rgba(255,255,255,0.2); }
+        .mode-desktop .device-camera { top: 8px; width: 8px; height: 8px; border-radius: 50%; box-shadow: inset 0 0 2px rgba(255,255,255,0.5); }
+
+        .mobile-home-indicator { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); width: 140px; height: 5px; background: rgba(255,255,255,0.8); border-radius: 10px; z-index: 50; mix-blend-mode: difference; opacity: 0; transition: opacity 0.4s; pointer-events: none; }
+        .mode-mobile .mobile-home-indicator { opacity: 1; }
+
+        .desktop-base-wrapper { width: 100%; max-width: 1150px; display: flex; justify-content: center; opacity: 0; height: 0; transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); overflow: visible; margin: 0 auto; }
+        .desktop-active.desktop-base-wrapper { opacity: 1; height: 24px; }
+        .desktop-base { width: 104%; height: 100%; background: linear-gradient(to bottom, #d4d4d4, #737373); border-radius: 0 0 16px 16px; position: relative; box-shadow: inset 0 2px 0 rgba(255,255,255,0.6), 0 30px 60px rgba(0,0,0,0.9); margin-top: -2px; flex-shrink: 0; }
+        .desktop-base::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 150px; height: 8px; background: #a3a3a3; border-radius: 0 0 8px 8px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.4); }
+
+        .browser-bar { background: #111; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #222; z-index: 40; transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+        .mode-desktop .browser-bar { height: 44px; padding: 0 16px; }
+        .mode-mobile .browser-bar { height: 0; opacity: 0; overflow: hidden; border-bottom: none; }
 
         #dbp-splash { position: fixed; inset: 0; z-index: 999999; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.8s ease, visibility 0.8s; }
         .splash-logo { width: 80px; height: 80px; background: linear-gradient(135deg, #a855f7, #6366f1); border-radius: 20px; display: flex; align-items: center; justify-content: center; color: white; font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 900; animation: spin-flash 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards; box-shadow: 0 0 40px rgba(139, 92, 246, 0.3); }
         @keyframes spin-flash { 0% { transform: scale(0) rotate(-180deg); opacity: 0; } 50% { transform: scale(1.2) rotate(10deg); opacity: 1; box-shadow: 0 0 80px rgba(168, 85, 247, 0.6); } 100% { transform: scale(1) rotate(0deg); opacity: 1; } }
         .toast-enter { animation: toastIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes toastIn { from { transform: translate(-50%, -100%); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+
+        /* Custom Toggle styling for UI */
+        .toggle-checkbox:checked { right: 0; border-color: #8b5cf6; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #8b5cf6; }
+        .offer-badge { animation: pulse 2s infinite; background: linear-gradient(135deg, #ef4444, #dc2626); color: white; padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.7rem; font-weight: 800; border: 1px solid #f87171;}
     </style>
 </head>
 <body class="font-sans antialiased overflow-hidden">
@@ -106,7 +128,7 @@
     <div id="dbp-splash">
         <div class="splash-logo mb-6">D</div>
         <div class="flex items-center gap-2 overflow-hidden">
-            <h1 class="font-display font-bold text-2xl tracking-widest text-white uppercase translate-y-full opacity-0 animate-[fadeUp_0.5s_ease_0.8s_forwards]" id="splash-text">DBP Systems</h1>
+            <h1 class="font-display font-bold text-2xl tracking-widest text-white uppercase translate-y-full opacity-0 animate-[fadeUp_0.5s_ease_0.8s_forwards]">DBP Systems</h1>
         </div>
         <div class="w-48 h-0.5 bg-gray-900 mt-6 relative overflow-hidden">
             <div class="absolute top-0 left-0 h-full bg-brand-500 animate-[progress_1.5s_ease_1s_forwards]" style="width: 0%; @keyframes progress { to { width: 100%; } }"></div>
@@ -125,21 +147,34 @@
         const generateSmartCopy = (name, type, city, description) => {
             const t = type.toLowerCase();
             let headline, subhead, about;
-            let pricing = [
-                { name: 'Basic', price: '₹999', desc: 'Perfect for standard needs.', f1: 'Standard Service', f2: 'Basic Support', f3: '3-Day TAT' },
-                { name: 'Pro', price: '₹2499', desc: 'Our most popular package.', f1: 'Premium Quality', f2: 'Priority Support', f3: '1-Day TAT' },
-                { name: 'Elite', price: '₹4999', desc: 'The ultimate VIP experience.', f1: 'Unlimited Access', f2: '24/7 Dedicated Support', f3: 'Instant TAT' }
+            
+            let faqs = [
+                { q: "What areas do you serve?", a: `We proudly serve ${city} and the surrounding regions with our expert ${type} services.` },
+                { q: "How can I book a consultation?", a: "Simply click the WhatsApp button anywhere on our site, and our team will respond immediately to assist you." },
+                { q: "Do you offer guarantees on your work?", a: "Yes, we stand behind our quality. We strive for 100% customer satisfaction on every project." }
             ];
 
-            if (t.includes('tech') || t.includes('repair') || t.includes('software') || t.includes('computer')) {
+            let testimonials = [
+                { name: "Arjun M.", text: `Absolutely phenomenal experience! The team at ${name} exceeded all my expectations.`, rating: 5 },
+                { name: "Priya S.", text: `If you need reliable ${type}, look no further. Professional, fast, and transparent in ${city}.`, rating: 5 },
+                { name: "Vikram R.", text: `I've worked with many professionals, but their attention to detail is unmatched. Highly recommended.`, rating: 5 }
+            ];
+
+            let pricing = [
+                { name: 'Starter', price: '₹999', desc: 'Perfect for standard needs.', f1: 'Standard Service', f2: 'Basic Support', f3: '3-Day TAT' },
+                { name: 'Professional', price: '₹2499', desc: 'Our most popular package.', f1: 'Premium Quality', f2: 'Priority Support', f3: '1-Day TAT' },
+                { name: 'Enterprise', price: '₹4999', desc: 'The ultimate VIP experience.', f1: 'Unlimited Access', f2: '24/7 Dedicated Support', f3: 'Instant TAT' }
+            ];
+
+            if (t.includes('tech') || t.includes('repair') || t.includes('software')) {
                 headline = `Next-Generation <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand to-brand-dark">${type}</span>.`;
                 subhead = `Fast, reliable, and expertly engineered solutions for your digital life in ${city}.`;
                 about = description || `At ${name}, we understand that technology drives your day. Our certified experts utilize state-of-the-art tools to deliver precision solutions, ensuring minimal downtime and maximum performance.`;
-            } else if (t.includes('food') || t.includes('restaurant') || t.includes('cafe') || t.includes('bakery')) {
+            } else if (t.includes('food') || t.includes('restaurant') || t.includes('cafe')) {
                 headline = `Savor the <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand to-brand-dark">Exceptional</span>.`;
                 subhead = `Experience culinary mastery and unforgettable flavors, right here in ${city}.`;
                 about = description || `Welcome to ${name}. We source the finest ingredients and pour passion into every recipe. Whether you are seeking a quick bite or a memorable dining experience, our commitment to quality is evident in every detail.`;
-            } else if (t.includes('health') || t.includes('clinic') || t.includes('fitness') || t.includes('gym')) {
+            } else if (t.includes('health') || t.includes('clinic') || t.includes('fitness')) {
                 headline = `Your Wellness, <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand to-brand-dark">Elevated</span>.`;
                 subhead = `Compassionate care and expert health services dedicated to the ${city} community.`;
                 about = description || `${name} is founded on the principle of holistic well-being. Our experienced professionals provide personalized care, utilizing modern practices to help you achieve and maintain your optimal health goals.`;
@@ -148,7 +183,7 @@
                 subhead = `The premier destination for professional ${type} services in ${city}.`;
                 about = description || `At ${name}, we pride ourselves on delivering an uncompromising standard of quality. Our dedicated team brings years of industry expertise to provide bespoke solutions that consistently exceed client expectations.`;
             }
-            return { headline, subhead, about, pricing };
+            return { headline, subhead, about, pricing, faqs, testimonials };
         };
 
         const generateSiteHTML = (data, isPro) => {
@@ -156,10 +191,11 @@
             let finalServices = data.services && isPro ? data.services.split(',').map(s => s.trim()).filter(s => s.length > 0) : ['Premium Quality', 'Rapid Turnaround', 'Expert Consultations', '24/7 Support'];
             while(finalServices.length < 4) finalServices.push('Dedicated Support');
 
-            const t = isPro ? data.template : (data.template === 'bento' || data.template === 'minimal' ? data.template : 'minimal'); 
+            const validTemplates = ['minimal', 'bento', 'dark', 'corporate', 'creative', 'neon', 'midnight', 'matrix', 'glassmorphism', 'brutalism'];
+            const t = isPro ? (validTemplates.includes(data.template) ? data.template : 'minimal') : (['bento', 'minimal'].includes(data.template) ? data.template : 'minimal'); 
             const mainColor = data.color || '#a855f7';
 
-            let fontName = 'Outfit'; let fontImport = 'Outfit:wght@300;400;600;800;900';
+            let fontName = 'Outfit', fontImport = 'Outfit:wght@300;400;600;800;900';
             let bodyClass, navClass, headClass, subClass, sectionBg1, sectionBg2, radiusClass, cardClass, customCSS = '';
 
             if (t === 'minimal') {
@@ -169,71 +205,62 @@
                 sectionBg1 = 'bg-white'; sectionBg2 = 'bg-gray-50'; radiusClass = 'rounded-none';
                 cardClass = 'bg-white border border-gray-200 hover:-translate-y-1 hover:shadow-2xl text-gray-600 transition-all duration-300';
                 customCSS = `.hero-bg { background-image: radial-gradient(${mainColor} 1px, transparent 1px); background-size: 40px 40px; background-color: #fafafa; }`;
-            } 
-            else if (t === 'bento') {
+            } else if (t === 'bento') {
                 bodyClass = 'bg-[#f8fafc] text-slate-800'; navClass = 'bg-white/80 border-slate-200 text-slate-900'; 
                 headClass = 'text-slate-900'; subClass = 'text-slate-500';
                 sectionBg1 = 'bg-white'; sectionBg2 = 'bg-[#f8fafc]'; radiusClass = 'rounded-[2rem]';
                 cardClass = 'bg-white border border-slate-100 rounded-[2rem] hover:-translate-y-2 hover:shadow-2xl hover:border-brand-light text-slate-600 transition-all duration-300';
                 customCSS = `.hero-bg { background: linear-gradient(135deg, #ffffff, #f1f5f9); }`;
-            }
-            else if (t === 'dark') {
+            } else if (t === 'dark') {
                 fontName = 'Space Grotesk'; fontImport = 'Space+Grotesk:wght@400;600;700';
                 bodyClass = 'bg-[#050505] text-gray-300'; navClass = 'bg-black/70 border-white/5 text-white'; 
                 headClass = 'text-white'; subClass = 'text-gray-400';
                 sectionBg1 = 'bg-[#0a0a0a]'; sectionBg2 = 'bg-[#111111]'; radiusClass = 'rounded-2xl';
                 cardClass = 'bg-[#171717] border border-[#262626] rounded-2xl hover:-translate-y-1 hover:border-brand shadow-lg text-gray-300 transition-all duration-300';
                 customCSS = `.hero-bg { background: radial-gradient(circle at top right, ${mainColor}20, transparent 40%), radial-gradient(circle at bottom left, ${mainColor}10, transparent 40%); }`;
-            }
-            else if (t === 'neon') {
+            } else if (t === 'neon') {
                 fontName = 'Space Grotesk'; fontImport = 'Space+Grotesk:wght@400;600;700';
                 bodyClass = 'bg-[#09090b] text-zinc-300'; navClass = 'bg-[#09090b]/90 border-b border-zinc-800 text-white'; 
                 headClass = 'text-white'; subClass = 'text-zinc-400';
                 sectionBg1 = 'bg-[#09090b]'; sectionBg2 = 'bg-[#18181b]'; radiusClass = 'rounded-none';
                 cardClass = 'bg-[#09090b] border border-zinc-800 hover:-translate-y-1 hover:border-brand hover:shadow-[0_0_20px_var(--tw-shadow-color)] shadow-brand text-zinc-300 transition-all duration-300';
                 customCSS = `.hero-bg { background: #09090b; } .brand-glow { text-shadow: 0 0 15px ${mainColor}; }`;
-            }
-            else if (t === 'midnight') {
+            } else if (t === 'midnight') {
                 fontName = 'Outfit'; fontImport = 'Outfit:wght@300;400;600;800';
                 bodyClass = 'bg-[#020617] text-slate-300'; navClass = 'bg-[#020617]/80 border-b border-slate-800 text-slate-100'; 
                 headClass = 'text-slate-50'; subClass = 'text-slate-400';
                 sectionBg1 = 'bg-[#020617]'; sectionBg2 = 'bg-[#0f172a]'; radiusClass = 'rounded-2xl';
                 cardClass = 'bg-[#1e293b] border border-slate-700 hover:-translate-y-1 hover:border-brand/50 text-slate-300 shadow-xl transition-all duration-300';
                 customCSS = `.hero-bg { background: radial-gradient(ellipse at center, #0f172a 0%, #020617 100%); }`;
-            }
-            else if (t === 'matrix') {
+            } else if (t === 'matrix') {
                 fontName = 'JetBrains Mono'; fontImport = 'JetBrains+Mono:wght@400;700;800';
                 bodyClass = 'bg-black text-brand'; navClass = 'bg-black/90 border-b border-brand/30 text-brand'; 
                 headClass = 'text-brand'; subClass = 'text-brand/70';
                 sectionBg1 = 'bg-black'; sectionBg2 = 'bg-[#050505]'; radiusClass = 'rounded-none';
                 cardClass = 'bg-black border border-brand/40 hover:-translate-y-1 hover:bg-brand/10 text-brand transition-all duration-300';
                 customCSS = `.hero-bg { background-image: linear-gradient(${mainColor}10 1px, transparent 1px), linear-gradient(90deg, ${mainColor}10 1px, transparent 1px); background-size: 30px 30px; }`;
-            }
-            else if (t === 'corporate') {
+            } else if (t === 'corporate') {
                 fontName = 'Inter'; fontImport = 'Inter:wght@400;600;700;900';
                 bodyClass = 'bg-slate-50 text-slate-800'; navClass = 'bg-white/95 border-slate-200 text-slate-900 shadow-sm'; 
                 headClass = 'text-slate-900'; subClass = 'text-slate-600';
                 sectionBg1 = 'bg-white'; sectionBg2 = 'bg-slate-100'; radiusClass = 'rounded-lg';
                 cardClass = 'bg-white border border-slate-200 rounded-lg hover:-translate-y-1 hover:shadow-xl text-slate-600 transition-all duration-300';
                 customCSS = `.hero-bg { background: linear-gradient(to right, #ffffff, #f8fafc); }`;
-            }
-            else if (t === 'glassmorphism') {
+            } else if (t === 'glassmorphism') {
                 fontName = 'Outfit'; fontImport = 'Outfit:wght@300;400;600;700';
                 bodyClass = 'bg-white text-slate-800'; navClass = 'bg-white/40 backdrop-blur-xl border-b border-white/40 text-slate-900 shadow-sm'; 
                 headClass = 'text-slate-900'; subClass = 'text-slate-600';
                 sectionBg1 = 'bg-transparent'; sectionBg2 = 'bg-white/30 backdrop-blur-md'; radiusClass = 'rounded-3xl';
                 cardClass = 'bg-white/40 backdrop-blur-lg border border-white/60 hover:-translate-y-1 hover:bg-white/60 text-slate-700 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] transition-all duration-300';
                 customCSS = `body { background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%); min-height: 100vh; }`;
-            }
-            else if (t === 'brutalism') {
+            } else if (t === 'brutalism') {
                 fontName = 'Syne'; fontImport = 'Syne:wght@600;800';
                 bodyClass = 'bg-[#fdfde3] text-black'; navClass = 'bg-[#fdfde3] border-b-4 border-black text-black'; 
                 headClass = 'text-black font-black uppercase tracking-tight'; subClass = 'text-gray-800 font-medium';
                 sectionBg1 = 'bg-[#fdfde3]'; sectionBg2 = 'bg-[#f0f0c9] border-y-4 border-black'; radiusClass = 'rounded-none';
                 cardClass = 'bg-white border-4 border-black hover:-translate-y-2 hover:translate-x-2 hover:shadow-[-8px_8px_0_0_#000] text-black font-bold transition-transform duration-300';
                 customCSS = `.hero-bg { background: repeating-linear-gradient( 45deg, transparent, transparent 10px, rgba(0,0,0,0.05) 10px, rgba(0,0,0,0.05) 20px ); }`;
-            }
-            else if (t === 'creative') {
+            } else if (t === 'creative') {
                 fontName = 'Syne'; fontImport = 'Syne:wght@600;800';
                 bodyClass = 'bg-[#fafafa] text-gray-900'; navClass = 'bg-transparent text-gray-900'; 
                 headClass = 'text-black font-black uppercase'; subClass = 'text-gray-700 font-medium';
@@ -267,14 +294,134 @@
                 <i class="fa-brands fa-whatsapp"></i>
             </a>`;
 
-            const navPricingLink = data.hasPricing === 'yes' ? `<a href="#pricing" class="hover:text-brand transition">Pricing</a>` : '';
-            const mobileNavPricingLink = data.hasPricing === 'yes' ? `<a href="#pricing" class="mobile-link hover:text-brand">Pricing Plans</a>` : '';
-            const footerPricingLink = data.hasPricing === 'yes' ? `<a href="#pricing" class="hover:text-brand transition">Pricing</a>` : '';
-            
+            // Dynamic Nav Links
+            let navLinksHtml = `<a href="#about" class="hover:text-brand transition">About</a><a href="#services" class="hover:text-brand transition">Services</a>`;
+            let mobileNavLinksHtml = `<a href="#about" class="mobile-link hover:text-brand">About</a><a href="#services" class="mobile-link hover:text-brand">Services</a>`;
+            if (data.showGallery) { navLinksHtml += `<a href="#gallery" class="hover:text-brand transition">Gallery</a>`; mobileNavLinksHtml += `<a href="#gallery" class="mobile-link hover:text-brand">Gallery</a>`; }
+            if (data.showTestimonials) { navLinksHtml += `<a href="#testimonials" class="hover:text-brand transition">Reviews</a>`; mobileNavLinksHtml += `<a href="#testimonials" class="mobile-link hover:text-brand">Reviews</a>`; }
+            if (data.hasPricing === 'yes') { navLinksHtml += `<a href="#pricing" class="hover:text-brand transition">Pricing</a>`; mobileNavLinksHtml += `<a href="#pricing" class="mobile-link hover:text-brand">Pricing</a>`; }
+            if (data.showFAQ) { navLinksHtml += `<a href="#faq" class="hover:text-brand transition">FAQ</a>`; mobileNavLinksHtml += `<a href="#faq" class="mobile-link hover:text-brand">FAQ</a>`; }
+
+            // Hero Switcher with local image placeholder
+            let heroContentHtml = '';
+            if (data.heroStyle === 'split') {
+                heroContentHtml = `
+                <div class="max-w-7xl mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-12 items-center min-h-[85vh] py-32">
+                    <div class="text-left reveal active">
+                        <div class="inline-flex items-center gap-2 px-4 py-1.5 ${t==='brutalism'?'rounded-none border-2 border-black':'rounded-full'} border border-brand/20 text-xs font-bold uppercase tracking-widest mb-8 bg-brand/5 text-brand shadow-sm">
+                            <span class="w-2 h-2 rounded-full bg-brand animate-pulse"></span> Top Rated in ${data.city}
+                        </div>
+                        <h2 class="font-display text-5xl md:text-6xl lg:text-7xl font-black mb-6 tracking-tighter leading-[1.1] ${headClass} brand-glow">${copy.headline}</h2>
+                        <p class="text-lg md:text-xl mb-10 font-light leading-relaxed max-w-lg ${subClass}">${copy.subhead}</p>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <a href="#services" class="bg-brand text-white px-8 py-4 ${t==='brutalism'?'border-2 border-black shadow-[-4px_4px_0_0_#000]':'rounded-xl'} font-bold text-center hover:opacity-90 transition-all">Explore Services</a>
+                            <a href="https://wa.me/91${cleanPhone}" target="_blank" class="px-8 py-4 ${t==='brutalism'?'border-2 border-black bg-white text-black shadow-[-4px_4px_0_0_#000]':'rounded-xl border-2 border-brand/30 text-brand'} text-center font-bold hover:bg-brand/5 transition-all flex items-center justify-center gap-2"><i class="fa-brands fa-whatsapp text-lg"></i> Free Quote</a>
+                        </div>
+                    </div>
+                    <div class="reveal active delay-200 hidden lg:block">
+                        <div class="w-full aspect-[4/3] ${radiusClass} overflow-hidden relative shadow-2xl group border-4 border-dashed ${t.includes('dark') || t==='midnight' || t==='matrix' ? 'border-white/10 bg-white/5' : 'border-black/10 bg-black/5'} flex flex-col items-center justify-center">
+                            <i class="fa-regular fa-image text-6xl mb-4 ${subClass} opacity-50"></i>
+                            <p class="text-sm font-mono ${subClass}">Export HTML & add image as</p>
+                            <p class="text-lg font-bold text-brand mt-1">hero.jpeg</p>
+                            <img src="hero.jpeg" alt="${data.type}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-700 z-10" onerror="this.style.display='none'"/>
+                        </div>
+                    </div>
+                </div>`;
+            } else if (data.heroStyle === 'minimal') {
+                heroContentHtml = `
+                <div class="max-w-7xl mx-auto px-6 relative z-10 flex flex-col justify-center min-h-[85vh] py-32 reveal active">
+                    <h2 class="font-display text-6xl md:text-8xl font-black mb-6 tracking-tighter leading-[1] ${headClass} max-w-4xl">${copy.headline.replace('<span', '<br/><span')}</h2>
+                    <p class="text-xl md:text-3xl mb-12 font-light leading-snug max-w-2xl ${subClass} border-l-4 border-brand pl-6">${copy.subhead}</p>
+                    <a href="https://wa.me/91${cleanPhone}" target="_blank" class="w-max bg-brand text-white px-10 py-5 ${t==='brutalism'?'border-2 border-black shadow-[-4px_4px_0_0_#000]':'rounded-none'} font-bold text-lg hover:opacity-90 transition-all flex items-center gap-3">GET STARTED <i class="fa-solid fa-arrow-right"></i></a>
+                </div>`;
+            } else {
+                heroContentHtml = `
+                <div class="max-w-7xl mx-auto px-6 relative z-10 text-center reveal active">
+                    <div class="inline-flex items-center gap-2 px-5 py-2 ${t==='minimal'||t==='brutalism'||t==='matrix'||t==='neon'?'rounded-none':'rounded-full'} border border-brand/20 text-sm font-semibold mb-8 bg-brand/5 text-brand shadow-sm">
+                        <span class="w-2 h-2 rounded-full bg-brand animate-pulse"></span>
+                        Top Rated in ${data.city}
+                    </div>
+                    <h2 class="font-display text-5xl md:text-7xl lg:text-[6rem] font-black mb-8 tracking-tighter leading-[1.05] max-w-5xl mx-auto ${headClass} brand-glow">
+                        ${copy.headline}
+                    </h2>
+                    <p class="text-lg md:text-2xl max-w-3xl mx-auto mb-12 font-light leading-relaxed ${subClass}">
+                        ${copy.subhead}
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center gap-4">
+                        <a href="#services" class="bg-brand text-white px-10 py-4 ${t==='minimal'||t==='brutalism'||t==='matrix'||t==='neon'?'rounded-none':'rounded-2xl'} font-bold text-lg shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all">Explore Services</a>
+                        <a href="https://wa.me/91${cleanPhone}" target="_blank" class="px-10 py-4 ${t==='minimal'||t==='brutalism'||t==='matrix'||t==='neon'?'rounded-none':'rounded-2xl'} font-bold text-lg border-2 border-brand/30 text-brand hover:bg-brand/5 transition-all flex items-center justify-center gap-2"><i class="fa-brands fa-whatsapp text-xl"></i> Free Quote</a>
+                    </div>
+                </div>`;
+            }
+
+            // Optional Sections with Local Image Placeholders
+            const galleryHtml = data.showGallery ? `
+            <section id="gallery" class="py-32 ${sectionBg2} border-y ${t.includes('dark') || t==='midnight' ? 'border-[#222]' : 'border-gray-100'} overflow-hidden">
+                <div class="max-w-7xl mx-auto px-6">
+                    <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+                        <div class="text-brand font-bold tracking-widest text-sm uppercase mb-4">Our Portfolio</div>
+                        <h3 class="font-display text-4xl md:text-5xl font-black ${headClass}">Recent Work.</h3>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+                        ${[1,2,3,4,5,6].map((i) => `
+                        <div class="aspect-square ${radiusClass} overflow-hidden relative group reveal delay-${(i%3)*100} ${t.includes('dark') || t==='midnight' || t==='matrix' ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} border-2 border-dashed flex flex-col items-center justify-center p-6 text-center">
+                            <i class="fa-regular fa-image text-4xl mb-3 ${subClass} opacity-50"></i>
+                            <p class="text-xs font-mono ${subClass}">Export HTML & add image as</p>
+                            <p class="text-sm font-bold text-brand mt-1">image${i}.jpeg</p>
+                            <img src="image${i}.jpeg" alt="Gallery ${i}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 group-hover:rotate-1 transition duration-500 z-10" onerror="this.style.display='none'"/>
+                        </div>`).join('')}
+                    </div>
+                </div>
+            </section>` : '';
+
+            const testimonialsHtml = data.showTestimonials ? `
+            <section id="testimonials" class="py-32 ${sectionBg1}">
+                <div class="max-w-7xl mx-auto px-6">
+                    <div class="text-center max-w-2xl mx-auto mb-20 reveal">
+                        <div class="text-brand font-bold tracking-widest text-sm uppercase mb-4">Client Feedback</div>
+                        <h3 class="font-display text-4xl md:text-5xl font-black ${headClass}">Don't just take our word for it.</h3>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        ${copy.testimonials.map((test, i) => `
+                        <div class="p-8 ${radiusClass} ${cardClass} relative reveal delay-${i*100}">
+                            <i class="fa-solid fa-quote-right absolute top-8 right-8 text-6xl text-brand opacity-10"></i>
+                            <div class="flex gap-1 text-brand mb-6 text-sm">
+                                ${Array(test.rating).fill('<i class="fa-solid fa-star"></i>').join('')}
+                            </div>
+                            <p class="font-light text-lg leading-relaxed ${subClass} mb-8">"${test.text}"</p>
+                            <div class="flex items-center gap-4 border-t ${t.includes('dark')?'border-white/10':'border-gray-200'} pt-6">
+                                <div class="w-10 h-10 rounded-full bg-brand/20 flex items-center justify-center text-brand font-bold font-display">${test.name.charAt(0)}</div>
+                                <div>
+                                    <h4 class="font-bold ${headClass} text-sm">${test.name}</h4>
+                                    <p class="text-xs ${subClass}">Verified Client</p>
+                                </div>
+                            </div>
+                        </div>`).join('')}
+                    </div>
+                </div>
+            </section>` : '';
+
+            const faqHtml = data.showFAQ ? `
+            <section id="faq" class="py-32 ${sectionBg2} border-y ${t.includes('dark') || t==='midnight' ? 'border-[#222]' : 'border-gray-100'}">
+                <div class="max-w-4xl mx-auto px-6">
+                    <div class="text-center mb-16 reveal">
+                        <div class="text-brand font-bold tracking-widest text-sm uppercase mb-4">FAQ</div>
+                        <h3 class="font-display text-4xl md:text-5xl font-black ${headClass}">Common Questions.</h3>
+                    </div>
+                    <div class="space-y-6">
+                        ${copy.faqs.map((faq, i) => `
+                        <div class="p-6 md:p-8 ${radiusClass} ${cardClass} reveal delay-${i*100}">
+                            <h4 class="font-display font-bold text-xl mb-3 ${headClass} flex items-start gap-4"><i class="fa-solid fa-circle-question text-brand mt-1"></i> ${faq.q}</h4>
+                            <p class="font-light text-base leading-relaxed ${subClass} pl-9">${faq.a}</p>
+                        </div>`).join('')}
+                    </div>
+                </div>
+            </section>` : '';
+
             let pricingSectionHtml = '';
             if (data.hasPricing === 'yes') {
                 pricingSectionHtml = `
-                <section id="pricing" class="py-32 ${sectionBg2}">
+                <section id="pricing" class="py-32 ${sectionBg1}">
                     <div class="max-w-7xl mx-auto px-6">
                         <div class="text-center max-w-2xl mx-auto mb-20 reveal">
                             <div class="text-brand font-bold tracking-widest text-sm uppercase mb-4">Pricing</div>
@@ -284,7 +431,7 @@
                             </div>
                             <p class="text-lg font-light ${subClass}">Choose the tier that fits your needs.</p>
                         </div>
-                        <div class="grid lg:grid-cols-3 gap-8 items-center">
+                        <div class="grid lg:grid-cols-3 gap-8 items-center max-w-5xl mx-auto">
                             ${copy.pricing.map((p, i) => `
                             <div class="p-10 ${radiusClass} ${cardClass} flex flex-col relative reveal delay-${i*100} ${i===1 && t!=='brutalism' ? `border-2 border-brand shadow-[0_20px_50px_rgba(79,70,229,0.15)] transform lg:-translate-y-8 bg-white dark:bg-[#111] z-10 py-14` : ''}">
                                 ${i===1 ? `<div class="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-brand to-brand-dark text-white text-xs font-black px-6 py-2 rounded-full uppercase tracking-widest shadow-xl">Most Popular</div>` : ''}
@@ -304,8 +451,7 @@
                 </section>`;
             }
 
-            return `
-<!DOCTYPE html>
+            return `<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
@@ -343,9 +489,7 @@
                 ${data.name}
             </h1>
             <div class="hidden md:flex gap-8 items-center font-semibold text-sm opacity-80">
-                <a href="#about" class="hover:text-brand transition">About</a>
-                <a href="#services" class="hover:text-brand transition">Services</a>
-                ${navPricingLink}
+                ${navLinksHtml}
             </div>
             <div class="hidden md:block">
                 <a href="https://wa.me/91${cleanPhone}" target="_blank" class="bg-brand text-white px-6 py-2.5 ${t==='minimal'||t==='brutalism'||t==='matrix'||t==='neon'?'rounded-none':'rounded-full'} font-bold text-sm shadow-lg hover:opacity-90 transition transform hover:-translate-y-0.5 inline-block">Contact Us</a>
@@ -355,9 +499,7 @@
 
         <div id="mobile-menu" class="fixed inset-0 ${t.includes('dark') || t==='neon' || t==='midnight' || t==='matrix' ? 'bg-[#0a0a0a]' : 'bg-white'} z-40 flex flex-col pt-24 px-6 pb-8 transition-transform duration-500 mobile-menu-closed md:hidden">
             <div class="flex flex-col gap-6 text-3xl font-display font-black ${headClass}">
-                <a href="#about" class="mobile-link hover:text-brand">About Us</a>
-                <a href="#services" class="mobile-link hover:text-brand">Our Services</a>
-                ${mobileNavPricingLink}
+                ${mobileNavLinksHtml}
             </div>
             <div class="mt-auto">
                 <a href="https://wa.me/91${cleanPhone}" target="_blank" class="w-full bg-brand text-white text-center py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 shadow-xl">
@@ -367,23 +509,8 @@
         </div>
     </nav>
 
-    <header class="relative pt-48 pb-24 md:pt-64 md:pb-40 overflow-hidden hero-bg ${sectionBg1} flex flex-col justify-center min-h-[85vh]">
-        <div class="max-w-7xl mx-auto px-6 relative z-10 text-center reveal active">
-            <div class="inline-flex items-center gap-2 px-5 py-2 ${t==='minimal'||t==='brutalism'||t==='matrix'||t==='neon'?'rounded-none':'rounded-full'} border border-brand/20 text-sm font-semibold mb-8 bg-brand/5 text-brand shadow-sm">
-                <span class="w-2 h-2 rounded-full bg-brand animate-pulse"></span>
-                Top Rated in ${data.city}
-            </div>
-            <h2 class="font-display text-5xl md:text-7xl lg:text-[6rem] font-black mb-8 tracking-tighter leading-[1.05] max-w-5xl mx-auto ${headClass} brand-glow">
-                ${copy.headline}
-            </h2>
-            <p class="text-lg md:text-2xl max-w-3xl mx-auto mb-12 font-light leading-relaxed ${subClass}">
-                ${copy.subhead}
-            </p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#services" class="bg-brand text-white px-10 py-4 ${t==='minimal'||t==='brutalism'||t==='matrix'||t==='neon'?'rounded-none':'rounded-2xl'} font-bold text-lg shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all">Explore Services</a>
-                <a href="https://wa.me/91${cleanPhone}" target="_blank" class="px-10 py-4 ${t==='minimal'||t==='brutalism'||t==='matrix'||t==='neon'?'rounded-none':'rounded-2xl'} font-bold text-lg border-2 border-brand/30 text-brand hover:bg-brand/5 transition-all flex items-center justify-center gap-2"><i class="fa-brands fa-whatsapp text-xl"></i> Free Quote</a>
-            </div>
-        </div>
+    <header class="relative pt-48 pb-24 md:pt-32 md:pb-40 overflow-hidden hero-bg ${sectionBg1} flex flex-col justify-center min-h-[90vh]">
+        ${heroContentHtml}
     </header>
 
     <section id="about" class="py-32 ${sectionBg2} border-y ${t.includes('dark') || t==='matrix' || t==='neon' || t==='midnight' ? 'border-[#222]' : 'border-gray-100'}">
@@ -430,7 +557,10 @@
         </div>
     </section>
 
+    ${galleryHtml}
+    ${testimonialsHtml}
     ${pricingSectionHtml}
+    ${faqHtml}
 
     <footer class="bg-[#050505] text-gray-400 py-20 border-t border-[#222]">
         <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-12 text-center md:text-left items-center md:items-start">
@@ -440,14 +570,12 @@
             </div>
             <div class="flex flex-col space-y-4 font-medium text-sm">
                 <h4 class="text-white font-bold uppercase tracking-widest mb-2">Links</h4>
-                <a href="#about" class="hover:text-brand transition">About Us</a>
-                <a href="#services" class="hover:text-brand transition">Services</a>
-                ${footerPricingLink}
+                ${navLinksHtml}
             </div>
             <div class="flex flex-col md:items-end space-y-4 text-sm text-gray-500">
                 <h4 class="text-white font-bold uppercase tracking-widest mb-2 text-center md:text-right">Contact</h4>
-                <p class="flex items-center gap-3"><i class="fa-solid fa-location-dot"></i> ${data.city} ${data.address ? ', ' + data.address : ''}</p>
-                <p class="flex items-center gap-3"><i class="fa-solid fa-phone"></i> +91 ${data.phone}</p>
+                <p class="flex items-center justify-center md:justify-end gap-3 text-right"><i class="fa-solid fa-location-dot mt-1 flex-shrink-0"></i> <span>${data.hasAddress === 'yes' && data.address ? data.address : data.city}</span></p>
+                <p class="flex items-center justify-center md:justify-end gap-3"><i class="fa-solid fa-phone"></i> +91 ${data.phone}</p>
                 <a href="https://wa.me/91${cleanPhone}" target="_blank" class="bg-brand text-white px-8 py-3 rounded-xl font-bold mt-4 shadow-lg hover:opacity-90 transition inline-block text-center"><i class="fa-brands fa-whatsapp mr-2"></i> Message Us</a>
             </div>
         </div>
@@ -483,9 +611,9 @@
     <\/script>
     <script id="dbp-live-editor">
         let isEditMode = true;
-        const editableElements = document.querySelectorAll('h1, h2, h3, h4, p, span, li, div.font-display');
         
         function applyEditMode() {
+            const editableElements = document.querySelectorAll('h1, h2, h3, h4, p, span, li, div.font-display');
             editableElements.forEach(el => {
                 if (el.closest('nav') || el.closest('button') || el.closest('a') || el.classList.contains('fa-solid')) return;
                 if (isEditMode) {
@@ -500,23 +628,36 @@
             });
         }
 
-        function handleMouseEnter(e) { if(isEditMode && document.activeElement !== e.target) e.target.style.boxShadow = '0 0 0 2px rgba(168, 85, 247, 0.5)'; }
-        function handleMouseLeave(e) { if(isEditMode && document.activeElement !== e.target) e.target.style.boxShadow = 'none'; }
-        function handleFocus(e) { if(isEditMode) e.target.style.boxShadow = '0 0 0 2px rgba(168, 85, 247, 0.9)'; }
-        function handleBlur(e) {
-            e.target.style.boxShadow = 'none';
-            const cleanDoc = document.documentElement.cloneNode(true);
-            cleanDoc.querySelectorAll('[contenteditable]').forEach(node => { node.removeAttribute('contenteditable'); node.style.boxShadow = ''; });
-            window.parent.postMessage({ type: 'LIVE_EDIT_UPDATE', html: '<!DOCTYPE html>\\n' + cleanDoc.outerHTML }, '*');
-        }
-
-        editableElements.forEach(el => {
-            if (el.closest('nav') || el.closest('button') || el.closest('a') || el.classList.contains('fa-solid')) return;
-            el.addEventListener('mouseenter', handleMouseEnter);
-            el.addEventListener('mouseleave', handleMouseLeave);
-            el.addEventListener('focus', handleFocus);
-            el.addEventListener('blur', handleBlur);
+        document.addEventListener('input', (e) => {
+            if(e.target.hasAttribute('contenteditable')) {
+                const cleanDoc = document.documentElement.cloneNode(true);
+                window.parent.postMessage({ type: 'LIVE_EDIT_UPDATE', html: cleanDoc.outerHTML }, '*');
+            }
         });
+
+        document.addEventListener('mouseenter', (e) => {
+            if(isEditMode && e.target.hasAttribute('contenteditable') && document.activeElement !== e.target) {
+                e.target.style.boxShadow = '0 0 0 2px rgba(168, 85, 247, 0.5)';
+            }
+        }, true);
+        
+        document.addEventListener('mouseleave', (e) => {
+            if(isEditMode && e.target.hasAttribute('contenteditable') && document.activeElement !== e.target) {
+                e.target.style.boxShadow = 'none';
+            }
+        }, true);
+
+        document.addEventListener('focus', (e) => {
+            if(isEditMode && e.target.hasAttribute('contenteditable')) {
+                e.target.style.boxShadow = '0 0 0 2px rgba(168, 85, 247, 0.9)';
+            }
+        }, true);
+
+        document.addEventListener('blur', (e) => {
+            if(isEditMode && e.target.hasAttribute('contenteditable')) {
+                e.target.style.boxShadow = 'none';
+            }
+        }, true);
 
         window.addEventListener('message', (event) => {
             if (event.data && event.data.type === 'TOGGLE_EDIT_MODE') {
@@ -578,13 +719,14 @@
 
             const [authMode, setAuthMode] = useState('signup');
             const [authForm, setAuthForm] = useState({ name: '', phone: '', password: '' });
-            const [paymentModalOpen, setPaymentModalOpen] = useState(false);
 
             const presetColors = ['#a855f7', '#10b981', '#f59e0b', '#171717']; 
             const proColors = ['#e11d48', '#d946ef', '#0ea5e9', '#84cc16']; 
 
+            // ENHANCED STATE
             const [form, setForm] = useState({
-                name: '', type: '', city: '', phone: '', address: '', hasPricing: 'no', pricingDetails: '', description: '', services: '', seo: '', color: '#a855f7', template: 'minimal'
+                name: '', type: '', city: '', phone: '', address: '', hasAddress: 'no', hasPricing: 'no', pricingDetails: '', description: '', services: '', seo: '', color: '#a855f7', template: 'minimal',
+                heroStyle: 'center', showTestimonials: true, showFAQ: true, showGallery: true
             });
 
             useEffect(() => {
@@ -632,8 +774,7 @@
             useEffect(() => {
                 const handleIframeMessage = (event) => {
                     if (event.data && event.data.type === 'LIVE_EDIT_UPDATE') {
-                        siteCodeRef.current = event.data.html; 
-                        setSiteCode(event.data.html); 
+                        siteCodeRef.current = event.data.html;
                     }
                 };
                 window.addEventListener('message', handleIframeMessage);
@@ -741,16 +882,18 @@
 
                 if(!form.name || !form.type || !form.city || !form.phone) return showToast("Please fill all required details (marked with *).", "error");
                 if(form.hasPricing === 'yes' && !form.pricingDetails) return showToast("Please provide pricing details, or select 'No' to skip.", "error");
+                if(form.hasAddress === 'yes' && !form.address) return showToast("Please provide a detailed address, or select 'No' to skip.", "error");
                 
                 setView('generating'); setLoadingLogs([]); setLoadingProgress(0);
                 window.scrollTo({top: 0, behavior: 'smooth'});
                 
                 const logs = [
-                    `root@dbp-engine:~$ ./build --type="${form.type}"`,
+                    `root@dbp-engine:~$ ./build --type="${form.type}" --hero="${form.heroStyle}"`,
                     `[OK] Auth Verified: ${isPro ? 'PRO' : 'FREE'} Tier.`,
                     `> fetching business_data: "${form.name.toUpperCase()}"`,
                     form.hasPricing === 'yes' ? `> injecting pricing strategy: "${form.pricingDetails}"` : `> bypassing pricing strategy module...`,
-                    `> synthesizing smart_grammar.js for [${form.type.toUpperCase()}]`,
+                    form.showTestimonials ? `> compiling dynamic testimonials layout...` : `> bypassing testimonials...`,
+                    form.showFAQ ? `> generating smart contextual FAQs...` : `> bypassing FAQs...`,
                     `> generating pure CSS architecture for extreme performance...`,
                     isPro && form.seo ? `> [PRO] injecting custom SEO tags...` : `> bypassing custom SEO (Free Tier)...`,
                     `> rendering DOM elements for [Template: ${form.template}]`,
@@ -769,7 +912,7 @@
                         siteCodeRef.current = finalCode; 
                         setTimeout(() => {
                             setView('preview');
-                            setIsEditMode(true); // Reset to edit mode on new generation
+                            setIsEditMode(true); 
                         }, 800); 
                     }
                 }, 350); 
@@ -807,20 +950,35 @@
             };
 
             const downloadHTML = () => {
-                let finalExportCode = siteCodeRef.current;
-                finalExportCode = finalExportCode.replace(/<script id="dbp-live-editor">[\s\S]*?<\/script>/gi, '');
-                finalExportCode = finalExportCode.replace(/<script id="dbp-preview-helper">[\s\S]*?<\/script>/gi, '');
-                finalExportCode = finalExportCode.replace(/ contenteditable="true"/gi, '');
-                finalExportCode = finalExportCode.replace(/ style="outline: none;"/gi, '');
-                finalExportCode = finalExportCode.replace(/ style="cursor: text;"/gi, '');
-                finalExportCode = finalExportCode.replace(/ style="cursor: default;"/gi, '');
+                try {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(siteCodeRef.current, 'text/html');
+                    
+                    const editorScript = doc.getElementById('dbp-live-editor');
+                    if (editorScript) editorScript.remove();
+                    
+                    const helperScript = doc.getElementById('dbp-preview-helper');
+                    if (helperScript) helperScript.remove();
 
-                const blob = new Blob([finalExportCode], { type: 'text/html' });
-                const a = document.createElement('a');
-                a.href = URL.createObjectURL(blob);
-                a.download = `${form.name.replace(/\s+/g, '_').toLowerCase()}_site.html`;
-                a.click();
-                showToast("Clean code exported successfully!");
+                    const editables = doc.querySelectorAll('[contenteditable]');
+                    editables.forEach(el => {
+                        el.removeAttribute('contenteditable');
+                        el.style.outline = '';
+                        el.style.cursor = '';
+                        el.style.boxShadow = '';
+                        if (el.getAttribute('style') === '') el.removeAttribute('style');
+                    });
+
+                    const finalExportCode = '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
+                    const blob = new Blob([finalExportCode], { type: 'text/html' });
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = `${form.name.replace(/\s+/g, '_').toLowerCase()}_site.html`;
+                    a.click();
+                    showToast("Clean code exported successfully!");
+                } catch (e) {
+                    showToast("Error processing export.", "error");
+                }
             };
 
             const handlePaymentInit = () => {
@@ -829,7 +987,7 @@
                 
                 const options = {
                     "key": "rzp_test_DBPInstantSiteKey", 
-                    "amount": "99900", 
+                    "amount": "49900", 
                     "currency": "INR",
                     "name": "DBP InstantSite AI",
                     "description": "Pro Editor Subscription",
@@ -878,7 +1036,7 @@
             useEffect(() => { if(terminalEndRef.current) terminalEndRef.current.scrollIntoView({ behavior: 'smooth' }); }, [loadingLogs]);
 
             const MobileNav = () => (
-                <header className="md:hidden glass-nav h-16 flex items-center justify-between px-6 sticky top-0 z-[100] flex-shrink-0">
+                <header className="md:hidden glass-nav h-16 flex items-center justify-between px-6 sticky top-0 flex-shrink-0">
                     <div className="flex items-center gap-3 cursor-pointer" onClick={() => { setView('home'); window.scrollTo(0,0); }}>
                         <div className="w-8 h-8 bg-gradient-to-br from-brand-400 to-brand-600 rounded-lg flex items-center justify-center text-white font-display font-bold shadow-[0_0_10px_rgba(139,92,246,0.3)]">D</div>
                         <span className="font-display font-bold text-lg text-white">DBP<span className="text-brand-400 font-medium">SYSTEMS</span></span>
@@ -960,9 +1118,10 @@
             return (
                 <div className="flex flex-col md:flex-row h-screen overflow-hidden bg-black text-white relative">
                     
+                    {/* DYNAMIC PRO BADGE - CLICKABLE AND NO CROWN ICON */}
                     {currentUser && isPro && (
-                        <div className="fixed top-6 right-8 z-[100] hidden md:block animate-fade-in pointer-events-none">
-                            <span className="pro-badge px-4 py-2 font-black shadow-[0_0_20px_rgba(251,191,36,0.4)]">PRO</span>
+                        <div className={`fixed z-[100] hidden md:block animate-fade-in pointer-events-auto transition-all duration-700 ease-in-out cursor-pointer hover:scale-105 ${view === 'preview' ? 'bottom-8 right-8' : 'top-6 right-8'}`} onClick={() => setView('pricing')}>
+                            <span className="pro-badge shadow-[0_0_20px_rgba(251,191,36,0.4)] text-[10px]">PRO</span>
                         </div>
                     )}
 
@@ -983,10 +1142,10 @@
                     <MobileNav />
                     <GlassSidebar />
 
-                    <main className="flex-1 md:ml-[112px] overflow-y-auto overflow-x-hidden relative z-10 flex flex-col scroll-smooth">
+                    <main className="flex-1 md:ml-[112px] overflow-hidden relative z-10 flex flex-col h-full">
                         
                         {view === 'home' && (
-                            <div className="w-full pb-20">
+                            <div className="w-full h-full overflow-y-auto pb-20 scroll-smooth">
                                 <div className="min-h-[90vh] flex flex-col items-center justify-center text-center p-6 relative overflow-hidden animate-fade-up">
                                     <div className="hero-glow animate-glow-pulse"></div>
                                     <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center pt-10 md:pt-0">
@@ -1069,28 +1228,53 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="grid grid-cols-2 gap-4">
-                                                        <div className="col-span-2 sm:col-span-1">
-                                                            <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Pricing Section?</label>
-                                                            <div className="input-wrapper">
-                                                                <select value={form.hasPricing} onChange={e => setForm({...form, hasPricing: e.target.value})} className="input-glass">
-                                                                    <option value="no">Disable</option>
-                                                                    <option value="yes">Enable Pricing</option>
-                                                                </select>
-                                                                <i className="fa-solid fa-chevron-down absolute right-4 text-gray-500 pointer-events-none text-xs"></i>
-                                                            </div>
-                                                        </div>
-                                                        {form.hasPricing === 'yes' && (
-                                                            <div className="col-span-2 sm:col-span-1 animate-fade-in">
-                                                                <label className="block text-xs font-bold text-brand-400 mb-2 uppercase tracking-widest">Pricing Info *</label>
+                                                    
+                                                    <div className="grid lg:grid-cols-2 gap-4 border-t border-white/5 pt-6 mt-6">
+                                                        <div className="col-span-2 lg:col-span-1 space-y-4">
+                                                            <div>
+                                                                <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Pricing Section?</label>
                                                                 <div className="input-wrapper">
-                                                                    <i className="fa-solid fa-indian-rupee-sign input-icon text-brand-400"></i>
-                                                                    <input type="text" placeholder="e.g. Starts at ₹499" value={form.pricingDetails} onChange={e => setForm({...form, pricingDetails: e.target.value})} className="input-glass border-brand-500/30 focus:border-brand-500"/>
+                                                                    <select value={form.hasPricing} onChange={e => setForm({...form, hasPricing: e.target.value})} className="input-glass">
+                                                                        <option value="no">Disable</option>
+                                                                        <option value="yes">Enable Pricing</option>
+                                                                    </select>
+                                                                    <i className="fa-solid fa-chevron-down absolute right-4 text-gray-500 pointer-events-none text-xs"></i>
                                                                 </div>
                                                             </div>
-                                                        )}
+                                                            {form.hasPricing === 'yes' && (
+                                                                <div className="animate-fade-in">
+                                                                    <label className="block text-xs font-bold text-brand-400 mb-2 uppercase tracking-widest">Pricing Info *</label>
+                                                                    <div className="input-wrapper">
+                                                                        <i className="fa-solid fa-indian-rupee-sign input-icon text-brand-400"></i>
+                                                                        <input type="text" placeholder="e.g. Starts at ₹499" value={form.pricingDetails} onChange={e => setForm({...form, pricingDetails: e.target.value})} className="input-glass border-brand-500/30 focus:border-brand-500"/>
+                                                                    </div>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                        <div className="col-span-2 lg:col-span-1 space-y-4 mt-2 lg:mt-0">
+                                                            <div>
+                                                                <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Detailed Address?</label>
+                                                                <div className="input-wrapper">
+                                                                    <select value={form.hasAddress} onChange={e => setForm({...form, hasAddress: e.target.value})} className="input-glass">
+                                                                        <option value="no">Disable</option>
+                                                                        <option value="yes">Enable Address</option>
+                                                                    </select>
+                                                                    <i className="fa-solid fa-chevron-down absolute right-4 text-gray-500 pointer-events-none text-xs"></i>
+                                                                </div>
+                                                            </div>
+                                                            {form.hasAddress === 'yes' && (
+                                                                <div className="animate-fade-in">
+                                                                    <label className="block text-xs font-bold text-brand-400 mb-2 uppercase tracking-widest">Full Address *</label>
+                                                                    <div className="input-wrapper items-start">
+                                                                        <i className="fa-solid fa-map-location-dot input-icon textarea-icon text-brand-400"></i>
+                                                                        <textarea placeholder="e.g. 123 Main St, Near Park..." value={form.address} onChange={e => setForm({...form, address: e.target.value})} className="input-glass h-12 py-3 resize-none border-brand-500/30 focus:border-brand-500"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                            )}
+                                                        </div>
                                                     </div>
-                                                    <div>
+
+                                                    <div className="pt-2">
                                                         <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">WhatsApp No. *</label>
                                                         <div className="input-wrapper">
                                                             <i className="fa-brands fa-whatsapp input-icon"></i>
@@ -1104,7 +1288,7 @@
                                                 <div className="absolute top-0 right-0 p-8 opacity-[0.02]"><i className="fa-solid fa-microchip text-[12rem]"></i></div>
                                                 <h2 className="font-display font-bold text-xl mb-8 flex items-center gap-4 text-white border-b border-white/10 pb-6 relative z-10">
                                                     <div className="w-8 h-8 rounded-full bg-black border border-white/10 flex items-center justify-center text-sm font-bold shadow-inner text-gray-500">2</div> 
-                                                    AI Tuning
+                                                    AI Tuning & Modules
                                                 </h2>
                                                 <div className="space-y-6 flex-1 relative z-10">
                                                     <div>
@@ -1114,17 +1298,54 @@
                                                             <textarea placeholder="Describe unique features. AI will rewrite into professional copy..." value={form.description} onChange={e => setForm({...form, description: e.target.value})} className="input-glass h-24 resize-none"></textarea>
                                                         </div>
                                                     </div>
+
+                                                    <div className="grid grid-cols-2 gap-4 border-t border-white/5 pt-6">
+                                                        <div className="col-span-2">
+                                                            <label className="block text-xs font-bold text-gray-500 mb-3 uppercase tracking-widest">Hero Architecture</label>
+                                                            <div className="grid grid-cols-3 gap-3">
+                                                                <button onClick={() => setForm({...form, heroStyle: 'center'})} className={`p-3 rounded-lg border ${form.heroStyle==='center'?'border-brand-500 bg-brand-500/10':'border-white/10 bg-black/50 hover:bg-black/80'} text-xs font-bold transition flex flex-col items-center gap-2`}><i className="fa-solid fa-align-center text-lg"></i>Center</button>
+                                                                <button onClick={() => setForm({...form, heroStyle: 'split'})} className={`p-3 rounded-lg border ${form.heroStyle==='split'?'border-brand-500 bg-brand-500/10':'border-white/10 bg-black/50 hover:bg-black/80'} text-xs font-bold transition flex flex-col items-center gap-2`}><i className="fa-solid fa-columns text-lg"></i>Split</button>
+                                                                <button onClick={() => setForm({...form, heroStyle: 'minimal'})} className={`p-3 rounded-lg border ${form.heroStyle==='minimal'?'border-brand-500 bg-brand-500/10':'border-white/10 bg-black/50 hover:bg-black/80'} text-xs font-bold transition flex flex-col items-center gap-2`}><i className="fa-solid fa-align-left text-lg"></i>Minimal</button>
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-span-2">
+                                                            <label className="block text-xs font-bold text-gray-500 mb-3 uppercase tracking-widest">Smart Sections</label>
+                                                            <div className="space-y-3">
+                                                                <label className="flex items-center justify-between p-3 rounded-xl border border-white/5 bg-black/30 cursor-pointer hover:bg-black/50 transition">
+                                                                    <span className="text-sm font-medium"><i className="fa-solid fa-images text-brand-400 w-6"></i> Gallery Grid</span>
+                                                                    <div className="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                                                                        <input type="checkbox" checked={form.showGallery} onChange={(e) => setForm({...form, showGallery: e.target.checked})} className="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 border-gray-600 appearance-none cursor-pointer transition-all duration-300 z-10"/>
+                                                                        <label className="toggle-label block overflow-hidden h-5 rounded-full bg-gray-600 cursor-pointer transition-colors duration-300"></label>
+                                                                    </div>
+                                                                </label>
+                                                                <label className="flex items-center justify-between p-3 rounded-xl border border-white/5 bg-black/30 cursor-pointer hover:bg-black/50 transition">
+                                                                    <span className="text-sm font-medium"><i className="fa-solid fa-quote-left text-brand-400 w-6"></i> Testimonials</span>
+                                                                    <div className="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                                                                        <input type="checkbox" checked={form.showTestimonials} onChange={(e) => setForm({...form, showTestimonials: e.target.checked})} className="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 border-gray-600 appearance-none cursor-pointer transition-all duration-300 z-10"/>
+                                                                        <label className="toggle-label block overflow-hidden h-5 rounded-full bg-gray-600 cursor-pointer transition-colors duration-300"></label>
+                                                                    </div>
+                                                                </label>
+                                                                <label className="flex items-center justify-between p-3 rounded-xl border border-white/5 bg-black/30 cursor-pointer hover:bg-black/50 transition">
+                                                                    <span className="text-sm font-medium"><i className="fa-solid fa-circle-question text-brand-400 w-6"></i> Smart FAQ</span>
+                                                                    <div className="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                                                                        <input type="checkbox" checked={form.showFAQ} onChange={(e) => setForm({...form, showFAQ: e.target.checked})} className="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 border-gray-600 appearance-none cursor-pointer transition-all duration-300 z-10"/>
+                                                                        <label className="toggle-label block overflow-hidden h-5 rounded-full bg-gray-600 cursor-pointer transition-colors duration-300"></label>
+                                                                    </div>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     
                                                     <div className="space-y-6 border-t border-white/5 pt-6">
                                                         <div>
-                                                            <label className="flex justify-between text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest"><span>Specific Services (CSV)</span>{!isPro && <span className="pro-badge"><i className="fa-solid fa-lock text-[8px] mr-1"></i>PRO</span>}</label>
+                                                            <label className="flex justify-between text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest"><span>Specific Services (CSV)</span>{!isPro && <span className="pro-badge text-[8px] px-2 py-0.5"><i className="fa-solid fa-lock text-[8px] mr-1"></i>PRO</span>}</label>
                                                             <div className="input-wrapper items-start">
                                                                 <i className="fa-solid fa-list-check input-icon textarea-icon"></i>
                                                                 <textarea placeholder={isPro ? "e.g. Screen Repair, Data Recovery" : "Locked in Free Tier"} value={form.services} onChange={e => setForm({...form, services: e.target.value})} disabled={!isPro} className={`input-glass h-16 resize-none ${!isPro && 'bg-black/50 border-white/5'}`}></textarea>
                                                             </div>
                                                         </div>
                                                         <div>
-                                                            <label className="flex justify-between text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest"><span>SEO Meta Tags</span>{!isPro && <span className="pro-badge"><i className="fa-solid fa-lock text-[8px] mr-1"></i>PRO</span>}</label>
+                                                            <label className="flex justify-between text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest"><span>SEO Meta Tags</span>{!isPro && <span className="pro-badge text-[8px] px-2 py-0.5"><i className="fa-solid fa-lock text-[8px] mr-1"></i>PRO</span>}</label>
                                                             <div className="input-wrapper">
                                                                 <i className="fa-solid fa-magnifying-glass input-icon"></i>
                                                                 <input type="text" placeholder={isPro ? "e.g. best repair patna, quick fix" : "Locked in Free Tier"} value={form.seo} onChange={e => setForm({...form, seo: e.target.value})} disabled={!isPro} className={`input-glass ${!isPro && 'bg-black/50 border-white/5'}`}/>
@@ -1196,8 +1417,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <button onClick={handleGenerate} className="w-full mt-12 text-white font-display font-bold text-xl py-5 rounded-xl btn-shine flex justify-center items-center gap-4 tracking-widest">
-                                                <i className="fa-solid fa-microchip"></i> INITIALIZE COMPILATION
+                                            <button onClick={handleGenerate} className="w-full mt-12 text-white font-display font-bold text-xl py-5 rounded-xl btn-shine flex justify-center items-center gap-4 tracking-widest shadow-[0_15px_40px_rgba(168,85,247,0.4)]">
+                                                <i className="fa-solid fa-microchip"></i> START BUILDING
                                             </button>
                                         </div>
                                     </div>
@@ -1205,7 +1426,6 @@
                             </div>
                         )}
 
-                        {/* GENERATING TERMINAL */}
                         {view === 'generating' && (
                             <div className="flex-1 flex flex-col items-center justify-center p-6 animate-fade-in">
                                 <div className="w-full max-w-3xl terminal-window border border-white/10 shadow-2xl">
@@ -1229,9 +1449,8 @@
                             </div>
                         )}
 
-                        {/* FULL SCREEN PREVIEW WITH EDIT/VIEW TOGGLE */}
                         {view === 'preview' && (
-                            <div className="flex-1 flex flex-col h-screen overflow-hidden animate-fade-in">
+                            <div className="flex-1 flex flex-col h-full overflow-hidden animate-fade-in relative">
                                 <div className="glass-nav border-x-0 border-t-0 p-3 px-6 flex flex-wrap gap-4 items-center justify-between z-10 flex-shrink-0 shadow-lg">
                                     <div className="flex items-center gap-4">
                                         <div className="flex items-center bg-black/50 rounded-lg p-1 border border-white/5 shadow-inner">
@@ -1250,30 +1469,31 @@
                                     </div>
                                 </div>
                                 
-                                <div className={`flex-1 flex justify-center items-center overflow-hidden relative ${previewMode === 'mobile' ? 'p-4 lg:p-10' : 'p-0'}`}>
+                                <div className="preview-outer-wrapper">
                                     {previewMode === 'mobile' && isEditMode && (
-                                        <div className="absolute top-6 right-6 z-50 bg-brand-600 border border-brand-400 text-white text-xs font-bold tracking-widest px-5 py-2.5 rounded-lg shadow-[0_10px_25px_rgba(139,92,246,0.4)] flex items-center gap-3 animate-bounce pointer-events-none">
+                                        <div className="absolute top-6 z-50 bg-brand-600 border border-brand-400 text-white text-xs font-bold tracking-widest px-5 py-2.5 rounded-lg shadow-[0_10px_25px_rgba(139,92,246,0.4)] flex items-center gap-3 animate-bounce pointer-events-none">
                                             <i className="fa-solid fa-pen-nib"></i> CLICK TEXT TO EDIT
                                         </div>
                                     )}
-                                    <div className={`transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${previewMode === 'mobile' ? 'device-mobile' : 'device-desktop'}`}>
-                                        {previewMode === 'desktop' && (
-                                            <div className="browser-bar flex-shrink-0">
-                                                <div className="flex gap-2"><div className="w-3 h-3 rounded-full bg-red-500/80"></div><div className="w-3 h-3 rounded-full bg-yellow-500/80"></div><div className="w-3 h-3 rounded-full bg-green-500/80"></div></div>
-                                                <div className="flex-1 flex justify-center">
-                                                    <div className="bg-black border border-white/5 text-[10px] font-mono text-gray-500 px-6 py-1 rounded w-1/2 max-w-sm text-center flex items-center justify-center gap-2 shadow-inner"><i className="fa-solid fa-lock text-brand-500"></i>{form.name.toLowerCase().replace(/\s+/g, '')}.dbpsites.in</div>
-                                                </div>
-                                            </div>
-                                        )}
-                                        <iframe ref={iframeRef} srcDoc={siteCode} className={`w-full h-full flex-1 border-none bg-white`}></iframe>
+                                    <div className={`device-morph mode-${previewMode}`}>
+                                        <div className="device-camera"></div>
+                                        <div className="mobile-home-indicator"></div>
+                                        <div className="browser-bar">
+                                            <div className="flex gap-2 w-16"><div className="w-3 h-3 rounded-full bg-red-500/80"></div><div className="w-3 h-3 rounded-full bg-yellow-500/80"></div><div className="w-3 h-3 rounded-full bg-green-500/80"></div></div>
+                                            <div className="flex-1 flex justify-center"><div className="bg-black border border-white/5 text-[10px] font-mono text-gray-500 px-6 py-1 rounded w-1/2 max-w-sm text-center flex items-center justify-center gap-2 shadow-inner"><i className="fa-solid fa-lock text-brand-500"></i>{(form.name || 'preview').toLowerCase().replace(/\s+/g, '')}.dbpsites.in</div></div>
+                                            <div className="w-16"></div>
+                                        </div>
+                                        <iframe ref={iframeRef} srcDoc={siteCode} className="w-full flex-1 border-none bg-white"></iframe>
+                                    </div>
+                                    <div className={`desktop-base-wrapper ${previewMode === 'desktop' ? 'desktop-active' : ''}`}>
+                                        <div className="desktop-base"></div>
                                     </div>
                                 </div>
                             </div>
                         )}
 
-                        {/* EXPORT / PRICING SCREEN */}
                         {view === 'pricing' && (
-                            <div className="flex-1 py-16 px-6 animate-fade-up overflow-y-auto relative">
+                            <div className="flex-1 h-full overflow-y-auto py-16 px-6 animate-fade-up relative">
                                 <div className="hero-glow opacity-50"></div>
                                 <div className="text-center max-w-3xl mx-auto mb-16 relative z-10">
                                     <button onClick={() => setView('preview')} className="text-gray-500 hover:text-white text-xs font-bold tracking-widest flex items-center gap-2 mx-auto transition mb-8 uppercase"><i className="fa-solid fa-arrow-left"></i> Back to Editor</button>
@@ -1295,15 +1515,23 @@
                                     </div>
 
                                     <div className="premium-panel p-10 border border-brand-500/50 shadow-[0_30px_60px_rgba(139,92,246,0.2)] transform md:-translate-y-4 relative z-10">
-                                        <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-brand-400 to-brand-600 text-white text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg">Professional Access</div>
+                                        <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-brand-400 to-brand-600 text-white text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg flex items-center gap-2">
+                                            Professional Access <span className="offer-badge ml-1">50% OFF</span>
+                                        </div>
                                         <h3 className="font-display font-bold text-2xl mb-2 text-white">Pro Editor</h3>
                                         <p className="text-brand-300 text-sm mb-8">No watermark. Full feature unlock.</p>
-                                        <div className="flex items-end gap-1 mb-8"><span className="text-5xl font-display font-bold text-white tracking-tighter">₹999</span><span className="text-gray-500 font-light mb-1">/yr</span></div>
+                                        
+                                        <div className="flex items-end gap-2 mb-8">
+                                            <span className="text-2xl font-display font-bold text-gray-500 tracking-tighter line-through decoration-red-500 decoration-2">₹999</span>
+                                            <span className="text-6xl font-display font-bold text-white tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-brand-100">₹499</span>
+                                            <span className="text-gray-400 font-light mb-2">/yr</span>
+                                        </div>
+                                        
                                         <ul className="space-y-4 text-sm text-white mb-10 font-medium border-t border-white/10 pt-8">
                                             <li className="flex gap-4 items-center"><i className="fa-solid fa-unlock text-brand-400 w-4"></i> All 10 Templates Unlocked</li>
                                             <li className="flex gap-4 items-center"><i className="fa-solid fa-droplet-slash text-brand-400 w-4"></i> Watermark Completely Removed</li>
                                             <li className="flex gap-4 items-center"><i className="fa-solid fa-palette text-brand-400 w-4"></i> Custom Color Engine</li>
-                                            <li className="flex gap-4 items-center"><i className="fa-solid fa-chart-line text-brand-400 w-4"></i> Custom SEO & Services</li>
+                                            <li className="flex gap-4 items-center"><i className="fa-solid fa-chart-line text-brand-400 w-4"></i> Custom SEO & Advanced Services</li>
                                         </ul>
                                         {isPro ? (
                                             <button onClick={downloadHTML} className="w-full py-4 rounded-xl text-xs font-bold tracking-widest bg-white text-black hover:bg-gray-200 transition flex justify-center items-center gap-2 shadow-[0_0_20px_rgba(255,255,255,0.2)]"><i className="fa-solid fa-code"></i> Export Pro HTML</button>
@@ -1317,9 +1545,8 @@
                             </div>
                         )}
 
-                        {/* AUTH SCREEN */}
                         {view === 'auth' && (
-                            <div className="flex-1 flex items-center justify-center p-6 animate-fade-up">
+                            <div className="flex-1 flex h-full overflow-y-auto items-center justify-center p-6 animate-fade-up">
                                 <div className="premium-panel w-full max-w-md p-10 relative overflow-hidden">
                                     <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-brand-400 to-indigo-500"></div>
                                     <div className="text-center mb-10">
@@ -1359,185 +1586,198 @@
                             </div>
                         )}
 
-                        {/* DASHBOARD SCREEN */}
                         {view === 'dashboard' && currentUser && (
-                            <div className="flex-1 p-6 lg:p-12 animate-fade-up max-w-7xl mx-auto w-full">
-                                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 border-b border-white/10 pb-8 gap-6">
-                                    <div>
-                                        <h1 className="font-display font-bold text-4xl text-white tracking-tight flex items-center gap-4">
-                                            Project Matrix 
-                                        </h1>
-                                        <p className="text-gray-400 mt-2 font-light">Welcome back, {currentUser.name}. Manage your cloud-saved architectures below.</p>
+                            <div className="flex-1 h-full overflow-y-auto p-6 lg:p-12 animate-fade-up w-full">
+                                <div className="max-w-7xl mx-auto w-full">
+                                    <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 border-b border-white/10 pb-8 gap-6">
+                                        <div>
+                                            <h1 className="font-display font-bold text-4xl text-white tracking-tight flex items-center gap-4">
+                                                Project Matrix 
+                                            </h1>
+                                            <p className="text-gray-400 mt-2 font-light">Welcome back, {currentUser.name}. Manage your cloud-saved architectures below.</p>
+                                        </div>
+                                        <button onClick={() => {setView('home'); setTimeout(handleGetStarted, 100);}} className="btn-shine px-8 py-3.5 rounded-xl text-xs flex items-center gap-2 shadow-lg">
+                                            <i className="fa-solid fa-plus text-base"></i> NEW DEPLOYMENT
+                                        </button>
                                     </div>
-                                    <button onClick={() => {setView('home'); setTimeout(scrollToBuilder, 100);}} className="btn-shine px-8 py-3.5 rounded-xl text-xs flex items-center gap-2 shadow-lg">
-                                        <i className="fa-solid fa-plus text-base"></i> NEW DEPLOYMENT
-                                    </button>
-                                </div>
-                                
-                                <div className="grid lg:grid-cols-4 gap-8">
-                                    <div className="lg:col-span-3">
-                                        {userSites.length === 0 ? (
-                                            <div className="premium-panel p-20 text-center flex flex-col items-center">
-                                                <div className="w-24 h-24 bg-black border border-white/10 rounded-full flex items-center justify-center mb-6 shadow-inner">
-                                                    <i className="fa-solid fa-folder-open text-3xl text-gray-600"></i>
+                                    
+                                    <div className="grid lg:grid-cols-4 gap-8">
+                                        <div className="lg:col-span-3">
+                                            {userSites.length === 0 ? (
+                                                <div className="premium-panel p-20 text-center flex flex-col items-center">
+                                                    <div className="w-24 h-24 bg-black border border-white/10 rounded-full flex items-center justify-center mb-6 shadow-inner">
+                                                        <i className="fa-solid fa-folder-open text-3xl text-gray-600"></i>
+                                                    </div>
+                                                    <h3 className="font-display font-bold text-2xl text-white mb-2">Database Empty</h3>
+                                                    <p className="text-gray-500 mb-8 max-w-md font-light">You have no saved projects in the cloud. Initialize the builder to generate your first enterprise site.</p>
+                                                    <button onClick={() => {setView('home'); setTimeout(handleGetStarted, 100);}} className="btn-secondary px-8 py-3 text-xs tracking-widest uppercase">Start Building</button>
                                                 </div>
-                                                <h3 className="font-display font-bold text-2xl text-white mb-2">Database Empty</h3>
-                                                <p className="text-gray-500 mb-8 max-w-md font-light">You have no saved projects in the cloud. Initialize the builder to generate your first enterprise site.</p>
-                                                <button onClick={() => {setView('home'); setTimeout(scrollToBuilder, 100);}} className="btn-secondary px-8 py-3 text-xs tracking-widest uppercase">Start Building</button>
-                                            </div>
-                                        ) : (
-                                            <div className="grid md:grid-cols-2 gap-8">
-                                                {userSites.map(site => (
-                                                    <div key={site.firebaseId} className="premium-panel p-8 flex flex-col group hover:border-brand-500/50 transition duration-500">
-                                                        <div className="flex justify-between items-start mb-6">
-                                                            <h3 className="font-display font-bold text-2xl text-white truncate pr-4 group-hover:text-brand-400 transition">{site.name}</h3>
-                                                            <span className="text-[10px] text-green-400 bg-green-500/10 px-2 py-1 rounded font-bold uppercase tracking-widest border border-green-500/20">Cloud</span>
+                                            ) : (
+                                                <div className="grid md:grid-cols-2 gap-8">
+                                                    {userSites.map(site => (
+                                                        <div key={site.firebaseId} className="premium-panel p-8 flex flex-col group hover:border-brand-500/50 transition duration-500">
+                                                            <div className="flex justify-between items-start mb-6">
+                                                                <h3 className="font-display font-bold text-2xl text-white truncate pr-4 group-hover:text-brand-400 transition">{site.name}</h3>
+                                                                <span className="text-[10px] text-green-400 bg-green-500/10 px-2 py-1 rounded font-bold uppercase tracking-widest border border-green-500/20">Cloud</span>
+                                                            </div>
+                                                            <p className="text-xs text-gray-500 mb-8 font-mono bg-black/50 p-3 rounded-lg border border-white/5 inline-block w-max"><i className="fa-regular fa-clock text-brand-400 mr-2"></i> {site.date}</p>
+                                                            
+                                                            <div className="mt-auto grid grid-cols-2 gap-4 border-t border-white/10 pt-6">
+                                                                <button onClick={() => loadProject(site.html, site.name)} className="btn-secondary py-3 text-xs font-bold tracking-widest hover:bg-white hover:text-black">
+                                                                    RESTORE
+                                                                </button>
+                                                                <button onClick={() => deleteProject(site.firebaseId)} className="bg-red-500/10 text-red-500 py-3 rounded-xl text-xs font-bold border border-red-500/20 hover:bg-red-500 hover:text-white transition tracking-widest">
+                                                                    DELETE
+                                                                </button>
+                                                            </div>
                                                         </div>
-                                                        <p className="text-xs text-gray-500 mb-8 font-mono bg-black/50 p-3 rounded-lg border border-white/5 inline-block w-max"><i className="fa-regular fa-clock text-brand-400 mr-2"></i> {site.date}</p>
-                                                        
-                                                        <div className="mt-auto grid grid-cols-2 gap-4 border-t border-white/10 pt-6">
-                                                            <button onClick={() => loadProject(site.html, site.name)} className="btn-secondary py-3 text-xs font-bold tracking-widest hover:bg-white hover:text-black">
-                                                                RESTORE
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="lg:col-span-1 space-y-6">
+                                            <div className="premium-panel p-6 border-brand-500/30">
+                                                <h3 className="text-xs text-brand-400 font-bold tracking-widest uppercase mb-4"><i className="fa-solid fa-chart-line mr-2"></i> Quick Stats</h3>
+                                                <div className="space-y-4">
+                                                    <div className="bg-black/50 p-4 rounded-xl border border-white/5">
+                                                        <p className="text-gray-500 text-xs uppercase tracking-widest mb-1">Total Assets</p>
+                                                        <p className="text-3xl font-display font-bold text-white">{userSites.length}</p>
+                                                    </div>
+                                                    <div className="bg-black/50 p-4 rounded-xl border border-white/5">
+                                                        <p className="text-gray-500 text-xs uppercase tracking-widest mb-1">License</p>
+                                                        {isPro ? <span className="pro-badge mt-2 text-[10px]">PRO</span> : <span className="text-white font-bold text-sm block mt-1">FREE TIER</span>}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* USER PROFILE SCREEN - NOW WITH BRIGHT GOLD BADGE AND FEATURE LIST */}
+                        {view === 'profile' && currentUser && (
+                            <div className="flex-1 h-full overflow-y-auto p-6 lg:p-12 animate-fade-up w-full">
+                                <div className="max-w-7xl mx-auto w-full">
+                                    <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 border-b border-white/10 pb-8 gap-6">
+                                        <div>
+                                            <h1 className="font-display font-bold text-4xl text-white tracking-tight flex items-center gap-4">
+                                                System Identity 
+                                            </h1>
+                                            <p className="text-gray-400 mt-2 font-light">Manage your platform authentication and license credentials.</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid lg:grid-cols-3 gap-8">
+                                        <div className="lg:col-span-2 space-y-8">
+                                            <div className="premium-panel p-8 flex items-center gap-8">
+                                                <div className="w-24 h-24 bg-brand-500/10 border border-brand-500/30 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(139,92,246,0.2)] flex-shrink-0">
+                                                    <i className="fa-solid fa-user text-4xl text-brand-400"></i>
+                                                </div>
+                                                <div>
+                                                    <h2 className="font-display font-bold text-3xl text-white mb-2">{currentUser.name}</h2>
+                                                    <p className="text-brand-400 font-mono text-sm">{currentUser.phone}</p>
+                                                </div>
+                                            </div>
+
+                                            <div className="premium-panel p-8">
+                                                <h3 className="text-gray-500 font-bold text-xs uppercase tracking-widest mb-6 border-b border-white/10 pb-4">Account Diagnostics</h3>
+                                                <div className="space-y-4">
+                                                    <div className="flex justify-between items-center bg-black/30 p-4 rounded-xl border border-white/5">
+                                                        <span className="text-gray-400 text-sm">System Entry Date</span>
+                                                        <span className="text-white font-mono text-sm">{currentUser.joined || 'Recent'}</span>
+                                                    </div>
+                                                    <div className="flex justify-between items-center bg-black/30 p-4 rounded-xl border border-white/5">
+                                                        <span className="text-gray-400 text-sm">Generated Assets</span>
+                                                        <span className="text-white font-bold">{userSites.length}</span>
+                                                    </div>
+                                                    <div className="pt-6 mt-6 border-t border-white/10">
+                                                        <button onClick={handleLogout} className="w-full bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500 hover:text-white py-4 rounded-xl font-bold text-xs tracking-widest transition uppercase">LOGOUT CURRENT SESSION</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="lg:col-span-1">
+                                            <div className={`premium-panel p-8 h-full flex flex-col justify-center border ${isPro ? 'border-yellow-500/50 shadow-[0_0_30px_rgba(251,191,36,0.15)]' : 'border-white/10'}`}>
+                                                <div className="text-center">
+                                                    <h3 className="text-gray-500 font-bold text-xs uppercase tracking-widest mb-6 border-b border-white/10 pb-4 text-left">License Status</h3>
+                                                    {isPro ? (
+                                                        <div className="py-4">
+                                                            <div className="inline-flex items-center gap-2 text-lg px-8 py-3 mb-4 animate-glow-pulse shadow-[0_0_30px_rgba(255,215,0,0.8)] !bg-gradient-to-r !from-[#FFF500] !to-[#FFB300] !text-black !border !border-[#FFE000] font-black uppercase tracking-widest rounded-lg">
+                                                                ACTIVE PRO
+                                                            </div>
+                                                            <p className="text-gray-400 text-sm leading-relaxed mx-auto mt-4 mb-6">All enterprise architectures, infinite colors, and SEO engines are fully unlocked.</p>
+                                                            
+                                                            <ul className="text-left space-y-3 mt-6 border-t border-white/10 pt-6">
+                                                                <li className="flex items-start gap-3 text-xs text-gray-300 leading-snug"><i className="fa-solid fa-check text-yellow-400 mt-0.5"></i> Full Access to 10+ Premium Architectures</li>
+                                                                <li className="flex items-start gap-3 text-xs text-gray-300 leading-snug"><i className="fa-solid fa-check text-yellow-400 mt-0.5"></i> Zero DBP Watermarks on HTML Export</li>
+                                                                <li className="flex items-start gap-3 text-xs text-gray-300 leading-snug"><i className="fa-solid fa-check text-yellow-400 mt-0.5"></i> Unlocked Custom Hex/RGB Design Engine</li>
+                                                                <li className="flex items-start gap-3 text-xs text-gray-300 leading-snug"><i className="fa-solid fa-check text-yellow-400 mt-0.5"></i> Advanced SEO Meta Tag Injection</li>
+                                                                <li className="flex items-start gap-3 text-xs text-gray-300 leading-snug"><i className="fa-solid fa-check text-yellow-400 mt-0.5"></i> Granular Smart Section Control</li>
+<li className="flex items-start gap-3 text-xs text-gray-300 leading-snug"><i className="fa-solid fa-check text-yellow-400 mt-0.5"></i>Text Editing Enabled</li>
+                                                            </ul>
+                                                        </div>
+                                                    ) : (
+                                                        <div className="py-2">
+                                                            <div className="inline-block bg-gray-800 text-gray-400 font-bold text-xs px-3 py-1 rounded mb-4 tracking-widest uppercase border border-white/10">FREE TIER</div>
+                                                            <p className="text-gray-400 text-sm mb-8 leading-relaxed mx-auto">Upgrade to PRO to unlock all 10 templates, custom colors, SEO tags, and remove watermarks.</p>
+                                                            <button onClick={handlePaymentInit} className="w-full btn-shine py-4 rounded-xl text-xs font-bold tracking-widest flex justify-center items-center gap-2">
+                                                                <i className="fa-solid fa-crown"></i> SECURE UPGRADE
                                                             </button>
-                                                            <button onClick={() => deleteProject(site.firebaseId)} className="bg-red-500/10 text-red-500 py-3 rounded-xl text-xs font-bold border border-red-500/20 hover:bg-red-500 hover:text-white transition tracking-widest">
-                                                                DELETE
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {view === 'admin' && isAdmin && (
+                            <div className="flex-1 h-full overflow-y-auto p-6 lg:p-12 animate-fade-up w-full">
+                                <div className="max-w-7xl mx-auto w-full">
+                                    <div className="flex justify-between items-end mb-10 border-b border-white/10 pb-6">
+                                        <div><h1 className="font-display font-bold text-4xl text-white flex items-center gap-4">System Admin <span className="pro-badge text-xs !bg-gradient-to-r !from-red-500 !to-red-700 !text-white !shadow-[0_0_15px_rgba(239,68,68,0.5)]">ROOT</span></h1><p className="text-gray-400 mt-2">Total control over platform architecture.</p></div>
+                                    </div>
+                                    
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
+                                        <div className="premium-panel p-6"><div className="text-4xl font-display font-bold text-white mb-1">{users.length}</div><div className="text-xs font-bold text-gray-500 tracking-widest uppercase">Total Users</div></div>
+                                        <div className="premium-panel p-6"><div className="text-4xl font-display font-bold text-brand-400 mb-1">{users.filter(u=>u.isPro).length}</div><div className="text-xs font-bold text-gray-500 tracking-widest uppercase">PRO Members</div></div>
+                                        <div className="premium-panel p-6 md:col-span-2"><div className="text-4xl font-display font-bold text-white mb-1">₹{(users.filter(u=>u.isPro).length * 499).toLocaleString()}</div><div className="text-xs font-bold text-gray-500 tracking-widest uppercase">Estimated ARR</div></div>
+                                    </div>
+
+                                    <div className="grid lg:grid-cols-2 gap-8">
+                                        <div className="premium-panel p-8">
+                                            <h3 className="font-display font-bold text-xl text-white mb-6 flex items-center gap-3"><i className="fa-solid fa-users text-brand-400"></i> User Database</h3>
+                                            <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
+                                                {users.length === 0 ? <p className="text-gray-500 italic">No users yet.</p> : users.map(u => (
+                                                    <div key={u.phone} className="flex justify-between items-center bg-black/50 p-5 rounded-2xl border border-white/5 hover:border-white/10 transition">
+                                                        <div>
+                                                            <div className="font-bold text-white text-lg flex items-center gap-3">{u.name} {u.isPro && <span className="pro-badge text-[8px] px-2 py-0.5">PRO</span>}</div>
+                                                            <div className="text-xs text-gray-500 font-mono mt-2"><i className="fa-solid fa-phone text-[10px] mr-1"></i> {u.phone} <span className="mx-2">•</span> {u.joined}</div>
+                                                        </div>
+                                                        <div className="flex gap-2">
+                                                            <button onClick={() => adminTogglePro(u.phone)} className={`px-4 py-2 rounded-lg text-xs font-bold tracking-widest transition ${u.isPro ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20 hover:bg-orange-500/20' : 'bg-brand-500/10 text-brand-400 border border-brand-500/20 hover:bg-brand-500/20'}`}>
+                                                                {u.isPro ? 'REVOKE' : 'GRANT'}
                                                             </button>
+                                                            <button onClick={() => adminDeleteUser(u.phone)} className="px-4 py-2 bg-red-500/10 text-red-500 rounded-lg text-xs font-bold border border-red-500/20 hover:bg-red-500 hover:text-white transition"><i className="fa-solid fa-trash"></i></button>
                                                         </div>
                                                     </div>
                                                 ))}
                                             </div>
-                                        )}
-                                    </div>
-                                    <div className="lg:col-span-1 space-y-6">
-                                        <div className="premium-panel p-6 border-brand-500/30">
-                                            <h3 className="text-xs text-brand-400 font-bold tracking-widest uppercase mb-4"><i className="fa-solid fa-chart-line mr-2"></i> Quick Stats</h3>
-                                            <div className="space-y-4">
-                                                <div className="bg-black/50 p-4 rounded-xl border border-white/5">
-                                                    <p className="text-gray-500 text-xs uppercase tracking-widest mb-1">Total Assets</p>
-                                                    <p className="text-3xl font-display font-bold text-white">{userSites.length}</p>
-                                                </div>
-                                                <div className="bg-black/50 p-4 rounded-xl border border-white/5">
-                                                    <p className="text-gray-500 text-xs uppercase tracking-widest mb-1">License</p>
-                                                    {isPro ? <span className="pro-badge mt-2">ACTIVE PRO</span> : <span className="text-white font-bold text-sm block mt-1">FREE TIER</span>}
-                                                </div>
-                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* USER PROFILE SCREEN */}
-                        {view === 'profile' && currentUser && (
-                            <div className="flex-1 p-6 lg:p-12 animate-fade-up max-w-7xl mx-auto w-full">
-                                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 border-b border-white/10 pb-8 gap-6">
-                                    <div>
-                                        <h1 className="font-display font-bold text-4xl text-white tracking-tight flex items-center gap-4">
-                                            System Identity 
-                                        </h1>
-                                        <p className="text-gray-400 mt-2 font-light">Manage your platform authentication and license credentials.</p>
-                                    </div>
-                                </div>
-
-                                <div className="grid lg:grid-cols-3 gap-8">
-                                    <div className="lg:col-span-2 space-y-8">
-                                        <div className="premium-panel p-8 flex items-center gap-8">
-                                            <div className="w-24 h-24 bg-brand-500/10 border border-brand-500/30 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(139,92,246,0.2)] flex-shrink-0">
-                                                <i className="fa-solid fa-user text-4xl text-brand-400"></i>
-                                            </div>
-                                            <div>
-                                                <h2 className="font-display font-bold text-3xl text-white mb-2">{currentUser.name}</h2>
-                                                <p className="text-brand-400 font-mono text-sm">{currentUser.phone}</p>
-                                            </div>
-                                        </div>
-
                                         <div className="premium-panel p-8">
-                                            <h3 className="text-gray-500 font-bold text-xs uppercase tracking-widest mb-6 border-b border-white/10 pb-4">Account Diagnostics</h3>
-                                            <div className="space-y-4">
-                                                <div className="flex justify-between items-center bg-black/30 p-4 rounded-xl border border-white/5">
-                                                    <span className="text-gray-400 text-sm">System Entry Date</span>
-                                                    <span className="text-white font-mono text-sm">{currentUser.joined || 'Recent'}</span>
-                                                </div>
-                                                <div className="flex justify-between items-center bg-black/30 p-4 rounded-xl border border-white/5">
-                                                    <span className="text-gray-400 text-sm">Generated Assets</span>
-                                                    <span className="text-white font-bold">{userSites.length}</span>
-                                                </div>
-                                                <div className="pt-6 mt-6 border-t border-white/10">
-                                                    <button onClick={handleLogout} className="w-full bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500 hover:text-white py-4 rounded-xl font-bold text-xs tracking-widest transition uppercase">LOGOUT CURRENT SESSION</button>
-                                                </div>
+                                            <h3 className="font-display font-bold text-xl text-white mb-6 flex items-center gap-3"><i className="fa-solid fa-server text-brand-400"></i> Transaction Logs</h3>
+                                            <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
+                                                {requests.length === 0 ? <p className="text-gray-500 text-sm italic">No recent transactions.</p> : requests.slice().reverse().map(r => (
+                                                    <div key={r.firebaseId} className="bg-black/50 p-5 rounded-2xl border border-white/5 flex flex-col gap-3">
+                                                        <div className="flex justify-between items-center"><span className="text-xs font-mono text-gray-500">ID: {r.id}</span><span className="text-[10px] bg-green-500/10 text-green-400 border border-green-500/20 px-2 py-1 rounded font-bold uppercase tracking-widest">{r.status}</span></div>
+                                                        <div className="text-sm text-white font-medium">{r.type} <br/><span className="text-gray-500 font-light mt-1 inline-block">Authorized by {r.user} ({r.phone})</span></div>
+                                                    </div>
+                                                ))}
                                             </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="lg:col-span-1">
-                                        <div className={`premium-panel p-8 h-full flex flex-col justify-center border ${isPro ? 'border-yellow-500/50 shadow-[0_0_30px_rgba(251,191,36,0.15)]' : 'border-white/10'}`}>
-                                            <div className="text-center">
-                                                <h3 className="text-gray-500 font-bold text-xs uppercase tracking-widest mb-6 border-b border-white/10 pb-4 text-left">License Status</h3>
-                                                {isPro ? (
-                                                    <div className="py-4">
-                                                        <div className="inline-flex items-center gap-2 pro-badge text-lg px-6 py-2 mb-4 animate-glow-pulse shadow-[0_0_20px_rgba(251,191,36,0.4)]">
-                                                            ACTIVE PRO
-                                                        </div>
-                                                        <p className="text-gray-400 text-sm leading-relaxed mx-auto mt-4">All enterprise architectures, infinite colors, and SEO engines are fully unlocked.</p>
-                                                    </div>
-                                                ) : (
-                                                    <div className="py-2">
-                                                        <div className="inline-block bg-gray-800 text-gray-400 font-bold text-xs px-3 py-1 rounded mb-4 tracking-widest uppercase border border-white/10">FREE TIER</div>
-                                                        <p className="text-gray-400 text-sm mb-8 leading-relaxed mx-auto">Upgrade to PRO to unlock all 10 templates, custom colors, SEO tags, and remove watermarks.</p>
-                                                        <button onClick={handlePaymentInit} className="w-full btn-shine py-4 rounded-xl text-xs font-bold tracking-widest flex justify-center items-center gap-2">
-                                                            <i className="fa-solid fa-crown"></i> SECURE UPGRADE
-                                                        </button>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* ADMIN DASHBOARD */}
-                        {view === 'admin' && isAdmin && (
-                            <div className="flex-1 p-6 lg:p-12 animate-fade-up max-w-7xl mx-auto w-full">
-                                <div className="flex justify-between items-end mb-10 border-b border-white/10 pb-6">
-                                    <div><h1 className="font-display font-bold text-4xl text-white flex items-center gap-4">System Admin <span className="pro-badge text-xs !bg-gradient-to-r !from-red-500 !to-red-700 !text-white !shadow-[0_0_15px_rgba(239,68,68,0.5)]">ROOT</span></h1><p className="text-gray-400 mt-2">Total control over platform architecture.</p></div>
-                                </div>
-                                
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
-                                    <div className="premium-panel p-6"><div className="text-4xl font-display font-bold text-white mb-1">{users.length}</div><div className="text-xs font-bold text-gray-500 tracking-widest uppercase">Total Users</div></div>
-                                    <div className="premium-panel p-6"><div className="text-4xl font-display font-bold text-brand-400 mb-1">{users.filter(u=>u.isPro).length}</div><div className="text-xs font-bold text-gray-500 tracking-widest uppercase">PRO Members</div></div>
-                                    <div className="premium-panel p-6 md:col-span-2"><div className="text-4xl font-display font-bold text-white mb-1">₹{(users.filter(u=>u.isPro).length * 999).toLocaleString()}</div><div className="text-xs font-bold text-gray-500 tracking-widest uppercase">Estimated ARR</div></div>
-                                </div>
-
-                                <div className="grid lg:grid-cols-2 gap-8">
-                                    <div className="premium-panel p-8">
-                                        <h3 className="font-display font-bold text-xl text-white mb-6 flex items-center gap-3"><i className="fa-solid fa-users text-brand-400"></i> User Database</h3>
-                                        <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
-                                            {users.length === 0 ? <p className="text-gray-500 italic">No users yet.</p> : users.map(u => (
-                                                <div key={u.phone} className="flex justify-between items-center bg-black/50 p-5 rounded-2xl border border-white/5 hover:border-white/10 transition">
-                                                    <div>
-                                                        <div className="font-bold text-white text-lg flex items-center gap-3">{u.name} {u.isPro && <span className="pro-badge text-[8px]">PRO</span>}</div>
-                                                        <div className="text-xs text-gray-500 font-mono mt-2"><i className="fa-solid fa-phone text-[10px] mr-1"></i> {u.phone} <span className="mx-2">•</span> {u.joined}</div>
-                                                    </div>
-                                                    <div className="flex gap-2">
-                                                        <button onClick={() => adminTogglePro(u.phone)} className={`px-4 py-2 rounded-lg text-xs font-bold tracking-widest transition ${u.isPro ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20 hover:bg-orange-500/20' : 'bg-brand-500/10 text-brand-400 border border-brand-500/20 hover:bg-brand-500/20'}`}>
-                                                            {u.isPro ? 'REVOKE' : 'GRANT'}
-                                                        </button>
-                                                        <button onClick={() => adminDeleteUser(u.phone)} className="px-4 py-2 bg-red-500/10 text-red-500 rounded-lg text-xs font-bold border border-red-500/20 hover:bg-red-500 hover:text-white transition"><i className="fa-solid fa-trash"></i></button>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                    <div className="premium-panel p-8">
-                                        <h3 className="font-display font-bold text-xl text-white mb-6 flex items-center gap-3"><i className="fa-solid fa-server text-brand-400"></i> Transaction Logs</h3>
-                                        <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
-                                            {requests.length === 0 ? <p className="text-gray-500 text-sm italic">No recent transactions.</p> : requests.slice().reverse().map(r => (
-                                                <div key={r.firebaseId} className="bg-black/50 p-5 rounded-2xl border border-white/5 flex flex-col gap-3">
-                                                    <div className="flex justify-between items-center"><span className="text-xs font-mono text-gray-500">ID: {r.id}</span><span className="text-[10px] bg-green-500/10 text-green-400 border border-green-500/20 px-2 py-1 rounded font-bold uppercase tracking-widest">{r.status}</span></div>
-                                                    <div className="text-sm text-white font-medium">{r.type} <br/><span className="text-gray-500 font-light mt-1 inline-block">Authorized by {r.user} ({r.phone})</span></div>
-                                                </div>
-                                            ))}
                                         </div>
                                     </div>
                                 </div>
