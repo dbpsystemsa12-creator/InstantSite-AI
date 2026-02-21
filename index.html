@@ -56,6 +56,8 @@
         .glass-sidebar { background: rgba(10, 10, 10, 0.4); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 2rem; }
         .glass-nav { background: rgba(3,3,3,0.7); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
 
+        .pro-badge { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #000; font-weight: 900; font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 0.3rem; text-transform: uppercase; letter-spacing: 0.1em; box-shadow: 0 0 15px rgba(245, 158, 11, 0.4), inset 0 1px 1px rgba(255,255,255,0.5); display: inline-flex; align-items: center; justify-content: center; }
+
         .input-wrapper { position: relative; display: flex; align-items: center; width: 100%; }
         .input-icon { position: absolute; left: 1.25rem; color: #64748b; font-size: 1rem; pointer-events: none; z-index: 10; }
         .textarea-icon { top: 1.25rem; align-items: flex-start; }
@@ -80,8 +82,10 @@
         .terminal-window { background: #000; border: 1px solid #1e293b; border-radius: 12px; overflow: hidden; box-shadow: 0 0 40px rgba(16, 185, 129, 0.1); }
         .hacker-text { font-family: 'JetBrains Mono', monospace; color: #10b981; text-shadow: 0 0 5px rgba(16, 185, 129, 0.4); font-size: 13px; line-height: 1.6; }
         
+        /* Device Previews (Perfected) */
         .device-mobile { width: 375px; height: 812px; border: 12px solid #111; border-radius: 40px; position: relative; overflow: hidden; background: white; display: flex; flex-direction: column; transition: all 0.5s ease; box-shadow: 0 30px 60px rgba(0,0,0,0.8);}
         .device-mobile::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 120px; height: 28px; background: #111; border-bottom-left-radius: 18px; border-bottom-right-radius: 18px; z-index: 50; }
+        .browser-bar { background: #111; height: 44px; display: flex; align-items: center; padding: 0 16px; gap: 8px; border-bottom: 1px solid #222; z-index: 50;}
         
         ::-webkit-scrollbar { width: 8px; height: 8px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; } ::-webkit-scrollbar-thumb:hover { background: #555; }
         input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; } input[type="color"]::-webkit-color-swatch { border: none; border-radius: 4px; }
@@ -105,7 +109,7 @@
         </div>
     </div>
 
-    <div id="root" class="h-screen flex bg-grid"></div>
+    <div id="root" class="h-screen flex flex-col bg-grid"></div>
 
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -550,7 +554,6 @@
 
             const [authMode, setAuthMode] = useState('signup');
             const [authForm, setAuthForm] = useState({ name: '', phone: '', password: '' });
-            const [paymentModalOpen, setPaymentModalOpen] = useState(false);
 
             const presetColors = ['#a855f7', '#10b981', '#f59e0b', '#171717']; 
             const proColors = ['#e11d48', '#d946ef', '#0ea5e9', '#84cc16']; 
@@ -690,6 +693,10 @@
             const handleTemplateSelect = (tmpl) => {
                 if (!isPro && ['dark', 'corporate', 'creative', 'neon', 'midnight', 'matrix', 'glassmorphism', 'brutalism'].includes(tmpl)) return showToast("Unlock PRO to use Premium Templates!", "error");
                 setForm({...form, template: tmpl});
+            };
+            const handleColorSelect = (c) => {
+                if (!isPro && !presetColors.includes(c)) return showToast("Unlock PRO for premium colors!", "error");
+                setForm({...form, color: c});
             };
 
             const handleGenerate = () => {
@@ -833,7 +840,7 @@
             useEffect(() => { if(terminalEndRef.current) terminalEndRef.current.scrollIntoView({ behavior: 'smooth' }); }, [loadingLogs]);
 
             const MobileNav = () => (
-                <header className="md:hidden glass-nav h-16 flex items-center justify-between px-6 sticky top-0 z-[100]">
+                <header className="md:hidden glass-nav h-16 flex items-center justify-between px-6 sticky top-0 z-[100] flex-shrink-0">
                     <div className="flex items-center gap-3 cursor-pointer" onClick={() => { setView('home'); window.scrollTo(0,0); }}>
                         <div className="w-8 h-8 bg-gradient-to-br from-brand-400 to-brand-600 rounded-lg flex items-center justify-center text-white font-display font-bold shadow-[0_0_10px_rgba(139,92,246,0.3)]">D</div>
                         <span className="font-display font-bold text-lg text-white">DBP<span className="text-brand-400 font-medium">SYSTEMS</span></span>
@@ -863,10 +870,9 @@
                             <span className="nav-tooltip">Home</span>
                         </button>
 
-                        {/* NEW: "Current Site" option added if a site has been generated */}
                         {siteCode && (
                             <button onClick={() => setView('preview')} className={`nav-item ${view === 'preview' ? 'active' : ''}`}>
-                                <i className="fa-solid fa-eye"></i>
+                                <i className="fa-solid fa-eye drop-shadow-[0_0_8px_rgba(168,85,247,0.8)] text-brand-400"></i>
                                 <span className="nav-tooltip">Current Site</span>
                             </button>
                         )}
@@ -894,7 +900,6 @@
                     </div>
 
                     <div className="mt-auto w-full px-4 flex flex-col gap-4">
-                        {/* NEW: Non-Pro Golden Crown button at bottom of sidebar */}
                         {currentUser && !isPro && (
                             <button onClick={() => setView('pricing')} className={`nav-item !text-yellow-400 hover:!bg-yellow-400/10 ${view === 'pricing' ? 'active !border-yellow-400/30 !shadow-[0_0_20px_rgba(251,191,36,0.2)]' : ''}`}>
                                 <i className="fa-solid fa-crown"></i>
@@ -916,9 +921,8 @@
             );
 
             return (
-                <div className="flex h-screen overflow-hidden bg-black text-white relative">
+                <div className="flex flex-col md:flex-row h-screen overflow-hidden bg-black text-white relative">
                     
-                    {/* GLOBAL PRO BADGE - Fixed to Top Right */}
                     {currentUser && isPro && (
                         <div className="fixed top-6 right-6 z-[100] hidden md:block animate-fade-in pointer-events-none">
                             <span className="pro-badge text-xs px-4 py-1.5 font-black shadow-[0_0_20px_rgba(251,191,36,0.4)]">PRO</span>
@@ -1076,14 +1080,14 @@
                                                     
                                                     <div className="space-y-6 border-t border-white/5 pt-6">
                                                         <div>
-                                                            <label className="flex justify-between text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest"><span>Specific Services (CSV)</span>{!isPro && <span className="pro-badge"><i className="fa-solid fa-lock text-[8px] mr-1"></i></span>}</label>
+                                                            <label className="flex justify-between text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest"><span>Specific Services (CSV)</span>{!isPro && <span className="pro-badge"><i className="fa-solid fa-lock text-[8px] mr-1"></i>PRO</span>}</label>
                                                             <div className="input-wrapper items-start">
                                                                 <i className="fa-solid fa-list-check input-icon textarea-icon"></i>
                                                                 <textarea placeholder={isPro ? "e.g. Screen Repair, Data Recovery" : "Locked in Free Tier"} value={form.services} onChange={e => setForm({...form, services: e.target.value})} disabled={!isPro} className={`input-glass h-16 resize-none ${!isPro && 'bg-black/50 border-white/5'}`}></textarea>
                                                             </div>
                                                         </div>
                                                         <div>
-                                                            <label className="flex justify-between text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest"><span>SEO Meta Tags</span>{!isPro && <span className="pro-badge"><i className="fa-solid fa-lock text-[8px] mr-1"></i></span>}</label>
+                                                            <label className="flex justify-between text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest"><span>SEO Meta Tags</span>{!isPro && <span className="pro-badge"><i className="fa-solid fa-lock text-[8px] mr-1"></i>PRO</span>}</label>
                                                             <div className="input-wrapper">
                                                                 <i className="fa-solid fa-magnifying-glass input-icon"></i>
                                                                 <input type="text" placeholder={isPro ? "e.g. best repair patna, quick fix" : "Locked in Free Tier"} value={form.seo} onChange={e => setForm({...form, seo: e.target.value})} disabled={!isPro} className={`input-glass ${!isPro && 'bg-black/50 border-white/5'}`}/>
@@ -1100,28 +1104,30 @@
                                                 Design Matrix
                                             </h2>
                                             <div className="grid lg:grid-cols-3 gap-12">
-                                                <div className="lg:col-span-1 border-r border-white/5 pr-8">
-                                                    <label className="block text-xs font-bold text-gray-500 mb-4 uppercase tracking-widest">Brand Palette</label>
-                                                    <div className="flex flex-wrap gap-4 mb-4">
-                                                        {presetColors.map(c => (
-                                                            <button key={c} onClick={() => handleColorSelect(c)} className={`w-10 h-10 rounded-full cursor-pointer transition transform ${form.color === c ? 'scale-110 ring-2 ring-white ring-offset-4 ring-offset-[#0a0a0a] shadow-[0_0_15px_currentColor]' : 'opacity-50 hover:opacity-100 hover:scale-110 shadow-inner border border-white/10'}`} style={{backgroundColor: c}}/>
-                                                        ))}
-                                                        <div className="w-px h-10 bg-white/10 mx-1"></div>
-                                                        {proColors.map(c => (
-                                                            <button key={c} onClick={() => handleColorSelect(c)} className={`relative w-10 h-10 rounded-full cursor-pointer transition transform ${form.color === c ? 'scale-110 ring-2 ring-white ring-offset-4 ring-offset-[#0a0a0a] shadow-[0_0_15px_currentColor]' : 'opacity-50 hover:opacity-100 hover:scale-110 shadow-inner border border-white/10'} ${!isPro && 'opacity-30 cursor-not-allowed'}`} style={{backgroundColor: c}}>
-                                                                {!isPro && <i className="fa-solid fa-lock text-[10px] text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20"></i>}
-                                                            </button>
-                                                        ))}
+                                                <div className="lg:col-span-1 border-r border-white/5 pr-8 flex flex-col justify-between">
+                                                    <div>
+                                                        <label className="block text-xs font-bold text-gray-500 mb-4 uppercase tracking-widest">Brand Palette</label>
+                                                        <div className="flex flex-wrap gap-4 mb-8">
+                                                            {presetColors.map(c => (
+                                                                <button key={c} onClick={() => handleColorSelect(c)} className={`w-10 h-10 rounded-full cursor-pointer transition transform ${form.color === c ? 'scale-110 ring-2 ring-white ring-offset-4 ring-offset-[#0a0a0a] shadow-[0_0_15px_currentColor]' : 'opacity-50 hover:opacity-100 hover:scale-110 shadow-inner border border-white/10'}`} style={{backgroundColor: c}}/>
+                                                            ))}
+                                                            <div className="w-px h-10 bg-white/10 mx-1"></div>
+                                                            {proColors.map(c => (
+                                                                <button key={c} onClick={() => handleColorSelect(c)} className={`relative w-10 h-10 rounded-full cursor-pointer transition transform ${form.color === c ? 'scale-110 ring-2 ring-white ring-offset-4 ring-offset-[#0a0a0a] shadow-[0_0_15px_currentColor]' : 'opacity-50 hover:opacity-100 hover:scale-110 shadow-inner border border-white/10'} ${!isPro && 'opacity-30 cursor-not-allowed'}`} style={{backgroundColor: c}}>
+                                                                    {!isPro && <i className="fa-solid fa-lock text-[10px] text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 opacity-80"></i>}
+                                                                </button>
+                                                            ))}
+                                                        </div>
                                                     </div>
-                                                    {/* NEW: INFINITE CUSTOM COLOR OPTION */}
-                                                    <div className="pt-4 border-t border-white/5">
-                                                        <label className="flex justify-between text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-widest"><span>Custom Hex / RGB</span>{!isPro && <span className="text-yellow-500 font-bold"><i className="fa-solid fa-lock"></i> PRO</span>}</label>
+                                                    
+                                                    <div className="pt-6 border-t border-white/5">
+                                                        <label className="flex justify-between text-[10px] font-bold text-gray-500 mb-3 uppercase tracking-widest"><span>Custom RGB / Hex</span>{!isPro && <span className="pro-badge !text-[8px] !px-1">PRO</span>}</label>
                                                         <div className="flex items-center gap-3">
-                                                            <div className={`relative w-10 h-10 rounded-xl overflow-hidden border border-white/20 flex-shrink-0 transition ${!isPro ? 'opacity-30 cursor-not-allowed' : 'hover:border-white'}`}>
+                                                            <div className={`relative w-10 h-10 rounded-xl overflow-hidden border border-white/20 flex-shrink-0 transition ${!isPro ? 'opacity-30 cursor-not-allowed' : 'hover:border-white shadow-inner'}`}>
                                                                 {!isPro && <i className="fa-solid fa-lock text-[10px] text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20"></i>}
-                                                                <input type="color" value={form.color} onChange={e => {if(isPro) setForm({...form, color: e.target.value})}} className="absolute inset-0 w-[200%] h-[200%] -top-1/2 -left-1/2 cursor-pointer bg-transparent border-0 p-0" disabled={!isPro}/>
+                                                                <input type="color" value={form.color.startsWith('#') ? form.color : '#8b5cf6'} onChange={e => {if(isPro) setForm({...form, color: e.target.value})}} className="absolute inset-0 w-[200%] h-[200%] -top-1/2 -left-1/2 cursor-pointer bg-transparent border-0 p-0" disabled={!isPro}/>
                                                             </div>
-                                                            <input type="text" value={form.color} onChange={e => {if(isPro) setForm({...form, color: e.target.value})}} disabled={!isPro} placeholder="#HEXCODE" className={`input-glass input-glass-no-icon h-10 flex-1 font-mono text-sm ${!isPro ? 'opacity-30 cursor-not-allowed' : ''}`} />
+                                                            <input type="text" value={form.color} onChange={e => {if(isPro) setForm({...form, color: e.target.value})}} disabled={!isPro} placeholder="#HEXCODE or rgb()" className={`input-glass input-glass-no-icon h-10 flex-1 font-mono text-sm ${!isPro ? 'opacity-30 cursor-not-allowed' : ''}`} />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1159,6 +1165,233 @@
                                         </div>
                                     </div>
                                 )}
+                            </div>
+                        )}
+
+                        {/* AUTH SCREEN */}
+                        {view === 'auth' && (
+                            <div className="flex-1 flex items-center justify-center p-6 animate-fade-up">
+                                <div className="premium-panel w-full max-w-md p-10 relative overflow-hidden">
+                                    <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-brand-400 to-indigo-500"></div>
+                                    <div className="text-center mb-10">
+                                        <div className="w-16 h-16 bg-black border border-white/10 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-inner">
+                                            <i className="fa-solid fa-fingerprint text-2xl text-brand-400"></i>
+                                        </div>
+                                        <h2 className="font-display font-bold text-3xl text-white">{authMode === 'login' ? 'Welcome Back' : 'Create Account'}</h2>
+                                        <p className="text-gray-500 text-sm mt-2 font-medium">Authenticate to access the DBP Engine.</p>
+                                    </div>
+                                    <div className="space-y-5">
+                                        {authMode === 'signup' && (
+                                            <div className="input-wrapper">
+                                                <i className="fa-solid fa-user input-icon"></i>
+                                                <input type="text" placeholder="Full Name" value={authForm.name} onChange={e => setAuthForm({...authForm, name: e.target.value})} className="input-glass"/>
+                                            </div>
+                                        )}
+                                        <div className="input-wrapper">
+                                            <i className="fa-solid fa-phone input-icon"></i>
+                                            <input type="tel" placeholder="Phone Number (e.g. 9827700975)" value={authForm.phone} onChange={e => setAuthForm({...authForm, phone: e.target.value})} className="input-glass"/>
+                                        </div>
+                                        <div className="input-wrapper">
+                                            <i className="fa-solid fa-lock input-icon"></i>
+                                            <input type="password" placeholder="Secure Password" value={authForm.password} onChange={e => setAuthForm({...authForm, password: e.target.value})} className="input-glass"/>
+                                        </div>
+                                        
+                                        <button onClick={handleAuth} className="w-full btn-shine py-4 rounded-xl mt-4 flex justify-center items-center gap-2">
+                                            {authMode === 'login' ? 'SECURE LOGIN' : 'INITIALIZE ACCOUNT'}
+                                        </button>
+                                        
+                                        <div className="text-center mt-6">
+                                            <button onClick={() => setAuthMode(authMode === 'login' ? 'signup' : 'login')} className="text-gray-400 text-xs font-bold tracking-widest hover:text-brand-400 transition uppercase">
+                                                {authMode === 'login' ? 'Register New Access' : 'Return to Login'}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* DASHBOARD SCREEN - SPLIT PANEL DESIGN */}
+                        {view === 'dashboard' && currentUser && (
+                            <div className="flex-1 p-6 lg:p-12 animate-fade-up max-w-7xl mx-auto w-full">
+                                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 border-b border-white/10 pb-8 gap-6">
+                                    <div>
+                                        <h1 className="font-display font-bold text-4xl text-white tracking-tight flex items-center gap-4">
+                                            Project Matrix 
+                                        </h1>
+                                        <p className="text-gray-400 mt-2 font-light">Welcome back, {currentUser.name}. Manage your cloud-saved architectures below.</p>
+                                    </div>
+                                    <button onClick={() => {setView('home'); setTimeout(scrollToBuilder, 100);}} className="btn-shine px-8 py-3.5 rounded-xl text-xs flex items-center gap-2 shadow-lg">
+                                        <i className="fa-solid fa-plus text-base"></i> NEW DEPLOYMENT
+                                    </button>
+                                </div>
+                                
+                                <div className="grid lg:grid-cols-4 gap-8">
+                                    <div className="lg:col-span-3">
+                                        {userSites.length === 0 ? (
+                                            <div className="premium-panel p-20 text-center flex flex-col items-center">
+                                                <div className="w-24 h-24 bg-black border border-white/10 rounded-full flex items-center justify-center mb-6 shadow-inner">
+                                                    <i className="fa-solid fa-folder-open text-3xl text-gray-600"></i>
+                                                </div>
+                                                <h3 className="font-display font-bold text-2xl text-white mb-2">Database Empty</h3>
+                                                <p className="text-gray-500 mb-8 max-w-md font-light">You have no saved projects in the cloud. Initialize the builder to generate your first enterprise site.</p>
+                                                <button onClick={() => {setView('home'); setTimeout(scrollToBuilder, 100);}} className="btn-secondary px-8 py-3 text-xs tracking-widest uppercase">Start Building</button>
+                                            </div>
+                                        ) : (
+                                            <div className="grid md:grid-cols-2 gap-8">
+                                                {userSites.map(site => (
+                                                    <div key={site.firebaseId} className="premium-panel p-8 flex flex-col group hover:border-brand-500/50 transition duration-500">
+                                                        <div className="flex justify-between items-start mb-6">
+                                                            <h3 className="font-display font-bold text-2xl text-white truncate pr-4 group-hover:text-brand-400 transition">{site.name}</h3>
+                                                            <span className="text-[10px] text-green-400 bg-green-500/10 px-2 py-1 rounded font-bold uppercase tracking-widest border border-green-500/20">Cloud</span>
+                                                        </div>
+                                                        <p className="text-xs text-gray-500 mb-8 font-mono bg-black/50 p-3 rounded-lg border border-white/5 inline-block w-max"><i className="fa-regular fa-clock text-brand-400 mr-2"></i> {site.date}</p>
+                                                        
+                                                        <div className="mt-auto grid grid-cols-2 gap-4 border-t border-white/10 pt-6">
+                                                            <button onClick={() => loadProject(site.html, site.name)} className="btn-secondary py-3 text-xs font-bold tracking-widest hover:bg-white hover:text-black">
+                                                                RESTORE
+                                                            </button>
+                                                            <button onClick={() => deleteProject(site.firebaseId)} className="bg-red-500/10 text-red-500 py-3 rounded-xl text-xs font-bold border border-red-500/20 hover:bg-red-500 hover:text-white transition tracking-widest">
+                                                                DELETE
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="lg:col-span-1 space-y-6">
+                                        <div className="premium-panel p-6 border-brand-500/30">
+                                            <h3 className="text-xs text-brand-400 font-bold tracking-widest uppercase mb-4"><i className="fa-solid fa-chart-line mr-2"></i> Quick Stats</h3>
+                                            <div className="space-y-4">
+                                                <div className="bg-black/50 p-4 rounded-xl border border-white/5">
+                                                    <p className="text-gray-500 text-xs uppercase tracking-widest mb-1">Total Assets</p>
+                                                    <p className="text-3xl font-display font-bold text-white">{userSites.length}</p>
+                                                </div>
+                                                <div className="bg-black/50 p-4 rounded-xl border border-white/5">
+                                                    <p className="text-gray-500 text-xs uppercase tracking-widest mb-1">License</p>
+                                                    {isPro ? <span className="pro-badge mt-2">ACTIVE PRO</span> : <span className="text-white font-bold text-sm block mt-1">FREE TIER</span>}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* USER PROFILE SCREEN */}
+                        {view === 'profile' && currentUser && (
+                            <div className="flex-1 p-6 lg:p-12 animate-fade-up max-w-7xl mx-auto w-full">
+                                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 border-b border-white/10 pb-8 gap-6">
+                                    <div>
+                                        <h1 className="font-display font-bold text-4xl text-white tracking-tight flex items-center gap-4">
+                                            System Identity 
+                                        </h1>
+                                        <p className="text-gray-400 mt-2 font-light">Manage your platform authentication and license credentials.</p>
+                                    </div>
+                                </div>
+
+                                <div className="grid lg:grid-cols-3 gap-8">
+                                    <div className="lg:col-span-2 space-y-8">
+                                        <div className="premium-panel p-8 flex items-center gap-8">
+                                            <div className="w-24 h-24 bg-brand-500/10 border border-brand-500/30 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(139,92,246,0.2)] flex-shrink-0">
+                                                <i className="fa-solid fa-user text-4xl text-brand-400"></i>
+                                            </div>
+                                            <div>
+                                                <h2 className="font-display font-bold text-3xl text-white mb-2">{currentUser.name}</h2>
+                                                <p className="text-brand-400 font-mono text-sm">{currentUser.phone}</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="premium-panel p-8">
+                                            <h3 className="text-gray-500 font-bold text-xs uppercase tracking-widest mb-6 border-b border-white/10 pb-4">Account Diagnostics</h3>
+                                            <div className="space-y-4">
+                                                <div className="flex justify-between items-center bg-black/30 p-4 rounded-xl border border-white/5">
+                                                    <span className="text-gray-400 text-sm">System Entry Date</span>
+                                                    <span className="text-white font-mono text-sm">{currentUser.joined || 'Recent'}</span>
+                                                </div>
+                                                <div className="flex justify-between items-center bg-black/30 p-4 rounded-xl border border-white/5">
+                                                    <span className="text-gray-400 text-sm">Generated Assets</span>
+                                                    <span className="text-white font-bold">{userSites.length}</span>
+                                                </div>
+                                                <div className="pt-6 mt-6 border-t border-white/10">
+                                                    <button onClick={handleLogout} className="w-full bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500 hover:text-white py-4 rounded-xl font-bold text-xs tracking-widest transition uppercase">LOGOUT CURRENT SESSION</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="lg:col-span-1">
+                                        <div className={`premium-panel p-8 h-full flex flex-col justify-center border ${isPro ? 'border-yellow-500/50 shadow-[0_0_30px_rgba(251,191,36,0.15)]' : 'border-white/10'}`}>
+                                            <div className="text-center">
+                                                <h3 className="text-gray-500 font-bold text-xs uppercase tracking-widest mb-6 border-b border-white/10 pb-4 text-left">License Status</h3>
+                                                {isPro ? (
+                                                    <div className="py-4">
+                                                        <div className="inline-flex items-center gap-2 pro-badge text-lg px-6 py-2 mb-4 animate-glow-pulse shadow-[0_0_20px_rgba(251,191,36,0.4)]">
+                                                            ACTIVE PRO
+                                                        </div>
+                                                        <p className="text-gray-400 text-sm leading-relaxed mx-auto mt-4">All enterprise architectures, infinite colors, and SEO engines are fully unlocked.</p>
+                                                    </div>
+                                                ) : (
+                                                    <div className="py-2">
+                                                        <div className="inline-block bg-gray-800 text-gray-400 font-bold text-xs px-3 py-1 rounded mb-4 tracking-widest uppercase border border-white/10">FREE TIER</div>
+                                                        <p className="text-gray-400 text-sm mb-8 leading-relaxed mx-auto">Upgrade to PRO to unlock all 10 templates, custom colors, SEO tags, and remove watermarks.</p>
+                                                        <button onClick={handlePaymentInit} className="w-full btn-shine py-4 rounded-xl text-xs font-bold tracking-widest flex justify-center items-center gap-2">
+                                                            <i className="fa-solid fa-crown"></i> SECURE UPGRADE
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* ADMIN DASHBOARD */}
+                        {view === 'admin' && isAdmin && (
+                            <div className="flex-1 p-6 lg:p-12 animate-fade-up max-w-7xl mx-auto w-full">
+                                <div className="flex justify-between items-end mb-10 border-b border-white/10 pb-6">
+                                    <div><h1 className="font-display font-bold text-4xl text-white flex items-center gap-4">System Admin <span className="pro-badge text-xs !bg-gradient-to-r !from-red-500 !to-red-700 !text-white !shadow-[0_0_15px_rgba(239,68,68,0.5)]">ROOT</span></h1><p className="text-gray-400 mt-2">Total control over platform architecture.</p></div>
+                                </div>
+                                
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
+                                    <div className="premium-panel p-6"><div className="text-4xl font-display font-bold text-white mb-1">{users.length}</div><div className="text-xs font-bold text-gray-500 tracking-widest uppercase">Total Users</div></div>
+                                    <div className="premium-panel p-6"><div className="text-4xl font-display font-bold text-brand-400 mb-1">{users.filter(u=>u.isPro).length}</div><div className="text-xs font-bold text-gray-500 tracking-widest uppercase">PRO Members</div></div>
+                                    <div className="premium-panel p-6 md:col-span-2"><div className="text-4xl font-display font-bold text-white mb-1">₹{(users.filter(u=>u.isPro).length * 999).toLocaleString()}</div><div className="text-xs font-bold text-gray-500 tracking-widest uppercase">Estimated ARR</div></div>
+                                </div>
+
+                                <div className="grid lg:grid-cols-2 gap-8">
+                                    <div className="premium-panel p-8">
+                                        <h3 className="font-display font-bold text-xl text-white mb-6 flex items-center gap-3"><i className="fa-solid fa-users text-brand-400"></i> User Database</h3>
+                                        <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
+                                            {users.length === 0 ? <p className="text-gray-500 italic">No users yet.</p> : users.map(u => (
+                                                <div key={u.phone} className="flex justify-between items-center bg-black/50 p-5 rounded-2xl border border-white/5 hover:border-white/10 transition">
+                                                    <div>
+                                                        <div className="font-bold text-white text-lg flex items-center gap-3">{u.name} {u.isPro && <span className="pro-badge text-[8px]">PRO</span>}</div>
+                                                        <div className="text-xs text-gray-500 font-mono mt-2"><i className="fa-solid fa-phone text-[10px] mr-1"></i> {u.phone} <span className="mx-2">•</span> {u.joined}</div>
+                                                    </div>
+                                                    <div className="flex gap-2">
+                                                        <button onClick={() => adminTogglePro(u.phone)} className={`px-4 py-2 rounded-lg text-xs font-bold tracking-widest transition ${u.isPro ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20 hover:bg-orange-500/20' : 'bg-brand-500/10 text-brand-400 border border-brand-500/20 hover:bg-brand-500/20'}`}>
+                                                            {u.isPro ? 'REVOKE' : 'GRANT'}
+                                                        </button>
+                                                        <button onClick={() => adminDeleteUser(u.phone)} className="px-4 py-2 bg-red-500/10 text-red-500 rounded-lg text-xs font-bold border border-red-500/20 hover:bg-red-500 hover:text-white transition"><i className="fa-solid fa-trash"></i></button>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="premium-panel p-8">
+                                        <h3 className="font-display font-bold text-xl text-white mb-6 flex items-center gap-3"><i className="fa-solid fa-server text-brand-400"></i> Transaction Logs</h3>
+                                        <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
+                                            {requests.length === 0 ? <p className="text-gray-500 text-sm italic">No recent transactions.</p> : requests.slice().reverse().map(r => (
+                                                <div key={r.firebaseId} className="bg-black/50 p-5 rounded-2xl border border-white/5 flex flex-col gap-3">
+                                                    <div className="flex justify-between items-center"><span className="text-xs font-mono text-gray-500">ID: {r.id}</span><span className="text-[10px] bg-green-500/10 text-green-400 border border-green-500/20 px-2 py-1 rounded font-bold uppercase tracking-widest">{r.status}</span></div>
+                                                    <div className="text-sm text-white font-medium">{r.type} <br/><span className="text-gray-500 font-light mt-1 inline-block">Authorized by {r.user} ({r.phone})</span></div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         )}
 
@@ -1203,7 +1436,6 @@
                                     </div>
                                 </div>
                                 
-                                {/* PADDING REMOVED ON DESKTOP SO IT USES ALL SPACE */}
                                 <div className={`flex-1 flex justify-center items-center overflow-hidden relative ${previewMode === 'mobile' ? 'p-4 lg:p-10' : 'p-0'}`}>
                                     {previewMode === 'mobile' && (
                                         <div className="absolute top-6 right-6 z-50 bg-brand-600 border border-brand-400 text-white text-xs font-bold tracking-widest px-5 py-2.5 rounded-lg shadow-[0_10px_25px_rgba(139,92,246,0.4)] flex items-center gap-3 animate-bounce pointer-events-none">
@@ -1271,232 +1503,6 @@
                             </div>
                         )}
 
-                        {/* AUTH SCREEN */}
-                        {view === 'auth' && (
-                            <div className="flex-1 flex items-center justify-center p-6 animate-fade-up">
-                                <div className="premium-panel w-full max-w-md p-10 relative overflow-hidden">
-                                    <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-brand-400 to-indigo-500"></div>
-                                    <div className="text-center mb-10">
-                                        <div className="w-16 h-16 bg-black border border-white/10 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-inner">
-                                            <i className="fa-solid fa-fingerprint text-2xl text-brand-400"></i>
-                                        </div>
-                                        <h2 className="font-display font-bold text-3xl text-white">{authMode === 'login' ? 'Welcome Back' : 'Create Account'}</h2>
-                                        <p className="text-gray-500 text-sm mt-2 font-medium">Authenticate to access the DBP Engine.</p>
-                                    </div>
-                                    <div className="space-y-5">
-                                        {authMode === 'signup' && (
-                                            <div className="input-wrapper">
-                                                <i className="fa-solid fa-user input-icon"></i>
-                                                <input type="text" placeholder="Full Name" value={authForm.name} onChange={e => setAuthForm({...authForm, name: e.target.value})} className="input-glass"/>
-                                            </div>
-                                        )}
-                                        <div className="input-wrapper">
-                                            <i className="fa-solid fa-phone input-icon"></i>
-                                            <input type="tel" placeholder="Phone Number (e.g. 9827700975)" value={authForm.phone} onChange={e => setAuthForm({...authForm, phone: e.target.value})} className="input-glass"/>
-                                        </div>
-                                        <div className="input-wrapper">
-                                            <i className="fa-solid fa-lock input-icon"></i>
-                                            <input type="password" placeholder="Secure Password" value={authForm.password} onChange={e => setAuthForm({...authForm, password: e.target.value})} className="input-glass"/>
-                                        </div>
-                                        
-                                        <button onClick={handleAuth} className="w-full btn-shine py-4 rounded-xl mt-4 flex justify-center items-center gap-2">
-                                            {authMode === 'login' ? 'SECURE LOGIN' : 'INITIALIZE ACCOUNT'}
-                                        </button>
-                                        
-                                        <div className="text-center mt-6">
-                                            <button onClick={() => setAuthMode(authMode === 'login' ? 'signup' : 'login')} className="text-gray-400 text-xs font-bold tracking-widest hover:text-brand-400 transition uppercase">
-                                                {authMode === 'login' ? 'Register New Access' : 'Return to Login'}
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* DASHBOARD SCREEN */}
-                        {view === 'dashboard' && currentUser && (
-                            <div className="flex-1 p-6 lg:p-12 animate-fade-up max-w-7xl mx-auto w-full">
-                                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 border-b border-white/10 pb-8 gap-6">
-                                    <div>
-                                        <h1 className="font-display font-bold text-4xl text-white tracking-tight flex items-center gap-4">
-                                            Project Matrix 
-                                        </h1>
-                                        <p className="text-gray-400 mt-2 font-light">Welcome back, {currentUser.name}. Manage your cloud-saved architectures below.</p>
-                                    </div>
-                                    <button onClick={() => {setView('home'); setTimeout(scrollToBuilder, 100);}} className="btn-shine px-8 py-3.5 rounded-xl text-xs flex items-center gap-2 shadow-lg">
-                                        <i className="fa-solid fa-plus text-base"></i> NEW DEPLOYMENT
-                                    </button>
-                                </div>
-                                
-                                <div className="grid lg:grid-cols-4 gap-8">
-                                    <div className="lg:col-span-3">
-                                        {userSites.length === 0 ? (
-                                            <div className="premium-panel p-20 text-center flex flex-col items-center">
-                                                <div className="w-24 h-24 bg-black border border-white/10 rounded-full flex items-center justify-center mb-6 shadow-inner">
-                                                    <i className="fa-solid fa-folder-open text-3xl text-gray-600"></i>
-                                                </div>
-                                                <h3 className="font-display font-bold text-2xl text-white mb-2">Database Empty</h3>
-                                                <p className="text-gray-500 mb-8 max-w-md font-light">You have no saved projects in the cloud. Initialize the builder to generate your first enterprise site.</p>
-                                                <button onClick={() => {setView('home'); setTimeout(scrollToBuilder, 100);}} className="btn-secondary px-8 py-3 text-xs tracking-widest uppercase">Start Building</button>
-                                            </div>
-                                        ) : (
-                                            <div className="grid md:grid-cols-2 gap-8">
-                                                {userSites.map(site => (
-                                                    <div key={site.firebaseId} className="premium-panel p-8 flex flex-col group hover:border-brand-500/50 transition duration-500">
-                                                        <div className="flex justify-between items-start mb-6">
-                                                            <h3 className="font-display font-bold text-2xl text-white truncate pr-4 group-hover:text-brand-400 transition">{site.name}</h3>
-                                                            <span className="text-[10px] text-green-400 bg-green-500/10 px-2 py-1 rounded font-bold uppercase tracking-widest border border-green-500/20">Cloud</span>
-                                                        </div>
-                                                        <p className="text-xs text-gray-500 mb-8 font-mono bg-black/50 p-3 rounded-lg border border-white/5 inline-block w-max"><i className="fa-regular fa-clock text-brand-400 mr-2"></i> {site.date}</p>
-                                                        
-                                                        <div className="mt-auto grid grid-cols-2 gap-4 border-t border-white/10 pt-6">
-                                                            <button onClick={() => loadProject(site.html, site.name)} className="btn-secondary py-3 text-xs font-bold tracking-widest hover:bg-white hover:text-black">
-                                                                RESTORE
-                                                            </button>
-                                                            <button onClick={() => deleteProject(site.firebaseId)} className="bg-red-500/10 text-red-500 py-3 rounded-xl text-xs font-bold border border-red-500/20 hover:bg-red-500 hover:text-white transition tracking-widest">
-                                                                DELETE
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="lg:col-span-1 space-y-6">
-                                        <div className="premium-panel p-6 border-brand-500/30">
-                                            <h3 className="text-xs text-brand-400 font-bold tracking-widest uppercase mb-4"><i className="fa-solid fa-chart-line mr-2"></i> Quick Stats</h3>
-                                            <div className="space-y-4">
-                                                <div className="bg-black/50 p-4 rounded-xl border border-white/5">
-                                                    <p className="text-gray-500 text-xs uppercase tracking-widest mb-1">Total Assets</p>
-                                                    <p className="text-3xl font-display font-bold text-white">{userSites.length}</p>
-                                                </div>
-                                                <div className="bg-black/50 p-4 rounded-xl border border-white/5">
-                                                    <p className="text-gray-500 text-xs uppercase tracking-widest mb-1">License</p>
-                                                    {isPro ? <span className="pro-badge mt-1">PRO</span> : <span className="text-white font-bold text-sm">FREE TIER</span>}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* USER PROFILE SCREEN */}
-                        {view === 'profile' && currentUser && (
-                            <div className="flex-1 p-6 lg:p-12 animate-fade-up max-w-7xl mx-auto w-full">
-                                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 border-b border-white/10 pb-8 gap-6">
-                                    <div>
-                                        <h1 className="font-display font-bold text-4xl text-white tracking-tight flex items-center gap-4">
-                                            System Identity 
-                                        </h1>
-                                        <p className="text-gray-400 mt-2 font-light">Manage your platform authentication and license credentials.</p>
-                                    </div>
-                                </div>
-
-                                <div className="grid lg:grid-cols-3 gap-8">
-                                    <div className="lg:col-span-2 space-y-8">
-                                        <div className="premium-panel p-8 flex items-center gap-8">
-                                            <div className="w-24 h-24 bg-brand-500/10 border border-brand-500/30 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(139,92,246,0.2)] flex-shrink-0">
-                                                <i className="fa-solid fa-user text-4xl text-brand-400"></i>
-                                            </div>
-                                            <div>
-                                                <h2 className="font-display font-bold text-3xl text-white mb-2">{currentUser.name}</h2>
-                                                <p className="text-brand-400 font-mono text-sm">{currentUser.phone}</p>
-                                            </div>
-                                        </div>
-
-                                        <div className="premium-panel p-8">
-                                            <h3 className="text-gray-500 font-bold text-xs uppercase tracking-widest mb-6 border-b border-white/10 pb-4">Account Diagnostics</h3>
-                                            <div className="space-y-4">
-                                                <div className="flex justify-between items-center bg-black/30 p-4 rounded-xl border border-white/5">
-                                                    <span className="text-gray-400 text-sm">System Entry Date</span>
-                                                    <span className="text-white font-mono text-sm">{currentUser.joined || 'Recent'}</span>
-                                                </div>
-                                                <div className="flex justify-between items-center bg-black/30 p-4 rounded-xl border border-white/5">
-                                                    <span className="text-gray-400 text-sm">Generated Assets</span>
-                                                    <span className="text-white font-bold">{userSites.length}</span>
-                                                </div>
-                                                <div className="pt-6 mt-6 border-t border-white/10">
-                                                    <button onClick={handleLogout} className="w-full bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500 hover:text-white py-4 rounded-xl font-bold text-xs tracking-widest transition uppercase">LOGOUT CURRENT SESSION</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="lg:col-span-1">
-                                        <div className={`premium-panel p-8 h-full flex flex-col justify-center border ${isPro ? 'border-yellow-500/50 shadow-[0_0_30px_rgba(251,191,36,0.15)]' : 'border-white/10'}`}>
-                                            <div className="text-center">
-                                                <h3 className="text-gray-500 font-bold text-xs uppercase tracking-widest mb-6 border-b border-white/10 pb-4 text-left">License Status</h3>
-                                                {isPro ? (
-                                                    <div className="py-4">
-                                                        <div className="inline-flex items-center gap-2 pro-badge text-lg px-6 py-2 mb-4 animate-glow-pulse shadow-[0_0_20px_rgba(251,191,36,0.4)]">
-                                                            <i className="fa-solid fa-crown text-black"></i> ACTIVE PRO
-                                                        </div>
-                                                        <p className="text-gray-400 text-sm leading-relaxed mx-auto mt-4">All enterprise architectures, infinite colors, and SEO engines are fully unlocked.</p>
-                                                    </div>
-                                                ) : (
-                                                    <div className="py-2">
-                                                        <div className="inline-block bg-gray-800 text-gray-400 font-bold text-xs px-3 py-1 rounded mb-4 tracking-widest uppercase border border-white/10">FREE TIER</div>
-                                                        <p className="text-gray-400 text-sm mb-8 leading-relaxed mx-auto">Upgrade to PRO to unlock all 10 templates, custom colors, SEO tags, and remove watermarks.</p>
-                                                        <button onClick={handlePaymentInit} className="w-full btn-shine py-4 rounded-xl text-xs font-bold tracking-widest flex justify-center items-center gap-2">
-                                                            <i className="fa-solid fa-crown"></i> SECURE UPGRADE
-                                                        </button>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* ADMIN DASHBOARD */}
-                        {view === 'admin' && isAdmin && (
-                            <div className="flex-1 p-6 lg:p-12 animate-fade-up max-w-7xl mx-auto w-full">
-                                <div className="flex justify-between items-end mb-10 border-b border-white/10 pb-6">
-                                    <div><h1 className="font-display font-bold text-4xl text-white flex items-center gap-4">System Admin <span className="pro-badge text-xs !bg-gradient-to-r !from-red-500 !to-red-700 !text-white !shadow-[0_0_15px_rgba(239,68,68,0.5)]">ROOT</span></h1><p className="text-gray-400 mt-2">Total control over platform architecture.</p></div>
-                                </div>
-                                
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
-                                    <div className="premium-panel p-6"><div className="text-4xl font-display font-bold text-white mb-1">{users.length}</div><div className="text-xs font-bold text-gray-500 tracking-widest uppercase">Total Users</div></div>
-                                    <div className="premium-panel p-6"><div className="text-4xl font-display font-bold text-brand-400 mb-1">{users.filter(u=>u.isPro).length}</div><div className="text-xs font-bold text-gray-500 tracking-widest uppercase">PRO Members</div></div>
-                                    <div className="premium-panel p-6 md:col-span-2"><div className="text-4xl font-display font-bold text-white mb-1">₹{(users.filter(u=>u.isPro).length * 999).toLocaleString()}</div><div className="text-xs font-bold text-gray-500 tracking-widest uppercase">Estimated ARR</div></div>
-                                </div>
-
-                                <div className="grid lg:grid-cols-2 gap-8">
-                                    <div className="premium-panel p-8">
-                                        <h3 className="font-display font-bold text-xl text-white mb-6 flex items-center gap-3"><i className="fa-solid fa-users text-brand-400"></i> User Database</h3>
-                                        <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
-                                            {users.length === 0 ? <p className="text-gray-500 italic">No users yet.</p> : users.map(u => (
-                                                <div key={u.phone} className="flex justify-between items-center bg-black/50 p-5 rounded-2xl border border-white/5 hover:border-white/10 transition">
-                                                    <div>
-                                                        <div className="font-bold text-white text-lg flex items-center gap-3">{u.name} {u.isPro && <span className="pro-badge text-[8px]">PRO</span>}</div>
-                                                        <div className="text-xs text-gray-500 font-mono mt-2"><i className="fa-solid fa-phone text-[10px] mr-1"></i> {u.phone} <span className="mx-2">•</span> {u.joined}</div>
-                                                    </div>
-                                                    <div className="flex gap-2">
-                                                        <button onClick={() => adminTogglePro(u.phone)} className={`px-4 py-2 rounded-lg text-xs font-bold tracking-widest transition ${u.isPro ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20 hover:bg-orange-500/20' : 'bg-brand-500/10 text-brand-400 border border-brand-500/20 hover:bg-brand-500/20'}`}>
-                                                            {u.isPro ? 'REVOKE' : 'GRANT'}
-                                                        </button>
-                                                        <button onClick={() => adminDeleteUser(u.phone)} className="px-4 py-2 bg-red-500/10 text-red-500 rounded-lg text-xs font-bold border border-red-500/20 hover:bg-red-500 hover:text-white transition"><i className="fa-solid fa-trash"></i></button>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                    <div className="premium-panel p-8">
-                                        <h3 className="font-display font-bold text-xl text-white mb-6 flex items-center gap-3"><i className="fa-solid fa-server text-brand-400"></i> Transaction Logs</h3>
-                                        <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
-                                            {requests.length === 0 ? <p className="text-gray-500 text-sm italic">No recent transactions.</p> : requests.slice().reverse().map(r => (
-                                                <div key={r.firebaseId} className="bg-black/50 p-5 rounded-2xl border border-white/5 flex flex-col gap-3">
-                                                    <div className="flex justify-between items-center"><span className="text-xs font-mono text-gray-500">ID: {r.id}</span><span className="text-[10px] bg-green-500/10 text-green-400 border border-green-500/20 px-2 py-1 rounded font-bold uppercase tracking-widest">{r.status}</span></div>
-                                                    <div className="text-sm text-white font-medium">{r.type} <br/><span className="text-gray-500 font-light mt-1 inline-block">Authorized by {r.user} ({r.phone})</span></div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
                     </main>
                 </div>
             );
