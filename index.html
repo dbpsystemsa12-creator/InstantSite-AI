@@ -53,22 +53,24 @@
         .hero-glow { position: absolute; top: -10%; left: 50%; transform: translateX(-50%); width: 800px; height: 400px; background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.15) 0%, transparent 70%); pointer-events: none; z-index: 0; }
 
         .premium-panel { background: linear-gradient(145deg, rgba(20,20,22,0.8), rgba(10,10,12,0.95)); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.1); border-radius: 1.5rem; }
-        .glass-sidebar { background: rgba(10, 10, 10, 0.4); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: inset 0 0 20px rgba(255,255,255,0.02); border-radius: 2rem; }
-        
+        .glass-sidebar { background: rgba(10, 10, 10, 0.4); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 2rem; }
+        .glass-nav { background: rgba(3,3,3,0.7); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+
         .pro-badge { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #000; font-weight: 900; font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 0.3rem; text-transform: uppercase; letter-spacing: 0.1em; box-shadow: 0 0 15px rgba(245, 158, 11, 0.4), inset 0 1px 1px rgba(255,255,255,0.5); display: inline-flex; align-items: center; justify-content: center; }
 
         .input-wrapper { position: relative; display: flex; align-items: center; width: 100%; }
-        .input-icon { position: absolute; left: 1.25rem; color: #64748b; transition: color 0.3s ease; font-size: 1rem; pointer-events: none; z-index: 10; }
+        .input-icon { position: absolute; left: 1.25rem; color: #64748b; font-size: 1rem; pointer-events: none; z-index: 10; }
         .textarea-icon { top: 1.25rem; align-items: flex-start; }
-        .input-glass { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); color: white; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); width: 100%; padding: 1.1rem 1rem 1.1rem 3.5rem !important; border-radius: 0.75rem; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); font-family: 'Inter', sans-serif; font-size: 0.95rem; }
+        .input-glass { background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); color: white; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); width: 100%; padding: 1.1rem 1rem 1.1rem 3.5rem !important; border-radius: 0.75rem; font-family: 'Inter', sans-serif; font-size: 0.95rem; }
         .input-wrapper:focus-within .input-icon { color: #a855f7; text-shadow: 0 0 12px rgba(168, 85, 247, 0.6); }
-        .input-glass:focus { background: rgba(255,255,255,0.03); border-color: #8b5cf6; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5), 0 0 0 3px rgba(139, 92, 246, 0.2); outline: none; }
-        .input-glass:disabled { opacity: 0.3; cursor: not-allowed; }
+        .input-glass:focus { background: rgba(255,255,255,0.03); border-color: #8b5cf6; box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2); outline: none; }
         select.input-glass { appearance: none; cursor: pointer; } select.input-glass option { background: #0a0a0a; color: white; }
 
-        .btn-shine { position: relative; overflow: hidden; background: linear-gradient(90deg, #7c3aed, #a855f7, #7c3aed); background-size: 200% 100%; animation: shimmer 3s infinite linear; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 10px 30px rgba(139, 92, 246, 0.25), inset 0 1px 0 rgba(255,255,255,0.3); border-radius: 0.75rem; color: white; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .btn-shine { position: relative; overflow: hidden; background: linear-gradient(90deg, #7c3aed, #a855f7, #7c3aed); background-size: 200% 100%; animation: shimmer 3s infinite linear; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 10px 30px rgba(139, 92, 246, 0.25), inset 0 1px 0 rgba(255,255,255,0.3); border-radius: 0.75rem; color: white; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; transition: all 0.3s ease; }
         .btn-shine:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(168, 85, 247, 0.4), inset 0 1px 0 rgba(255,255,255,0.4); }
-        
+        .btn-secondary { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.75rem; color: white; font-weight: 600; transition: all 0.3s ease; }
+        .btn-secondary:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); }
+
         .nav-item { width: 3.5rem; height: 3.5rem; display: flex; align-items: center; justify-content: center; border-radius: 1rem; color: #64748b; font-size: 1.25rem; transition: all 0.3s ease; position: relative; }
         .nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
         .nav-item.active { background: rgba(139, 92, 246, 0.15); color: #a855f7; border: 1px solid rgba(139, 92, 246, 0.3); box-shadow: 0 0 20px rgba(139, 92, 246, 0.2); }
@@ -78,17 +80,16 @@
         .terminal-window { background: #000; border: 1px solid #1e293b; border-radius: 12px; overflow: hidden; box-shadow: 0 0 40px rgba(16, 185, 129, 0.1); }
         .hacker-text { font-family: 'JetBrains Mono', monospace; color: #10b981; text-shadow: 0 0 5px rgba(16, 185, 129, 0.4); font-size: 13px; line-height: 1.6; }
         
-        .device-mobile { width: 375px; height: 812px; border: 12px solid #111; border-radius: 40px; box-shadow: 0 0 0 1px #333, 0 30px 60px rgba(0,0,0,0.8); position: relative; overflow: hidden; background: white; display: flex; flex-direction: column; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);}
+        .device-mobile { width: 375px; height: 812px; border: 12px solid #111; border-radius: 40px; position: relative; overflow: hidden; background: white; display: flex; flex-direction: column; transition: all 0.5s ease;}
         .device-mobile::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 120px; height: 28px; background: #111; border-bottom-left-radius: 18px; border-bottom-right-radius: 18px; z-index: 50; }
-        .device-desktop { width: 100%; max-width: 1400px; height: 85vh; border: 1px solid #333; border-radius: 12px; box-shadow: 0 30px 60px rgba(0,0,0,0.8); overflow: hidden; background: #050505; display: flex; flex-direction: column; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);}
-        .browser-bar { background: #111; height: 44px; display: flex; align-items: center; padding: 0 16px; gap: 8px; border-bottom: 1px solid #222; z-index: 50; position: relative;}
+        .device-desktop { width: 100%; max-width: 1400px; height: 85vh; border: 1px solid #333; border-radius: 12px; overflow: hidden; background: #050505; display: flex; flex-direction: column; transition: all 0.5s ease;}
+        .browser-bar { background: #111; height: 44px; display: flex; align-items: center; padding: 0 16px; gap: 8px; border-bottom: 1px solid #222; z-index: 50;}
         
         ::-webkit-scrollbar { width: 8px; height: 8px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; } ::-webkit-scrollbar-thumb:hover { background: #555; }
-        input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; } input[type="color"]::-webkit-color-swatch { border: none; border-radius: 4px; }
-
+        
         #dbp-splash { position: fixed; inset: 0; z-index: 999999; background: #000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.8s ease, visibility 0.8s; }
         .splash-logo { width: 80px; height: 80px; background: linear-gradient(135deg, #a855f7, #6366f1); border-radius: 20px; display: flex; align-items: center; justify-content: center; color: white; font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 900; animation: spin-flash 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards; box-shadow: 0 0 40px rgba(139, 92, 246, 0.3); }
-        @keyframes spin-flash { 0% { transform: scale(0) rotate(-180deg); opacity: 0; filter: brightness(1); } 50% { transform: scale(1.2) rotate(10deg); opacity: 1; filter: brightness(2); box-shadow: 0 0 80px rgba(168, 85, 247, 0.6); } 100% { transform: scale(1) rotate(0deg); opacity: 1; filter: brightness(1); } }
+        @keyframes spin-flash { 0% { transform: scale(0) rotate(-180deg); opacity: 0; } 50% { transform: scale(1.2) rotate(10deg); opacity: 1; box-shadow: 0 0 80px rgba(168, 85, 247, 0.6); } 100% { transform: scale(1) rotate(0deg); opacity: 1; } }
         .toast-enter { animation: toastIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes toastIn { from { transform: translate(-50%, -100%); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
     </style>
@@ -648,7 +649,10 @@
                         
                         setView('home');
                         setIsBuilderRevealed(true);
-                        setTimeout(() => document.getElementById('builder-section').scrollIntoView({ behavior: 'smooth' }), 100);
+                        setTimeout(() => {
+                            const el = document.getElementById('builder-section');
+                            if(el) el.scrollIntoView({ behavior: 'smooth' });
+                        }, 100);
                         showToast(`Account created! Welcome, ${newUser.name}.`, "success");
                     } catch (err) { showToast("Database Error: Check Firebase Rules", "error"); }
                 } else {
@@ -665,7 +669,10 @@
                             
                             setView('home');
                             setIsBuilderRevealed(true);
-                            setTimeout(() => document.getElementById('builder-section').scrollIntoView({ behavior: 'smooth' }), 100);
+                            setTimeout(() => {
+                                const el = document.getElementById('builder-section');
+                                if(el) el.scrollIntoView({ behavior: 'smooth' });
+                            }, 100);
                             showToast(`Welcome back, ${user.name}!`, "success");
                         } else { showToast("Invalid credentials.", "error"); }
                     } catch (err) { showToast("Database Error: Check Firebase Rules", "error"); }
@@ -821,7 +828,7 @@
             const terminalEndRef = useRef(null);
             useEffect(() => { if(terminalEndRef.current) terminalEndRef.current.scrollIntoView({ behavior: 'smooth' }); }, [loadingLogs]);
 
-            // MOBILE NAVBAR COMPONENT
+            // MOBILE NAVBAR
             const MobileNav = () => (
                 <header className="md:hidden glass-nav h-16 flex items-center justify-between px-6 sticky top-0 z-[100]">
                     <div className="flex items-center gap-3 cursor-pointer" onClick={() => { setView('home'); window.scrollTo(0,0); }}>
@@ -830,7 +837,10 @@
                     </div>
                     <div className="flex gap-4 items-center">
                         {currentUser ? (
-                            <button onClick={() => setView('profile')} className="text-gray-400 hover:text-white"><i className="fa-solid fa-user"></i></button>
+                            <button onClick={() => setView('profile')} className="text-gray-400 hover:text-white flex items-center gap-2">
+                                <i className="fa-solid fa-user"></i>
+                                {isPro && <span className="pro-badge !text-[8px] !px-1">PRO</span>}
+                            </button>
                         ) : (
                             <button onClick={() => setView('auth')} className="text-brand-400 font-bold text-xs">LOGIN</button>
                         )}
@@ -838,7 +848,7 @@
                 </header>
             );
 
-            // DESKTOP GLASS SIDEBAR COMPONENT
+            // DESKTOP GLASS SIDEBAR
             const GlassSidebar = () => (
                 <aside className="hidden md:flex flex-col items-center py-8 w-24 fixed left-4 top-4 bottom-4 glass-sidebar z-[100]">
                     <div className="w-12 h-12 bg-gradient-to-br from-brand-400 to-brand-600 rounded-xl flex items-center justify-center text-white font-display font-bold text-2xl shadow-[0_0_15px_rgba(139,92,246,0.4)] cursor-pointer hover:scale-105 transition transform mb-10" onClick={() => { setView('home'); window.scrollTo(0,0); }}>
@@ -848,28 +858,27 @@
                     <div className="flex flex-col gap-6 w-full px-4">
                         <button onClick={() => { setView('home'); window.scrollTo(0,0); }} className={`nav-item ${view === 'home' ? 'active' : ''}`}>
                             <i className="fa-solid fa-house"></i>
-                            <span className="nav-tooltip">Home Engine</span>
+                            <span className="nav-tooltip">Home</span>
                         </button>
 
                         {currentUser && (
                             <button onClick={() => setView('dashboard')} className={`nav-item ${view === 'dashboard' ? 'active' : ''}`}>
                                 <i className="fa-regular fa-folder-open"></i>
-                                <span className="nav-tooltip">My Assets</span>
+                                <span className="nav-tooltip">Projects</span>
                             </button>
                         )}
                         
                         {currentUser && (
                             <button onClick={() => setView('profile')} className={`nav-item ${view === 'profile' ? 'active' : ''}`}>
                                 <i className="fa-regular fa-user"></i>
-                                {isPro && <div className="absolute top-0 right-0 w-2.5 h-2.5 bg-yellow-400 rounded-full border-2 border-[#111]"></div>}
-                                <span className="nav-tooltip">User Profile</span>
+                                <span className="nav-tooltip">Profile</span>
                             </button>
                         )}
 
                         {isAdmin && (
                             <button onClick={() => setView('admin')} className={`nav-item ${view === 'admin' ? 'active' : ''} !text-red-400 hover:!bg-red-500/10`}>
                                 <i className="fa-solid fa-shield-halved"></i>
-                                <span className="nav-tooltip">Root Admin</span>
+                                <span className="nav-tooltip">Admin</span>
                             </button>
                         )}
                     </div>
@@ -891,6 +900,14 @@
             return (
                 <div className="flex h-screen overflow-hidden bg-black text-white relative">
                     
+                    {/* GLOBAL PRO BADGE - Fixed to Top Right on Desktop */}
+                    {currentUser && isPro && (
+                        <div className="fixed top-6 right-8 z-[100] hidden md:flex items-center gap-3 bg-black/60 backdrop-blur-md border border-brand-500/30 px-4 py-2 rounded-full shadow-[0_0_20px_rgba(139,92,246,0.15)] animate-fade-in pointer-events-none">
+                            <span className="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
+                            <span className="text-brand-400 font-bold text-xs tracking-widest uppercase">PRO ACCESS ACTIVE</span>
+                        </div>
+                    )}
+
                     <div className="fixed inset-0 pointer-events-none z-[-1] bg-grid">
                         <div className="absolute top-[-10%] left-[20%] w-[50%] h-[50%] bg-brand-600 rounded-full mix-blend-screen filter blur-[180px] opacity-[0.15] animate-blob"></div>
                         <div className="absolute bottom-[-10%] right-[10%] w-[40%] h-[40%] bg-indigo-500 rounded-full mix-blend-screen filter blur-[180px] opacity-[0.15] animate-blob" style={{animationDelay: '2s'}}></div>
@@ -943,7 +960,7 @@
                                 {/* CINEMATIC ABOUT SECTIONS */}
                                 <div className="max-w-6xl mx-auto px-6 py-10 z-10 relative">
                                     <div className="grid md:grid-cols-2 gap-8">
-                                        <div className="premium-panel p-10 relative overflow-hidden group">
+                                        <div className="premium-panel p-10 relative overflow-hidden group hover:border-brand-500/50 transition duration-500">
                                             <div className="absolute -right-10 -top-10 w-40 h-40 bg-brand-500/10 blur-[50px] rounded-full group-hover:bg-brand-500/20 transition duration-700"></div>
                                             <div className="w-14 h-14 bg-black border border-white/10 rounded-2xl flex items-center justify-center mb-6 shadow-inner relative z-10">
                                                 <i className="fa-solid fa-bolt text-2xl text-brand-400"></i>
@@ -952,7 +969,7 @@
                                             <p className="text-gray-400 leading-relaxed font-light relative z-10">A proprietary AI engine designed to eliminate the friction of web development. By leveraging pre-compiled, pure-CSS architectures, we guarantee perfect lighthouse scores, flawless mobile responsiveness, and zero-dependency deployments right out of the box.</p>
                                         </div>
                                         
-                                        <div className="premium-panel p-10 relative overflow-hidden group">
+                                        <div className="premium-panel p-10 relative overflow-hidden group hover:border-indigo-500/50 transition duration-500">
                                             <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-indigo-500/10 blur-[50px] rounded-full group-hover:bg-indigo-500/20 transition duration-700"></div>
                                             <div className="w-14 h-14 bg-black border border-white/10 rounded-2xl flex items-center justify-center mb-6 shadow-inner relative z-10">
                                                 <i className="fa-solid fa-microchip text-2xl text-indigo-400"></i>
@@ -1032,13 +1049,6 @@
                                                         <div className="input-wrapper">
                                                             <i className="fa-brands fa-whatsapp input-icon"></i>
                                                             <input type="tel" placeholder="e.g. 9827700975" value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} className="input-glass"/>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Detailed Address <span className="opacity-50">(Optional)</span></label>
-                                                        <div className="input-wrapper">
-                                                            <i className="fa-solid fa-map-pin input-icon"></i>
-                                                            <input type="text" placeholder="Optional exact location..." value={form.address} onChange={e => setForm({...form, address: e.target.value})} className="input-glass"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1198,67 +1208,13 @@
                             </div>
                         )}
 
-                        {/* USER PROFILE SCREEN */}
-                        {view === 'profile' && currentUser && (
-                            <div className="flex-1 p-6 lg:p-12 animate-fade-up max-w-4xl mx-auto w-full">
-                                <div className="text-center mb-12">
-                                    <div className="w-24 h-24 bg-brand-500/10 border border-brand-500/30 rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_0_30px_rgba(139,92,246,0.2)] relative">
-                                        <i className="fa-solid fa-user text-4xl text-brand-400"></i>
-                                        {isPro && <div className="absolute top-0 right-0 w-4 h-4 bg-yellow-400 rounded-full border-2 border-[#111]"></div>}
-                                    </div>
-                                    <h1 className="font-display font-bold text-4xl text-white mb-2">{currentUser.name}</h1>
-                                    <p className="text-gray-400 font-mono">{currentUser.phone}</p>
-                                </div>
-
-                                <div className="grid md:grid-cols-2 gap-8">
-                                    <div className="premium-panel p-8">
-                                        <h3 className="text-gray-500 font-bold text-xs uppercase tracking-widest mb-6 border-b border-white/10 pb-4">Account Details</h3>
-                                        <div className="space-y-5">
-                                            <div className="flex justify-between items-center bg-black/30 p-4 rounded-xl border border-white/5">
-                                                <span className="text-gray-400 text-sm">Member Since</span>
-                                                <span className="text-white font-mono text-sm">{currentUser.joined || 'Recent'}</span>
-                                            </div>
-                                            <div className="flex justify-between items-center bg-black/30 p-4 rounded-xl border border-white/5">
-                                                <span className="text-gray-400 text-sm">Projects Generated</span>
-                                                <span className="text-white font-bold">{userSites.length}</span>
-                                            </div>
-                                            <div className="pt-4 mt-4">
-                                                <button onClick={() => {setCurrentUser(null); localStorage.removeItem('dbp-current-user'); setView('home'); window.scrollTo(0,0);}} className="w-full bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500 hover:text-white py-4 rounded-xl font-bold text-xs tracking-widest transition uppercase">LOGOUT CURRENT SESSION</button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className={`premium-panel p-8 flex flex-col justify-center border ${isPro ? 'border-brand-500/50 shadow-[0_0_30px_rgba(139,92,246,0.15)]' : 'border-white/10'}`}>
-                                        <div className="text-center">
-                                            <h3 className="text-gray-500 font-bold text-xs uppercase tracking-widest mb-6 border-b border-white/10 pb-4 text-left">License Status</h3>
-                                            {isPro ? (
-                                                <div className="py-4">
-                                                    <div className="inline-block pro-badge text-lg px-6 py-2 mb-4 animate-glow-pulse shadow-[0_0_20px_rgba(251,191,36,0.4)]">ACTIVE PRO MEMBER</div>
-                                                    <p className="text-gray-400 text-sm leading-relaxed max-w-xs mx-auto">All enterprise architectures and SEO generation engines are fully unlocked and ready for deployment.</p>
-                                                </div>
-                                            ) : (
-                                                <div className="py-2">
-                                                    <div className="inline-block bg-gray-800 text-gray-400 font-bold text-xs px-3 py-1 rounded mb-4 tracking-widest uppercase border border-white/10">FREE TIER</div>
-                                                    <p className="text-gray-400 text-sm mb-8 leading-relaxed max-w-xs mx-auto">Upgrade to PRO to unlock all 10 templates, custom SEO, and remove generated watermarks.</p>
-                                                    <button onClick={handlePaymentInit} className="w-full btn-shine py-4 rounded-xl text-xs font-bold tracking-widest flex justify-center items-center gap-2">
-                                                        <i className="fa-solid fa-bolt"></i> UPGRADE TO PRO
-                                                    </button>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* DASHBOARD SCREEN */}
+                        {/* DASHBOARD SCREEN - SPLIT PANEL DESIGN */}
                         {view === 'dashboard' && currentUser && (
                             <div className="flex-1 p-6 lg:p-12 animate-fade-up max-w-7xl mx-auto w-full">
                                 <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 border-b border-white/10 pb-8 gap-6">
                                     <div>
                                         <h1 className="font-display font-bold text-4xl text-white tracking-tight flex items-center gap-4">
                                             Project Matrix 
-                                            {isPro && <span className="pro-badge text-xs">PRO</span>}
                                         </h1>
                                         <p className="text-gray-400 mt-2 font-light">Welcome back, {currentUser.name}. Manage your cloud-saved architectures below.</p>
                                     </div>
@@ -1267,37 +1223,136 @@
                                     </button>
                                 </div>
                                 
-                                {userSites.length === 0 ? (
-                                    <div className="premium-panel p-20 text-center flex flex-col items-center">
-                                        <div className="w-24 h-24 bg-black border border-white/10 rounded-full flex items-center justify-center mb-6 shadow-inner">
-                                            <i className="fa-solid fa-folder-open text-3xl text-gray-600"></i>
-                                        </div>
-                                        <h3 className="font-display font-bold text-2xl text-white mb-2">Database Empty</h3>
-                                        <p className="text-gray-500 mb-8 max-w-md font-light">You have no saved projects in the cloud. Initialize the builder to generate your first enterprise site.</p>
-                                        <button onClick={() => {setView('home'); setTimeout(scrollToBuilder, 100);}} className="btn-secondary px-8 py-3 text-xs tracking-widest uppercase">Start Building</button>
-                                    </div>
-                                ) : (
-                                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                                        {userSites.map(site => (
-                                            <div key={site.firebaseId} className="premium-panel p-8 flex flex-col group hover:border-brand-500/50 transition duration-500">
-                                                <div className="flex justify-between items-start mb-6">
-                                                    <h3 className="font-display font-bold text-2xl text-white truncate pr-4 group-hover:text-brand-400 transition">{site.name}</h3>
-                                                    <span className="text-[10px] text-green-400 bg-green-500/10 px-2 py-1 rounded font-bold uppercase tracking-widest border border-green-500/20">Cloud</span>
+                                <div className="grid lg:grid-cols-4 gap-8">
+                                    {/* Left: Projects Grid */}
+                                    <div className="lg:col-span-3">
+                                        {userSites.length === 0 ? (
+                                            <div className="premium-panel p-20 text-center flex flex-col items-center">
+                                                <div className="w-24 h-24 bg-black border border-white/10 rounded-full flex items-center justify-center mb-6 shadow-inner">
+                                                    <i className="fa-solid fa-folder-open text-3xl text-gray-600"></i>
                                                 </div>
-                                                <p className="text-xs text-gray-500 mb-8 font-mono bg-black/50 p-3 rounded-lg border border-white/5 inline-block w-max"><i className="fa-regular fa-clock text-brand-400 mr-2"></i> {site.date}</p>
-                                                
-                                                <div className="mt-auto grid grid-cols-2 gap-4 border-t border-white/10 pt-6">
-                                                    <button onClick={() => loadProject(site.html, site.name)} className="btn-secondary py-3 text-xs tracking-widest hover:bg-white hover:text-black">
-                                                        RESTORE
-                                                    </button>
-                                                    <button onClick={() => deleteProject(site.firebaseId)} className="bg-red-500/10 text-red-500 py-3 rounded-xl text-xs font-bold border border-red-500/20 hover:bg-red-500 hover:text-white transition tracking-widest">
-                                                        PURGE
-                                                    </button>
+                                                <h3 className="font-display font-bold text-2xl text-white mb-2">Database Empty</h3>
+                                                <p className="text-gray-500 mb-8 max-w-md font-light">You have no saved projects in the cloud. Initialize the builder to generate your first enterprise site.</p>
+                                                <button onClick={() => {setView('home'); setTimeout(scrollToBuilder, 100);}} className="btn-secondary px-8 py-3 text-xs tracking-widest uppercase">Start Building</button>
+                                            </div>
+                                        ) : (
+                                            <div className="grid md:grid-cols-2 gap-8">
+                                                {userSites.map(site => (
+                                                    <div key={site.firebaseId} className="premium-panel p-8 flex flex-col group hover:border-brand-500/50 transition duration-500">
+                                                        <div className="flex justify-between items-start mb-6">
+                                                            <h3 className="font-display font-bold text-2xl text-white truncate pr-4 group-hover:text-brand-400 transition">{site.name}</h3>
+                                                            <span className="text-[10px] text-green-400 bg-green-500/10 px-2 py-1 rounded font-bold uppercase tracking-widest border border-green-500/20">Cloud</span>
+                                                        </div>
+                                                        <p className="text-xs text-gray-500 mb-8 font-mono bg-black/50 p-3 rounded-lg border border-white/5 inline-block w-max"><i className="fa-regular fa-clock text-brand-400 mr-2"></i> {site.date}</p>
+                                                        
+                                                        <div className="mt-auto grid grid-cols-2 gap-4 border-t border-white/10 pt-6">
+                                                            <button onClick={() => loadProject(site.html, site.name)} className="btn-secondary py-3 text-xs tracking-widest hover:bg-white hover:text-black">
+                                                                RESTORE
+                                                            </button>
+                                                            <button onClick={() => deleteProject(site.firebaseId)} className="bg-red-500/10 text-red-500 py-3 rounded-xl text-xs font-bold border border-red-500/20 hover:bg-red-500 hover:text-white transition tracking-widest">
+                                                                PURGE
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Right: Insight Panel to fill space */}
+                                    <div className="lg:col-span-1 space-y-6">
+                                        <div className="premium-panel p-6 border-brand-500/30">
+                                            <h3 className="text-xs text-brand-400 font-bold tracking-widest uppercase mb-4"><i className="fa-solid fa-chart-line mr-2"></i> Quick Stats</h3>
+                                            <div className="space-y-4">
+                                                <div className="bg-black/50 p-4 rounded-xl border border-white/5">
+                                                    <p className="text-gray-500 text-xs uppercase tracking-widest mb-1">Total Assets</p>
+                                                    <p className="text-3xl font-display font-bold text-white">{userSites.length}</p>
+                                                </div>
+                                                <div className="bg-black/50 p-4 rounded-xl border border-white/5">
+                                                    <p className="text-gray-500 text-xs uppercase tracking-widest mb-1">License Status</p>
+                                                    {isPro ? <span className="pro-badge mt-1">ACTIVE PRO</span> : <span className="text-white font-bold text-sm">FREE TIER</span>}
                                                 </div>
                                             </div>
-                                        ))}
+                                        </div>
+
+                                        {!isPro && (
+                                            <div className="premium-panel p-6 bg-gradient-to-b from-black to-brand-900/20 border-brand-500/50">
+                                                <h3 className="font-display font-bold text-lg text-white mb-2">Upgrade Engine</h3>
+                                                <p className="text-gray-400 text-xs mb-4">Unlock custom SEO mapping and remove code watermarks.</p>
+                                                <button onClick={() => setView('profile')} className="w-full btn-shine py-3 text-xs">VIEW UPGRADE</button>
+                                            </div>
+                                        )}
                                     </div>
-                                )}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* USER PROFILE SCREEN - SPLIT PANEL DESIGN */}
+                        {view === 'profile' && currentUser && (
+                            <div className="flex-1 p-6 lg:p-12 animate-fade-up max-w-7xl mx-auto w-full">
+                                <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 border-b border-white/10 pb-8 gap-6">
+                                    <div>
+                                        <h1 className="font-display font-bold text-4xl text-white tracking-tight flex items-center gap-4">
+                                            System Identity 
+                                        </h1>
+                                        <p className="text-gray-400 mt-2 font-light">Manage your platform authentication and license credentials.</p>
+                                    </div>
+                                </div>
+
+                                <div className="grid lg:grid-cols-3 gap-8">
+                                    {/* Left: Main Details */}
+                                    <div className="lg:col-span-2 space-y-8">
+                                        <div className="premium-panel p-8 flex items-center gap-8">
+                                            <div className="w-24 h-24 bg-brand-500/10 border border-brand-500/30 rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(139,92,246,0.2)] flex-shrink-0">
+                                                <i className="fa-solid fa-user text-4xl text-brand-400"></i>
+                                            </div>
+                                            <div>
+                                                <h2 className="font-display font-bold text-3xl text-white mb-2">{currentUser.name}</h2>
+                                                <p className="text-brand-400 font-mono text-sm">{currentUser.phone}</p>
+                                            </div>
+                                        </div>
+
+                                        <div className="premium-panel p-8">
+                                            <h3 className="text-gray-500 font-bold text-xs uppercase tracking-widest mb-6 border-b border-white/10 pb-4">Account Diagnostics</h3>
+                                            <div className="space-y-4">
+                                                <div className="flex justify-between items-center bg-black/30 p-4 rounded-xl border border-white/5">
+                                                    <span className="text-gray-400 text-sm">System Entry Date</span>
+                                                    <span className="text-white font-mono text-sm">{currentUser.joined || 'Recent'}</span>
+                                                </div>
+                                                <div className="flex justify-between items-center bg-black/30 p-4 rounded-xl border border-white/5">
+                                                    <span className="text-gray-400 text-sm">Generated Assets</span>
+                                                    <span className="text-white font-bold">{userSites.length}</span>
+                                                </div>
+                                                <div className="pt-6 mt-6 border-t border-white/10">
+                                                    <button onClick={() => {setCurrentUser(null); localStorage.removeItem('dbp-current-user'); setView('home'); window.scrollTo(0,0);}} className="w-full bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500 hover:text-white py-4 rounded-xl font-bold text-xs tracking-widest transition uppercase">LOGOUT CURRENT SESSION</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Right: License Status */}
+                                    <div className="lg:col-span-1">
+                                        <div className={`premium-panel p-8 h-full flex flex-col justify-center border ${isPro ? 'border-brand-500/50 shadow-[0_0_30px_rgba(139,92,246,0.15)]' : 'border-white/10'}`}>
+                                            <div className="text-center">
+                                                <h3 className="text-gray-500 font-bold text-xs uppercase tracking-widest mb-6 border-b border-white/10 pb-4 text-left">License Status</h3>
+                                                {isPro ? (
+                                                    <div className="py-4">
+                                                        <div className="inline-block pro-badge text-lg px-6 py-2 mb-4 animate-glow-pulse shadow-[0_0_20px_rgba(251,191,36,0.4)]">ACTIVE PRO</div>
+                                                        <p className="text-gray-400 text-sm leading-relaxed mx-auto mt-4">All enterprise architectures and SEO generation engines are fully unlocked and ready for deployment.</p>
+                                                    </div>
+                                                ) : (
+                                                    <div className="py-2">
+                                                        <div className="inline-block bg-gray-800 text-gray-400 font-bold text-xs px-3 py-1 rounded mb-4 tracking-widest uppercase border border-white/10">FREE TIER</div>
+                                                        <p className="text-gray-400 text-sm mb-8 leading-relaxed mx-auto">Upgrade to PRO to unlock all 10 templates, custom SEO, and remove generated watermarks.</p>
+                                                        <button onClick={handlePaymentInit} className="w-full btn-shine py-4 rounded-xl text-xs font-bold tracking-widest flex justify-center items-center gap-2">
+                                                            <i className="fa-solid fa-bolt"></i> SECURE UPGRADE
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         )}
 
@@ -1415,7 +1470,7 @@
                                 <div className="hero-glow opacity-50"></div>
                                 <div className="text-center max-w-3xl mx-auto mb-16 relative z-10">
                                     <button onClick={() => setView('preview')} className="text-gray-500 hover:text-white text-xs font-bold tracking-widest flex items-center gap-2 mx-auto transition mb-8 uppercase"><i className="fa-solid fa-arrow-left"></i> Back to Editor</button>
-                                    <h2 className="font-display text-4xl md:text-6xl font-bold mb-4 text-white tracking-tighter flex items-center justify-center gap-4">Export Architecture {isPro && <span className="pro-badge text-xl">PRO</span>}</h2>
+                                    <h2 className="font-display text-4xl md:text-6xl font-bold mb-4 text-white tracking-tighter flex items-center justify-center gap-4">Export Architecture</h2>
                                     <p className="text-gray-400 text-lg font-light">Download the enterprise-grade source code for free, or upgrade to PRO to remove watermarks and unlock the full matrix.</p>
                                 </div>
 
