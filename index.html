@@ -32,12 +32,13 @@
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
                     colors: { brand: { 400: '#a855f7', 500: '#8b5cf6', 600: '#7c3aed' }, dark: { 900: '#0a0a0a', 950: '#030303' } },
-                    animation: { 'spin-slow': 'spin 8s linear infinite', 'blob': 'blob 7s infinite', 'fade-up': 'fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards', 'shimmer': 'shimmer 3s linear infinite', 'glow-pulse': 'glowPulse 4s ease-in-out infinite' },
+                    animation: { 'spin-slow': 'spin 8s linear infinite', 'blob': 'blob 7s infinite', 'fade-up': 'fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards', 'shimmer': 'shimmer 3s linear infinite', 'glow-pulse': 'glowPulse 4s ease-in-out infinite', 'marquee': 'marquee 20s linear infinite' },
                     keyframes: {
                         blob: { '0%, 100%': { transform: 'translate(0px, 0px) scale(1)' }, '33%': { transform: 'translate(30px, -50px) scale(1.1)' }, '66%': { transform: 'translate(-20px, 20px) scale(0.9)' } },
                         fadeUp: { '0%': { opacity: 0, transform: 'translateY(30px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } },
                         shimmer: { '0%': { backgroundPosition: '-200% 0' }, '100%': { backgroundPosition: '200% 0' } },
-                        glowPulse: { '0%, 100%': { opacity: 0.3 }, '50%': { opacity: 0.6 } }
+                        glowPulse: { '0%, 100%': { opacity: 0.3 }, '50%': { opacity: 0.6 } },
+                        marquee: { '0%': { transform: 'translateX(0%)' }, '100%': { transform: 'translateX(-100%)' } }
                     }
                 }
             }
@@ -84,7 +85,6 @@
         .terminal-window { background: #000; border: 1px solid #1e293b; border-radius: 12px; overflow: hidden; box-shadow: 0 0 40px rgba(16, 185, 129, 0.1); }
         .hacker-text { font-family: 'JetBrains Mono', monospace; color: #10b981; text-shadow: 0 0 5px rgba(16, 185, 129, 0.4); font-size: 13px; line-height: 1.6; }
         
-        /* ULTIMATE DUAL-SCROLL & DEVICE MORPHING SYSTEM */
         .preview-outer-wrapper { flex: 1; overflow-y: auto; overflow-x: hidden; background: rgba(0,0,0,0.3); display: flex; flex-direction: column; align-items: center; padding: 3rem 2rem 8rem 2rem; position: relative; }
         .preview-outer-wrapper::-webkit-scrollbar { width: 12px; }
         .preview-outer-wrapper::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-left: 1px solid rgba(255,255,255,0.05); }
@@ -117,7 +117,6 @@
         .toast-enter { animation: toastIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes toastIn { from { transform: translate(-50%, -100%); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
 
-        /* Custom Toggle styling for UI */
         .toggle-checkbox:checked { right: 0; border-color: #8b5cf6; }
         .toggle-checkbox:checked + .toggle-label { background-color: #8b5cf6; }
         .offer-badge { animation: pulse 2s infinite; background: linear-gradient(135deg, #ef4444, #dc2626); color: white; padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.7rem; font-weight: 800; border: 1px solid #f87171;}
@@ -144,50 +143,76 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        const generateSmartCopy = (name, type, city, description) => {
+        // --- PRNG & SMART COPY ENGINE ---
+        // Generates deterministic text so generations aren't exactly identical across different business names
+        const seedRandom = (seedStr) => {
+            let h = 0xdeadbeef;
+            for(let i = 0; i < seedStr.length; i++) { h = Math.imul(h ^ seedStr.charCodeAt(i), 2654435761); }
+            return function() { h ^= h << 13; h ^= h >>> 17; h ^= h << 5; return ((h < 0 ? ~h + 1 : h) % 100000) / 100000; };
+        };
+
+        const generateSmartCopy = (name, type, city, description, rawPricing) => {
+            const rng = seedRandom(name + type + city);
+            const pick = (arr) => arr[Math.floor(rng() * arr.length)];
+            
             const t = type.toLowerCase();
             let headline, subhead, about;
-            
+
             let faqs = [
-                { q: "What areas do you serve?", a: `We proudly serve ${city} and the surrounding regions with our expert ${type} services.` },
-                { q: "How can I book a consultation?", a: "Simply click the WhatsApp button anywhere on our site, and our team will respond immediately to assist you." },
-                { q: "Do you offer guarantees on your work?", a: "Yes, we stand behind our quality. We strive for 100% customer satisfaction on every project." }
+                { q: `What areas do you serve?`, a: `We proudly serve ${city} and the surrounding metropolitan regions with our specialized ${type} services.` },
+                { q: `How can I book a consultation?`, a: `Simply click the WhatsApp button anywhere on our site, and our team will respond immediately to assist you.` },
+                { q: `Do you specialize in ${type}?`, a: `Absolutely. ${name} was founded specifically to provide top-tier ${type} solutions backed by years of experience.` }
             ];
 
             let testimonials = [
-                { name: "Arjun M.", text: `Absolutely phenomenal experience! The team at ${name} exceeded all my expectations.`, rating: 5 },
-                { name: "Priya S.", text: `If you need reliable ${type}, look no further. Professional, fast, and transparent in ${city}.`, rating: 5 },
-                { name: "Vikram R.", text: `I've worked with many professionals, but their attention to detail is unmatched. Highly recommended.`, rating: 5 }
+                { name: pick(["Arjun M.", "Priya S.", "Rahul T.", "Sneha K."]), text: pick([`Absolutely phenomenal experience! The team at ${name} exceeded all my expectations.`,`Best in ${city}! Highly recommended.`, `Incredible attention to detail.`]), rating: 5 },
+                { name: pick(["Vikram R.", "Ananya L.", "Karan B.", "Riya D."]), text: pick([`If you need reliable ${type}, look no further. Professional, fast, and transparent.`,`Saved me so much time and hassle. 10/10.`,`Very professional service in ${city}.`]), rating: 5 },
+                { name: pick(["Neha W.", "Amit P.", "Siddharth N.", "Tara V."]), text: pick([`I've worked with many professionals, but their attention to detail is unmatched.`,`Great pricing and even better quality.`,`Will definitely be coming back for future needs.`]), rating: 5 }
             ];
+
+            // DYNAMIC PRICING ALGORITHM
+            let baseText = rawPricing || "999";
+            let baseNum = parseInt(baseText.replace(/[^0-9]/g, ''));
+            let p1, p2, p3;
+            if(!isNaN(baseNum) && baseNum > 0) {
+                p1 = '₹' + baseNum;
+                p2 = '₹' + Math.round(baseNum * 2.5);
+                p3 = '₹' + Math.round(baseNum * 5);
+            } else {
+                p1 = baseText;
+                p2 = "Custom";
+                p3 = "Enterprise";
+            }
 
             let pricing = [
-                { name: 'Starter', price: '₹999', desc: 'Perfect for standard needs.', f1: 'Standard Service', f2: 'Basic Support', f3: '3-Day TAT' },
-                { name: 'Professional', price: '₹2499', desc: 'Our most popular package.', f1: 'Premium Quality', f2: 'Priority Support', f3: '1-Day TAT' },
-                { name: 'Enterprise', price: '₹4999', desc: 'The ultimate VIP experience.', f1: 'Unlimited Access', f2: '24/7 Dedicated Support', f3: 'Instant TAT' }
+                { name: 'Starter', price: p1, desc: 'Perfect for standard needs.', f1: 'Standard Service', f2: 'Basic Support', f3: '3-Day Turnaround' },
+                { name: 'Professional', price: p2, desc: 'Our most popular package.', f1: 'Premium Quality', f2: 'Priority Support', f3: '1-Day Turnaround' },
+                { name: 'Enterprise', price: p3, desc: 'The ultimate VIP experience.', f1: 'Unlimited Access', f2: '24/7 Dedicated Support', f3: 'Instant Priority' }
             ];
 
-            if (t.includes('tech') || t.includes('repair') || t.includes('software')) {
-                headline = `Next-Generation <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand to-brand-dark">${type}</span>.`;
-                subhead = `Fast, reliable, and expertly engineered solutions for your digital life in ${city}.`;
+            if (t.includes('tech') || t.includes('repair') || t.includes('software') || t.includes('it')) {
+                headline = pick([`Next-Generation <span class="text-brand">${type}</span>.`, `Empowering your digital life in <span class="text-brand">${city}</span>.`, `Advanced <span class="text-brand">Technology</span> Solutions.`]);
+                subhead = pick([`Fast, reliable, and expertly engineered solutions for your digital life in ${city}.`, `Precision ${type} services delivered by certified engineers.`, `Seamless integration and rapid deployment for modern needs.`]);
                 about = description || `At ${name}, we understand that technology drives your day. Our certified experts utilize state-of-the-art tools to deliver precision solutions, ensuring minimal downtime and maximum performance.`;
-            } else if (t.includes('food') || t.includes('restaurant') || t.includes('cafe')) {
-                headline = `Savor the <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand to-brand-dark">Exceptional</span>.`;
-                subhead = `Experience culinary mastery and unforgettable flavors, right here in ${city}.`;
+            } else if (t.includes('food') || t.includes('restaurant') || t.includes('cafe') || t.includes('bakery')) {
+                headline = pick([`Savor the <span class="text-brand">Exceptional</span>.`, `Taste the magic of <span class="text-brand">${city}</span>.`, `Authentic <span class="text-brand">Culinary</span> Experiences.`]);
+                subhead = pick([`Experience culinary mastery and unforgettable flavors, right here in ${city}.`, `Handcrafted ${type} made with passion and premium ingredients.`, `Your new favorite spot for delicious moments.`]);
                 about = description || `Welcome to ${name}. We source the finest ingredients and pour passion into every recipe. Whether you are seeking a quick bite or a memorable dining experience, our commitment to quality is evident in every detail.`;
-            } else if (t.includes('health') || t.includes('clinic') || t.includes('fitness')) {
-                headline = `Your Wellness, <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand to-brand-dark">Elevated</span>.`;
-                subhead = `Compassionate care and expert health services dedicated to the ${city} community.`;
+            } else if (t.includes('health') || t.includes('clinic') || t.includes('fitness') || t.includes('gym')) {
+                headline = pick([`Your Wellness, <span class="text-brand">Elevated</span>.`, `Transform your health in <span class="text-brand">${city}</span>.`, `Dedicated to your <span class="text-brand">Well-being</span>.`]);
+                subhead = pick([`Compassionate care and expert health services dedicated to the ${city} community.`, `Achieve your peak potential with our specialized ${type} programs.`, `Modern practices combined with traditional care.`]);
                 about = description || `${name} is founded on the principle of holistic well-being. Our experienced professionals provide personalized care, utilizing modern practices to help you achieve and maintain your optimal health goals.`;
             } else {
-                headline = `Excellence in <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand to-brand-dark">Every Detail</span>.`;
-                subhead = `The premier destination for professional ${type} services in ${city}.`;
+                headline = pick([`Excellence in <span class="text-brand">Every Detail</span>.`, `The premier destination for <span class="text-brand">${type}</span>.`, `Setting the standard in <span class="text-brand">${city}</span>.`]);
+                subhead = pick([`The premier destination for professional ${type} services in ${city}.`, `Uncompromising quality and dedicated service tailored to you.`, `Your trusted partner for all ${type} requirements.`]);
                 about = description || `At ${name}, we pride ourselves on delivering an uncompromising standard of quality. Our dedicated team brings years of industry expertise to provide bespoke solutions that consistently exceed client expectations.`;
             }
             return { headline, subhead, about, pricing, faqs, testimonials };
         };
 
+        // --- CORE HTML COMPILER ---
         const generateSiteHTML = (data, isPro) => {
-            const copy = generateSmartCopy(data.name, data.type, data.city, data.description);
+            const copy = generateSmartCopy(data.name, data.type, data.city, data.description, data.pricingDetails);
             let finalServices = data.services && isPro ? data.services.split(',').map(s => s.trim()).filter(s => s.length > 0) : ['Premium Quality', 'Rapid Turnaround', 'Expert Consultations', '24/7 Support'];
             while(finalServices.length < 4) finalServices.push('Dedicated Support');
 
@@ -196,27 +221,34 @@
             const mainColor = data.color || '#a855f7';
 
             let fontName = 'Outfit', fontImport = 'Outfit:wght@300;400;600;800;900';
-            let bodyClass, navClass, headClass, subClass, sectionBg1, sectionBg2, radiusClass, cardClass, customCSS = '';
+            let bodyClass='', navClass='', headClass='', subClass='', sectionBg1='', sectionBg2='', radiusClass='', cardClass='', customCSS='';
+
+            // ARCHITECTURE ASSIGNMENT
+            let isBento = t === 'bento' || t === 'creative';
+            let isBrutalist = t === 'brutalism';
+            let isDark = ['dark', 'neon', 'midnight', 'matrix'].includes(t);
+            let isCorporate = t === 'corporate';
+            let isGlass = t === 'glassmorphism';
 
             if (t === 'minimal') {
                 fontName = 'Inter'; fontImport = 'Inter:wght@300;400;600;800';
-                bodyClass = 'bg-white text-gray-800'; navClass = 'bg-white/90 border-gray-100 text-gray-900'; 
+                bodyClass = 'bg-white text-gray-800'; navClass = 'bg-white/90 border-b border-gray-100 text-gray-900'; 
                 headClass = 'text-gray-900'; subClass = 'text-gray-500';
                 sectionBg1 = 'bg-white'; sectionBg2 = 'bg-gray-50'; radiusClass = 'rounded-none';
-                cardClass = 'bg-white border border-gray-200 hover:-translate-y-1 hover:shadow-2xl text-gray-600 transition-all duration-300';
+                cardClass = 'bg-white border border-gray-200 hover:-translate-y-1 hover:shadow-xl text-gray-600 transition-all duration-300';
                 customCSS = `.hero-bg { background-image: radial-gradient(${mainColor} 1px, transparent 1px); background-size: 40px 40px; background-color: #fafafa; }`;
             } else if (t === 'bento') {
-                bodyClass = 'bg-[#f8fafc] text-slate-800'; navClass = 'bg-white/80 border-slate-200 text-slate-900'; 
+                bodyClass = 'bg-[#f8fafc] text-slate-800'; navClass = 'bg-white/80 border-b border-slate-200 text-slate-900'; 
                 headClass = 'text-slate-900'; subClass = 'text-slate-500';
                 sectionBg1 = 'bg-white'; sectionBg2 = 'bg-[#f8fafc]'; radiusClass = 'rounded-[2rem]';
-                cardClass = 'bg-white border border-slate-100 rounded-[2rem] hover:-translate-y-2 hover:shadow-2xl hover:border-brand-light text-slate-600 transition-all duration-300';
+                cardClass = 'bg-white border border-slate-100 hover:-translate-y-2 hover:shadow-2xl hover:border-brand-light text-slate-600 transition-all duration-300';
                 customCSS = `.hero-bg { background: linear-gradient(135deg, #ffffff, #f1f5f9); }`;
             } else if (t === 'dark') {
                 fontName = 'Space Grotesk'; fontImport = 'Space+Grotesk:wght@400;600;700';
-                bodyClass = 'bg-[#050505] text-gray-300'; navClass = 'bg-black/70 border-white/5 text-white'; 
+                bodyClass = 'bg-[#050505] text-gray-300'; navClass = 'bg-black/70 border-b border-white/5 text-white'; 
                 headClass = 'text-white'; subClass = 'text-gray-400';
                 sectionBg1 = 'bg-[#0a0a0a]'; sectionBg2 = 'bg-[#111111]'; radiusClass = 'rounded-2xl';
-                cardClass = 'bg-[#171717] border border-[#262626] rounded-2xl hover:-translate-y-1 hover:border-brand shadow-lg text-gray-300 transition-all duration-300';
+                cardClass = 'bg-[#171717] border border-[#262626] hover:-translate-y-1 hover:border-brand shadow-lg text-gray-300 transition-all duration-300';
                 customCSS = `.hero-bg { background: radial-gradient(circle at top right, ${mainColor}20, transparent 40%), radial-gradient(circle at bottom left, ${mainColor}10, transparent 40%); }`;
             } else if (t === 'neon') {
                 fontName = 'Space Grotesk'; fontImport = 'Space+Grotesk:wght@400;600;700';
@@ -224,7 +256,7 @@
                 headClass = 'text-white'; subClass = 'text-zinc-400';
                 sectionBg1 = 'bg-[#09090b]'; sectionBg2 = 'bg-[#18181b]'; radiusClass = 'rounded-none';
                 cardClass = 'bg-[#09090b] border border-zinc-800 hover:-translate-y-1 hover:border-brand hover:shadow-[0_0_20px_var(--tw-shadow-color)] shadow-brand text-zinc-300 transition-all duration-300';
-                customCSS = `.hero-bg { background: #09090b; } .brand-glow { text-shadow: 0 0 15px ${mainColor}; }`;
+                customCSS = `.hero-bg { background: #09090b; } .text-brand { text-shadow: 0 0 15px ${mainColor}; }`;
             } else if (t === 'midnight') {
                 fontName = 'Outfit'; fontImport = 'Outfit:wght@300;400;600;800';
                 bodyClass = 'bg-[#020617] text-slate-300'; navClass = 'bg-[#020617]/80 border-b border-slate-800 text-slate-100'; 
@@ -241,10 +273,10 @@
                 customCSS = `.hero-bg { background-image: linear-gradient(${mainColor}10 1px, transparent 1px), linear-gradient(90deg, ${mainColor}10 1px, transparent 1px); background-size: 30px 30px; }`;
             } else if (t === 'corporate') {
                 fontName = 'Inter'; fontImport = 'Inter:wght@400;600;700;900';
-                bodyClass = 'bg-slate-50 text-slate-800'; navClass = 'bg-white/95 border-slate-200 text-slate-900 shadow-sm'; 
+                bodyClass = 'bg-slate-50 text-slate-800'; navClass = 'bg-white/95 border-b border-slate-200 text-slate-900 shadow-sm'; 
                 headClass = 'text-slate-900'; subClass = 'text-slate-600';
                 sectionBg1 = 'bg-white'; sectionBg2 = 'bg-slate-100'; radiusClass = 'rounded-lg';
-                cardClass = 'bg-white border border-slate-200 rounded-lg hover:-translate-y-1 hover:shadow-xl text-slate-600 transition-all duration-300';
+                cardClass = 'bg-white border border-slate-200 hover:-translate-y-1 hover:shadow-xl text-slate-600 transition-all duration-300';
                 customCSS = `.hero-bg { background: linear-gradient(to right, #ffffff, #f8fafc); }`;
             } else if (t === 'glassmorphism') {
                 fontName = 'Outfit'; fontImport = 'Outfit:wght@300;400;600;700';
@@ -265,12 +297,18 @@
                 bodyClass = 'bg-[#fafafa] text-gray-900'; navClass = 'bg-transparent text-gray-900'; 
                 headClass = 'text-black font-black uppercase'; subClass = 'text-gray-700 font-medium';
                 sectionBg1 = 'bg-brand/10'; sectionBg2 = 'bg-white'; radiusClass = 'rounded-[3rem]';
-                cardClass = 'bg-white border-4 border-black rounded-[2rem] hover:-translate-y-2 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] text-black font-bold transition-all duration-300';
+                cardClass = 'bg-white border-4 border-black hover:-translate-y-2 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] text-black font-bold transition-all duration-300';
                 customCSS = `.hero-bg { background: linear-gradient(135deg, ${mainColor}20, transparent); }`;
             }
 
+            // Image Placeholders Logic (Seeded based on business name)
+            const getImage = (id) => {
+                const seedName = (data.name || 'default').replace(/\s+/g,'') + id;
+                return `https://picsum.photos/seed/${seedName}/800/600`;
+            };
+
             const themeIcons = { tech: 'fa-microchip', food: 'fa-utensils', health: 'fa-heart-pulse', retail: 'fa-bag-shopping', default: 'fa-bolt' };
-            const typeStr = data.type.toLowerCase();
+            const typeStr = data.type ? data.type.toLowerCase() : '';
             let icon = themeIcons.default;
             if(typeStr.includes('tech') || typeStr.includes('repair')) icon = themeIcons.tech;
             else if(typeStr.includes('food') || typeStr.includes('cafe')) icon = themeIcons.food;
@@ -278,7 +316,7 @@
             else if(typeStr.includes('shop') || typeStr.includes('mart')) icon = themeIcons.retail;
 
             const seoTags = isPro && data.seo ? `<meta name="keywords" content="${data.seo}">` : `<meta name="keywords" content="${data.type}, ${data.city}">`;
-            const cleanPhone = data.phone.replace(/\D/g, '');
+            const cleanPhone = (data.phone || '').replace(/\D/g, '');
 
             const watermarkHtml = isPro ? '' : `
             <a href="https://dbpsites.in" target="_blank" style="z-index: 9999;" class="fixed bottom-6 left-6 flex items-center gap-3 bg-[#0a0a0a]/90 backdrop-blur-xl border border-white/20 px-4 py-3 rounded-2xl shadow-2xl hover:scale-105 hover:shadow-brand transition-all w-max no-underline group">
@@ -302,44 +340,169 @@
             if (data.hasPricing === 'yes') { navLinksHtml += `<a href="#pricing" class="hover:text-brand transition">Pricing</a>`; mobileNavLinksHtml += `<a href="#pricing" class="mobile-link hover:text-brand">Pricing</a>`; }
             if (data.showFAQ) { navLinksHtml += `<a href="#faq" class="hover:text-brand transition">FAQ</a>`; mobileNavLinksHtml += `<a href="#faq" class="mobile-link hover:text-brand">FAQ</a>`; }
 
-            // Hero Switcher with local image placeholder
+
+            // --- TRULY DISTINCT ARCHITECTURAL GENERATORS ---
+
             let heroContentHtml = '';
-            if (data.heroStyle === 'split') {
+            let aboutHtml = '';
+            let servicesHtml = '';
+
+            // 1. BRUTALIST DOM
+            if (isBrutalist) {
+                heroContentHtml = `
+                <div class="w-full relative z-10 py-20 reveal active border-b-8 border-black bg-brand">
+                    <div class="overflow-hidden whitespace-nowrap bg-black text-brand py-4 border-y-8 border-black w-full mb-10 transform -rotate-2 scale-105">
+                        <h2 class="font-display font-black text-4xl uppercase tracking-widest inline-block animate-shimmer" style="animation: marquee 15s linear infinite;">${copy.headline.replace(/<[^>]*>?/gm, '')} // ${data.city} // ${copy.headline.replace(/<[^>]*>?/gm, '')} // ${data.city} //</h2>
+                    </div>
+                    <div class="max-w-7xl mx-auto px-6 text-center">
+                        <h2 class="font-display text-6xl md:text-[8rem] font-black mb-6 tracking-tighter leading-[0.9] ${headClass} uppercase drop-shadow-[-8px_8px_0_rgba(0,0,0,1)]">${copy.headline}</h2>
+                        <p class="text-xl md:text-3xl mb-12 font-bold leading-snug max-w-3xl mx-auto ${subClass} bg-white p-4 border-4 border-black shadow-[-8px_8px_0_0_#000]">${copy.subhead}</p>
+                        <a href="https://wa.me/91${cleanPhone}" target="_blank" class="inline-block bg-black text-white px-12 py-6 border-4 border-black font-black text-2xl hover:bg-white hover:text-black transition-all shadow-[-8px_8px_0_0_#fff]">START NOW</a>
+                    </div>
+                </div>`;
+                
+                aboutHtml = `
+                <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row border-4 border-black shadow-[-12px_12px_0_0_#000] bg-white reveal">
+                    <div class="p-12 md:w-1/2 border-b-4 md:border-b-0 md:border-r-4 border-black">
+                        <h3 class="font-display text-5xl font-black mb-6 uppercase">About Us</h3>
+                        <p class="text-xl font-bold border-l-8 border-brand pl-4">${copy.about}</p>
+                    </div>
+                    <div class="md:w-1/2 p-0 relative min-h-[300px]">
+                        <img src="${getImage('about')}" alt="About" class="absolute inset-0 w-full h-full object-cover grayscale contrast-125"/>
+                        <div class="absolute inset-0 bg-brand/30 mix-blend-multiply"></div>
+                    </div>
+                </div>`;
+
+                servicesHtml = `
+                <div class="grid grid-cols-1 gap-0 border-4 border-black shadow-[-8px_8px_0_0_#000]">
+                    ${finalServices.slice(0, 4).map((service, idx) => `
+                    <div class="p-8 border-b-4 border-black last:border-b-0 bg-white hover:bg-brand hover:text-white transition-colors duration-300 flex items-center justify-between group reveal delay-${idx*100}">
+                        <h4 class="font-display text-3xl font-black uppercase text-black group-hover:text-white">${service}</h4>
+                        <i class="fa-solid fa-arrow-right text-4xl text-black group-hover:text-white transform group-hover:translate-x-4 transition"></i>
+                    </div>`).join('')}
+                </div>`;
+            } 
+            // 2. BENTO / CREATIVE DOM
+            else if (isBento) {
+                heroContentHtml = `
+                <div class="max-w-7xl mx-auto px-6 relative z-10 py-32 reveal active">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-2 ${radiusClass} ${cardClass} p-10 md:p-16 flex flex-col justify-center relative overflow-hidden bg-brand/5 border-none shadow-xl">
+                            <div class="absolute -right-20 -top-20 w-64 h-64 bg-brand/20 blur-[80px] rounded-full"></div>
+                            <div class="inline-flex w-max items-center gap-2 px-4 py-2 ${radiusClass} border border-brand/20 text-xs font-bold uppercase tracking-widest mb-8 bg-brand/10 text-brand">
+                                <span class="w-2 h-2 rounded-full bg-brand animate-pulse"></span> Top Rated in ${data.city}
+                            </div>
+                            <h2 class="font-display text-5xl md:text-7xl font-black mb-6 tracking-tighter leading-[1.05] ${headClass} relative z-10">${copy.headline}</h2>
+                            <p class="text-lg md:text-xl mb-10 font-medium leading-relaxed max-w-lg ${subClass} relative z-10">${copy.subhead}</p>
+                            <div class="flex gap-4 relative z-10">
+                                <a href="#services" class="bg-brand text-white px-8 py-4 ${radiusClass} font-bold hover:opacity-90 transition-all">Our Services</a>
+                            </div>
+                        </div>
+                        <div class="lg:col-span-1 ${radiusClass} overflow-hidden relative shadow-xl min-h-[300px]">
+                            <img src="${getImage('hero')}" alt="Hero" class="absolute inset-0 w-full h-full object-cover hover:scale-105 transition duration-700"/>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-8">
+                                <a href="https://wa.me/91${cleanPhone}" class="w-full bg-white/20 backdrop-blur-md text-white border border-white/30 px-6 py-4 ${radiusClass} font-bold text-center hover:bg-white hover:text-black transition-all flex items-center justify-center gap-2"><i class="fa-brands fa-whatsapp text-lg"></i> Book Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+
+                aboutHtml = `
+                <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-6 items-stretch">
+                    <div class="${radiusClass} ${cardClass} p-10 md:p-14 reveal flex flex-col justify-center">
+                        <div class="text-brand font-bold tracking-widest text-sm uppercase mb-4">About Us</div>
+                        <h3 class="font-display text-4xl font-black mb-6 ${headClass}">The ${data.name} Standard.</h3>
+                        <p class="text-lg leading-relaxed ${subClass}">${copy.about}</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="${radiusClass} overflow-hidden relative reveal shadow-md">
+                            <img src="${getImage('about1')}" alt="About 1" class="absolute inset-0 w-full h-full object-cover"/>
+                        </div>
+                        <div class="${radiusClass} ${cardClass} p-8 flex flex-col items-center justify-center text-center reveal delay-100 bg-brand text-white border-none">
+                            <h4 class="font-display text-5xl font-black mb-2">100%</h4>
+                            <p class="text-sm font-bold uppercase tracking-widest opacity-80">Guaranteed</p>
+                        </div>
+                    </div>
+                </div>`;
+
+                servicesHtml = `
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    ${finalServices.slice(0, 4).map((service, idx) => `
+                    <div class="${idx === 0 || idx === 3 ? 'md:col-span-2' : 'md:col-span-1'} p-8 ${radiusClass} ${cardClass} reveal delay-${idx*100} group relative overflow-hidden">
+                        <div class="relative z-10">
+                            <div class="w-12 h-12 bg-brand/10 rounded-xl flex items-center justify-center text-xl mb-6 text-brand shadow-sm"><i class="fa-solid fa-check"></i></div>
+                            <h4 class="font-display text-2xl font-bold mb-3 ${headClass}">${service}</h4>
+                            <p class="font-light text-base leading-relaxed ${subClass}">Tailored specifically to deliver optimal results for your requirements.</p>
+                        </div>
+                    </div>`).join('')}
+                </div>`;
+            } 
+            // 3. CORPORATE / SPLIT DOM
+            else if (isCorporate || data.heroStyle === 'split') {
                 heroContentHtml = `
                 <div class="max-w-7xl mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-12 items-center min-h-[85vh] py-32">
                     <div class="text-left reveal active">
-                        <div class="inline-flex items-center gap-2 px-4 py-1.5 ${t==='brutalism'?'rounded-none border-2 border-black':'rounded-full'} border border-brand/20 text-xs font-bold uppercase tracking-widest mb-8 bg-brand/5 text-brand shadow-sm">
-                            <span class="w-2 h-2 rounded-full bg-brand animate-pulse"></span> Top Rated in ${data.city}
+                        <div class="inline-flex items-center gap-2 px-4 py-1.5 ${radiusClass} border border-brand/20 text-xs font-bold uppercase tracking-widest mb-8 bg-brand/5 text-brand shadow-sm">
+                            <span class="w-2 h-2 rounded-full bg-brand animate-pulse"></span> Serving ${data.city}
                         </div>
-                        <h2 class="font-display text-5xl md:text-6xl lg:text-7xl font-black mb-6 tracking-tighter leading-[1.1] ${headClass} brand-glow">${copy.headline}</h2>
+                        <h2 class="font-display text-5xl md:text-6xl lg:text-7xl font-black mb-6 tracking-tighter leading-[1.1] ${headClass}">${copy.headline}</h2>
                         <p class="text-lg md:text-xl mb-10 font-light leading-relaxed max-w-lg ${subClass}">${copy.subhead}</p>
                         <div class="flex flex-col sm:flex-row gap-4">
-                            <a href="#services" class="bg-brand text-white px-8 py-4 ${t==='brutalism'?'border-2 border-black shadow-[-4px_4px_0_0_#000]':'rounded-xl'} font-bold text-center hover:opacity-90 transition-all">Explore Services</a>
-                            <a href="https://wa.me/91${cleanPhone}" target="_blank" class="px-8 py-4 ${t==='brutalism'?'border-2 border-black bg-white text-black shadow-[-4px_4px_0_0_#000]':'rounded-xl border-2 border-brand/30 text-brand'} text-center font-bold hover:bg-brand/5 transition-all flex items-center justify-center gap-2"><i class="fa-brands fa-whatsapp text-lg"></i> Free Quote</a>
+                            <a href="#services" class="bg-brand text-white px-8 py-4 ${radiusClass} font-bold text-center hover:opacity-90 transition-all shadow-lg">Explore Services</a>
+                            <a href="https://wa.me/91${cleanPhone}" target="_blank" class="px-8 py-4 ${radiusClass} text-center font-bold hover:bg-brand/5 transition-all flex items-center justify-center gap-2 border-2 border-brand/30 text-brand"><i class="fa-brands fa-whatsapp text-lg"></i> Free Quote</a>
                         </div>
                     </div>
                     <div class="reveal active delay-200 hidden lg:block">
-                        <div class="w-full aspect-[4/3] ${radiusClass} overflow-hidden relative shadow-2xl group border-4 border-dashed ${t.includes('dark') || t==='midnight' || t==='matrix' ? 'border-white/10 bg-white/5' : 'border-black/10 bg-black/5'} flex flex-col items-center justify-center">
-                            <i class="fa-regular fa-image text-6xl mb-4 ${subClass} opacity-50"></i>
-                            <p class="text-sm font-mono ${subClass}">Export HTML & add image as</p>
-                            <p class="text-lg font-bold text-brand mt-1">hero.jpeg</p>
-                            <img src="hero.jpeg" alt="${data.type}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-700 z-10" onerror="this.style.display='none'"/>
+                        <div class="w-full aspect-[4/3] ${radiusClass} overflow-hidden relative shadow-2xl group border border-white/10">
+                            <img src="${getImage('hero')}" alt="${data.type}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition duration-700 z-10"/>
                         </div>
                     </div>
                 </div>`;
-            } else if (data.heroStyle === 'minimal') {
-                heroContentHtml = `
-                <div class="max-w-7xl mx-auto px-6 relative z-10 flex flex-col justify-center min-h-[85vh] py-32 reveal active">
-                    <h2 class="font-display text-6xl md:text-8xl font-black mb-6 tracking-tighter leading-[1] ${headClass} max-w-4xl">${copy.headline.replace('<span', '<br/><span')}</h2>
-                    <p class="text-xl md:text-3xl mb-12 font-light leading-snug max-w-2xl ${subClass} border-l-4 border-brand pl-6">${copy.subhead}</p>
-                    <a href="https://wa.me/91${cleanPhone}" target="_blank" class="w-max bg-brand text-white px-10 py-5 ${t==='brutalism'?'border-2 border-black shadow-[-4px_4px_0_0_#000]':'rounded-none'} font-bold text-lg hover:opacity-90 transition-all flex items-center gap-3">GET STARTED <i class="fa-solid fa-arrow-right"></i></a>
+
+                aboutHtml = `
+                <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+                    <div class="reveal">
+                        <div class="text-brand font-bold tracking-widest text-sm uppercase mb-4">About Us</div>
+                        <h3 class="font-display text-4xl md:text-5xl font-black mb-8 ${headClass} leading-tight">Why choose ${data.name}?</h3>
+                        <p class="text-lg leading-relaxed font-light mb-8 ${subClass}">${copy.about}</p>
+                        <div class="grid grid-cols-2 gap-6 mt-10 border-t ${isDark ? 'border-gray-800' : 'border-gray-200'} pt-10">
+                            <div>
+                                <h4 class="font-display text-3xl font-black text-brand mb-2">100%</h4>
+                                <p class="text-sm font-medium ${subClass}">Client Satisfaction</p>
+                            </div>
+                            <div>
+                                <h4 class="font-display text-3xl font-black text-brand mb-2">24/7</h4>
+                                <p class="text-sm font-medium ${subClass}">Expert Support</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="reveal w-full aspect-square ${radiusClass} shadow-2xl flex items-center justify-center border-4 border-white/10 overflow-hidden relative">
+                         <img src="${getImage('about')}" alt="About" class="absolute inset-0 w-full h-full object-cover z-0"/>
+                         <div class="absolute inset-0 bg-black/40 z-0"></div>
+                         <div class="relative z-10 text-center bg-black/60 backdrop-blur-md p-10 ${radiusClass} border border-white/20 shadow-2xl transform hover:scale-105 transition-transform duration-500">
+                            <i class="fa-solid fa-shield-halved text-6xl text-brand mb-6 drop-shadow-lg"></i>
+                            <h4 class="font-display font-black text-3xl text-white">Premium</h4>
+                            <p class="text-gray-300 mt-2 text-sm font-bold tracking-widest uppercase">Guaranteed</p>
+                        </div>
+                    </div>
                 </div>`;
-            } else {
+
+                servicesHtml = `
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    ${finalServices.slice(0, 4).map((service, idx) => `
+                    <div class="p-8 ${radiusClass} ${cardClass} reveal delay-${idx*100} group">
+                        <div class="w-14 h-14 bg-brand/10 rounded-xl flex items-center justify-center text-2xl mb-8 text-brand group-hover:scale-110 group-hover:bg-brand group-hover:text-white transition-all duration-300 shadow-sm"><i class="fa-solid fa-check"></i></div>
+                        <h4 class="font-display text-2xl font-bold mb-4 ${headClass}">${service}</h4>
+                        <p class="font-light text-base leading-relaxed ${subClass}">Expert implementation tailored to your specific requirements and goals.</p>
+                    </div>`).join('')}
+                </div>`;
+            }
+            // 4. DEFAULT / GLASS / CYBER (CENTERED)
+            else {
                 heroContentHtml = `
-                <div class="max-w-7xl mx-auto px-6 relative z-10 text-center reveal active">
-                    <div class="inline-flex items-center gap-2 px-5 py-2 ${t==='minimal'||t==='brutalism'||t==='matrix'||t==='neon'?'rounded-none':'rounded-full'} border border-brand/20 text-sm font-semibold mb-8 bg-brand/5 text-brand shadow-sm">
-                        <span class="w-2 h-2 rounded-full bg-brand animate-pulse"></span>
-                        Top Rated in ${data.city}
+                <div class="max-w-7xl mx-auto px-6 relative z-10 text-center reveal active py-32">
+                    <div class="inline-flex items-center gap-2 px-5 py-2 ${radiusClass} border border-brand/20 text-sm font-semibold mb-8 bg-brand/5 text-brand shadow-sm">
+                        <span class="w-2 h-2 rounded-full bg-brand animate-pulse"></span> Top Rated in ${data.city}
                     </div>
                     <h2 class="font-display text-5xl md:text-7xl lg:text-[6rem] font-black mb-8 tracking-tighter leading-[1.05] max-w-5xl mx-auto ${headClass} brand-glow">
                         ${copy.headline}
@@ -348,33 +511,71 @@
                         ${copy.subhead}
                     </p>
                     <div class="flex flex-col sm:flex-row justify-center gap-4">
-                        <a href="#services" class="bg-brand text-white px-10 py-4 ${t==='minimal'||t==='brutalism'||t==='matrix'||t==='neon'?'rounded-none':'rounded-2xl'} font-bold text-lg shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all">Explore Services</a>
-                        <a href="https://wa.me/91${cleanPhone}" target="_blank" class="px-10 py-4 ${t==='minimal'||t==='brutalism'||t==='matrix'||t==='neon'?'rounded-none':'rounded-2xl'} font-bold text-lg border-2 border-brand/30 text-brand hover:bg-brand/5 transition-all flex items-center justify-center gap-2"><i class="fa-brands fa-whatsapp text-xl"></i> Free Quote</a>
+                        <a href="#services" class="bg-brand text-white px-10 py-4 ${radiusClass} font-bold text-lg shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all">Explore Services</a>
+                        <a href="https://wa.me/91${cleanPhone}" target="_blank" class="px-10 py-4 ${radiusClass} font-bold text-lg border-2 border-brand/30 text-brand hover:bg-brand/5 transition-all flex items-center justify-center gap-2"><i class="fa-brands fa-whatsapp text-xl"></i> Free Quote</a>
                     </div>
+                </div>`;
+
+                aboutHtml = `
+                <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+                    <div class="reveal">
+                        <div class="text-brand font-bold tracking-widest text-sm uppercase mb-4">About Us</div>
+                        <h3 class="font-display text-4xl md:text-5xl font-black mb-8 ${headClass} leading-tight">Why choose ${data.name}?</h3>
+                        <p class="text-lg leading-relaxed font-light mb-8 ${subClass}">${copy.about}</p>
+                        <div class="grid grid-cols-2 gap-6 mt-10 border-t ${isDark ? 'border-gray-800' : 'border-gray-200'} pt-10">
+                            <div>
+                                <h4 class="font-display text-3xl font-black text-brand mb-2">100%</h4>
+                                <p class="text-sm font-medium ${subClass}">Client Satisfaction</p>
+                            </div>
+                            <div>
+                                <h4 class="font-display text-3xl font-black text-brand mb-2">24/7</h4>
+                                <p class="text-sm font-medium ${subClass}">Expert Support</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="reveal w-full aspect-square ${radiusClass} shadow-2xl flex items-center justify-center border-4 border-white/10 overflow-hidden relative">
+                         <img src="${getImage('about')}" alt="About" class="absolute inset-0 w-full h-full object-cover z-0"/>
+                         <div class="absolute inset-0 bg-black/40 z-0"></div>
+                         <div class="relative z-10 text-center bg-black/60 backdrop-blur-md p-10 ${radiusClass} border border-white/20 shadow-2xl transform hover:scale-105 transition-transform duration-500">
+                            <i class="fa-solid fa-shield-halved text-6xl text-brand mb-6 drop-shadow-lg"></i>
+                            <h4 class="font-display font-black text-3xl text-white">Premium</h4>
+                            <p class="text-gray-300 mt-2 text-sm font-bold tracking-widest uppercase">Guaranteed</p>
+                        </div>
+                    </div>
+                </div>`;
+
+                servicesHtml = `
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    ${finalServices.slice(0, 4).map((service, idx) => `
+                    <div class="p-8 ${radiusClass} ${cardClass} reveal delay-${idx*100} group">
+                        <div class="w-14 h-14 bg-brand/10 rounded-xl flex items-center justify-center text-2xl mb-8 text-brand group-hover:scale-110 group-hover:bg-brand group-hover:text-white transition-all duration-300 shadow-sm"><i class="fa-solid fa-check"></i></div>
+                        <h4 class="font-display text-2xl font-bold mb-4 ${headClass}">${service}</h4>
+                        <p class="font-light text-base leading-relaxed ${subClass}">Expert implementation tailored to your specific requirements and goals.</p>
+                    </div>`).join('')}
                 </div>`;
             }
 
-            // Optional Sections with Local Image Placeholders
-            const galleryHtml = data.showGallery ? `
-            <section id="gallery" class="py-32 ${sectionBg2} border-y ${t.includes('dark') || t==='midnight' ? 'border-[#222]' : 'border-gray-100'} overflow-hidden">
+            // OPTIONAL SECTIONS
+            const galleryContent = data.showGallery ? `
+            <section id="gallery" class="py-32 ${sectionBg2} border-y ${isDark ? 'border-[#222]' : 'border-gray-100'} overflow-hidden">
                 <div class="max-w-7xl mx-auto px-6">
                     <div class="text-center max-w-2xl mx-auto mb-16 reveal">
                         <div class="text-brand font-bold tracking-widest text-sm uppercase mb-4">Our Portfolio</div>
                         <h3 class="font-display text-4xl md:text-5xl font-black ${headClass}">Recent Work.</h3>
                     </div>
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+                    <div class="grid ${isBento ? 'grid-cols-2 md:grid-cols-4 gap-4' : 'grid-cols-2 md:grid-cols-3 gap-4 md:gap-6'}">
                         ${[1,2,3,4,5,6].map((i) => `
-                        <div class="aspect-square ${radiusClass} overflow-hidden relative group reveal delay-${(i%3)*100} ${t.includes('dark') || t==='midnight' || t==='matrix' ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'} border-2 border-dashed flex flex-col items-center justify-center p-6 text-center">
-                            <i class="fa-regular fa-image text-4xl mb-3 ${subClass} opacity-50"></i>
-                            <p class="text-xs font-mono ${subClass}">Export HTML & add image as</p>
-                            <p class="text-sm font-bold text-brand mt-1">image${i}.jpeg</p>
-                            <img src="image${i}.jpeg" alt="Gallery ${i}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 group-hover:rotate-1 transition duration-500 z-10" onerror="this.style.display='none'"/>
+                        <div class="aspect-square ${radiusClass} overflow-hidden relative group reveal delay-${(i%3)*100} shadow-md border ${isDark?'border-white/10':'border-black/5'} ${isBento && i===1 ? 'md:col-span-2 md:row-span-2' : ''}">
+                            <img src="${getImage('gallery'+i)}" alt="Gallery ${i}" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-700 z-10"/>
+                            <div class="absolute inset-0 bg-brand/80 opacity-0 group-hover:opacity-100 transition duration-300 z-20 flex items-center justify-center pointer-events-none">
+                                <i class="fa-solid fa-magnifying-glass-plus text-white text-3xl transform scale-50 group-hover:scale-100 transition duration-300"></i>
+                            </div>
                         </div>`).join('')}
                     </div>
                 </div>
             </section>` : '';
 
-            const testimonialsHtml = data.showTestimonials ? `
+            const testimonialsContent = data.showTestimonials ? `
             <section id="testimonials" class="py-32 ${sectionBg1}">
                 <div class="max-w-7xl mx-auto px-6">
                     <div class="text-center max-w-2xl mx-auto mb-20 reveal">
@@ -389,7 +590,7 @@
                                 ${Array(test.rating).fill('<i class="fa-solid fa-star"></i>').join('')}
                             </div>
                             <p class="font-light text-lg leading-relaxed ${subClass} mb-8">"${test.text}"</p>
-                            <div class="flex items-center gap-4 border-t ${t.includes('dark')?'border-white/10':'border-gray-200'} pt-6">
+                            <div class="flex items-center gap-4 border-t ${isDark?'border-white/10':'border-gray-200'} pt-6">
                                 <div class="w-10 h-10 rounded-full bg-brand/20 flex items-center justify-center text-brand font-bold font-display">${test.name.charAt(0)}</div>
                                 <div>
                                     <h4 class="font-bold ${headClass} text-sm">${test.name}</h4>
@@ -402,7 +603,7 @@
             </section>` : '';
 
             const faqHtml = data.showFAQ ? `
-            <section id="faq" class="py-32 ${sectionBg2} border-y ${t.includes('dark') || t==='midnight' ? 'border-[#222]' : 'border-gray-100'}">
+            <section id="faq" class="py-32 ${sectionBg2} border-y ${isDark ? 'border-[#222]' : 'border-gray-100'}">
                 <div class="max-w-4xl mx-auto px-6">
                     <div class="text-center mb-16 reveal">
                         <div class="text-brand font-bold tracking-widest text-sm uppercase mb-4">FAQ</div>
@@ -433,8 +634,8 @@
                         </div>
                         <div class="grid lg:grid-cols-3 gap-8 items-center max-w-5xl mx-auto">
                             ${copy.pricing.map((p, i) => `
-                            <div class="p-10 ${radiusClass} ${cardClass} flex flex-col relative reveal delay-${i*100} ${i===1 && t!=='brutalism' ? `border-2 border-brand shadow-[0_20px_50px_rgba(79,70,229,0.15)] transform lg:-translate-y-8 bg-white dark:bg-[#111] z-10 py-14` : ''}">
-                                ${i===1 ? `<div class="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-brand to-brand-dark text-white text-xs font-black px-6 py-2 rounded-full uppercase tracking-widest shadow-xl">Most Popular</div>` : ''}
+                            <div class="p-10 ${radiusClass} ${cardClass} flex flex-col relative reveal delay-${i*100} ${i===1 && !isBrutalist ? `border-2 border-brand shadow-[0_20px_50px_rgba(79,70,229,0.15)] transform lg:-translate-y-8 bg-white dark:bg-[#111] z-10 py-14` : ''}">
+                                ${i===1 && !isBrutalist ? `<div class="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-brand to-brand-dark text-white text-xs font-black px-6 py-2 rounded-full uppercase tracking-widest shadow-xl">Most Popular</div>` : ''}
                                 <h4 class="font-display text-3xl font-black mb-3 ${headClass}">${p.name}</h4>
                                 <p class="text-base ${subClass} mb-8 h-12">${p.desc}</p>
                                 <div class="text-5xl font-display font-black mb-10 ${headClass}">${p.price}</div>
@@ -443,7 +644,7 @@
                                     <li class="flex items-center gap-4"><i class="fa-solid fa-circle-check text-brand text-lg"></i> ${p.f2}</li>
                                     <li class="flex items-center gap-4"><i class="fa-solid fa-circle-check text-brand text-lg"></i> ${p.f3}</li>
                                 </ul>
-                                <a href="https://wa.me/91${cleanPhone}?text=Hi, I want to book the ${p.name} plan from your website." target="_blank" class="w-full text-center py-4 ${t==='minimal'||t==='brutalism'||t==='matrix'||t==='neon'?'rounded-none':'rounded-xl'} font-bold text-lg transition-all ${i===1 ? 'bg-brand text-white hover:opacity-90 hover:shadow-lg' : (t.includes('dark')||t==='neon'||t==='matrix'||t==='midnight'?'bg-white/10 text-white hover:bg-white/20':'bg-gray-100 text-gray-900 hover:bg-gray-200')}">Select ${p.name}</a>
+                                <a href="https://wa.me/91${cleanPhone}?text=Hi, I want to book the ${p.name} plan from your website." target="_blank" class="w-full text-center py-4 ${isBrutalist||t==='minimal'?'rounded-none border-2 border-black':'rounded-xl'} font-bold text-lg transition-all ${i===1 ? 'bg-brand text-white hover:opacity-90 hover:shadow-lg' : (isDark?'bg-white/10 text-white hover:bg-white/20':'bg-gray-100 text-gray-900 hover:bg-gray-200')}">Select ${p.name}</a>
                             </div>
                             `).join('')}
                         </div>
@@ -472,9 +673,6 @@
         .glass-nav { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
         .reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
-        .css-graphic { background: linear-gradient(135deg, ${t.includes('dark') || t==='matrix' || t==='neon' || t==='midnight' ? '#111' : '#fff'}, ${t.includes('dark') || t==='matrix' || t==='neon' || t==='midnight' ? '#050505' : '#f0f0f0'}); border: 1px solid ${t.includes('dark') || t==='matrix' || t==='neon' || t==='midnight' ? '#222' : '#e5e5e5'}; position: relative; overflow: hidden; }
-        .css-graphic::after { content: ''; position: absolute; width: 200%; height: 200%; top: -50%; left: -50%; background: conic-gradient(from 0deg at 50% 50%, transparent 0deg, ${mainColor}20 60deg, transparent 120deg); animation: spin 10s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
         .mobile-menu-open { transform: translateX(0%); } .mobile-menu-closed { transform: translateX(100%); }
     </style>
 </head>
@@ -485,59 +683,36 @@
     <nav class="glass-nav fixed w-full top-0 z-50 transition-all duration-300 ${navClass}">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center relative z-50">
             <h1 class="font-display font-black text-2xl tracking-tighter flex items-center gap-2">
-                <span class="w-8 h-8 bg-brand text-white flex justify-center items-center ${t==='minimal'||t==='brutalism'||t==='matrix'||t==='neon'?'rounded-none':'rounded-lg'} text-sm shadow-md"><i class="fa-solid ${icon}"></i></span>
+                <span class="w-8 h-8 bg-brand text-white flex justify-center items-center ${isBrutalist||t==='minimal'?'rounded-none':'rounded-lg'} text-sm shadow-md"><i class="fa-solid ${icon}"></i></span>
                 ${data.name}
             </h1>
-            <div class="hidden md:flex gap-8 items-center font-semibold text-sm opacity-80">
+            <div class="hidden md:flex gap-8 items-center font-semibold text-sm opacity-80 uppercase tracking-widest">
                 ${navLinksHtml}
             </div>
             <div class="hidden md:block">
-                <a href="https://wa.me/91${cleanPhone}" target="_blank" class="bg-brand text-white px-6 py-2.5 ${t==='minimal'||t==='brutalism'||t==='matrix'||t==='neon'?'rounded-none':'rounded-full'} font-bold text-sm shadow-lg hover:opacity-90 transition transform hover:-translate-y-0.5 inline-block">Contact Us</a>
+                <a href="https://wa.me/91${cleanPhone}" target="_blank" class="bg-brand text-white px-6 py-2.5 ${isBrutalist||t==='minimal'?'rounded-none border-2 border-black':'rounded-full'} font-bold text-sm shadow-lg hover:opacity-90 transition transform hover:-translate-y-0.5 inline-block">Contact Us</a>
             </div>
             <button id="mobile-menu-btn" class="md:hidden text-2xl p-2 focus:outline-none"><i class="fa-solid fa-bars"></i></button>
         </div>
 
-        <div id="mobile-menu" class="fixed inset-0 ${t.includes('dark') || t==='neon' || t==='midnight' || t==='matrix' ? 'bg-[#0a0a0a]' : 'bg-white'} z-40 flex flex-col pt-24 px-6 pb-8 transition-transform duration-500 mobile-menu-closed md:hidden">
+        <div id="mobile-menu" class="fixed inset-0 ${isDark ? 'bg-[#0a0a0a]' : 'bg-white'} z-40 flex flex-col pt-24 px-6 pb-8 transition-transform duration-500 mobile-menu-closed md:hidden">
             <div class="flex flex-col gap-6 text-3xl font-display font-black ${headClass}">
                 ${mobileNavLinksHtml}
             </div>
             <div class="mt-auto">
-                <a href="https://wa.me/91${cleanPhone}" target="_blank" class="w-full bg-brand text-white text-center py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 shadow-xl">
+                <a href="https://wa.me/91${cleanPhone}" target="_blank" class="w-full bg-brand text-white text-center py-4 ${radiusClass} font-bold text-lg flex items-center justify-center gap-2 shadow-xl">
                     <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
                 </a>
             </div>
         </div>
     </nav>
 
-    <header class="relative pt-48 pb-24 md:pt-32 md:pb-40 overflow-hidden hero-bg ${sectionBg1} flex flex-col justify-center min-h-[90vh]">
+    <header class="relative pt-24 md:pt-16 overflow-hidden hero-bg ${sectionBg1} flex flex-col justify-center min-h-[90vh]">
         ${heroContentHtml}
     </header>
 
-    <section id="about" class="py-32 ${sectionBg2} border-y ${t.includes('dark') || t==='matrix' || t==='neon' || t==='midnight' ? 'border-[#222]' : 'border-gray-100'}">
-        <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-            <div class="reveal">
-                <div class="text-brand font-bold tracking-widest text-sm uppercase mb-4">About Us</div>
-                <h3 class="font-display text-4xl md:text-5xl font-black mb-8 ${headClass} leading-tight">Why choose ${data.name}?</h3>
-                <p class="text-lg leading-relaxed font-light mb-8 ${subClass}">${copy.about}</p>
-                <div class="grid grid-cols-2 gap-6 mt-10 border-t ${t.includes('dark') ? 'border-gray-800' : 'border-gray-200'} pt-10">
-                    <div>
-                        <h4 class="font-display text-3xl font-black text-brand mb-2">100%</h4>
-                        <p class="text-sm font-medium ${subClass}">Client Satisfaction</p>
-                    </div>
-                    <div>
-                        <h4 class="font-display text-3xl font-black text-brand mb-2">24/7</h4>
-                        <p class="text-sm font-medium ${subClass}">Expert Support</p>
-                    </div>
-                </div>
-            </div>
-            <div class="reveal css-graphic w-full aspect-square ${radiusClass} shadow-2xl flex items-center justify-center border-4 border-white/10">
-                <div class="relative z-10 text-center bg-black/40 backdrop-blur-md p-10 ${radiusClass} border border-white/20 shadow-2xl transform hover:scale-105 transition-transform duration-500">
-                    <i class="fa-solid fa-shield-halved text-6xl text-brand mb-6 drop-shadow-lg"></i>
-                    <h4 class="font-display font-black text-3xl text-white">Premium</h4>
-                    <p class="text-gray-300 mt-2 text-sm font-bold tracking-widest uppercase">Guaranteed</p>
-                </div>
-            </div>
-        </div>
+    <section id="about" class="py-32 ${sectionBg2} border-y ${isDark ? 'border-[#222]' : 'border-gray-100'}">
+        ${aboutHtml}
     </section>
 
     <section id="services" class="py-32 ${sectionBg1}">
@@ -546,19 +721,12 @@
                 <div class="text-brand font-bold tracking-widest text-sm uppercase mb-4">Our Services</div>
                 <h3 class="font-display text-4xl md:text-5xl font-black ${headClass}">Expertise you can trust.</h3>
             </div>
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                ${finalServices.slice(0, 4).map((service, idx) => `
-                <div class="p-8 ${radiusClass} ${cardClass} reveal delay-${idx*100} group">
-                    <div class="w-14 h-14 bg-brand/10 rounded-xl flex items-center justify-center text-2xl mb-8 text-brand group-hover:scale-110 group-hover:bg-brand group-hover:text-white transition-all duration-300 shadow-sm"><i class="fa-solid fa-check"></i></div>
-                    <h4 class="font-display text-2xl font-bold mb-4 ${headClass}">${service}</h4>
-                    <p class="font-light text-base leading-relaxed ${subClass}">Expert implementation tailored to your specific requirements and goals.</p>
-                </div>`).join('')}
-            </div>
+            ${servicesHtml}
         </div>
     </section>
 
-    ${galleryHtml}
-    ${testimonialsHtml}
+    ${galleryContent}
+    ${testimonialsContent}
     ${pricingSectionHtml}
     ${faqHtml}
 
@@ -568,18 +736,18 @@
                 <div class="font-display font-black text-white text-3xl flex items-center justify-center md:justify-start gap-3 mb-6"><span class="w-10 h-10 bg-brand text-white flex justify-center items-center rounded-lg text-lg"><i class="fa-solid ${icon}"></i></span>${data.name}</div>
                 <p class="text-sm text-gray-500 leading-relaxed max-w-xs mx-auto md:mx-0">${copy.about.substring(0, 100)}...</p>
             </div>
-            <div class="flex flex-col space-y-4 font-medium text-sm">
-                <h4 class="text-white font-bold uppercase tracking-widest mb-2">Links</h4>
+            <div class="flex flex-col space-y-4 font-medium text-sm uppercase tracking-widest">
+                <h4 class="text-white font-bold mb-2">Links</h4>
                 ${navLinksHtml}
             </div>
             <div class="flex flex-col md:items-end space-y-4 text-sm text-gray-500">
                 <h4 class="text-white font-bold uppercase tracking-widest mb-2 text-center md:text-right">Contact</h4>
                 <p class="flex items-center justify-center md:justify-end gap-3 text-right"><i class="fa-solid fa-location-dot mt-1 flex-shrink-0"></i> <span>${data.hasAddress === 'yes' && data.address ? data.address : data.city}</span></p>
                 <p class="flex items-center justify-center md:justify-end gap-3"><i class="fa-solid fa-phone"></i> +91 ${data.phone}</p>
-                <a href="https://wa.me/91${cleanPhone}" target="_blank" class="bg-brand text-white px-8 py-3 rounded-xl font-bold mt-4 shadow-lg hover:opacity-90 transition inline-block text-center"><i class="fa-brands fa-whatsapp mr-2"></i> Message Us</a>
+                <a href="https://wa.me/91${cleanPhone}" target="_blank" class="bg-brand text-white px-8 py-3 ${radiusClass} font-bold mt-4 shadow-lg hover:opacity-90 transition inline-block text-center"><i class="fa-brands fa-whatsapp mr-2"></i> Message Us</a>
             </div>
         </div>
-        <div class="max-w-7xl mx-auto px-6 mt-16 pt-8 border-t border-white/10 text-center text-xs text-gray-600">
+        <div class="max-w-7xl mx-auto px-6 mt-16 pt-8 border-t border-white/10 text-center text-xs text-gray-600 tracking-widest uppercase">
             © ${new Date().getFullYear()} ${data.name}. All rights reserved.
         </div>
     </footer>
@@ -628,6 +796,19 @@
             });
         }
 
+        // Handle Image Editing
+        document.addEventListener('click', (e) => {
+            if(isEditMode && e.target.tagName === 'IMG') {
+                e.preventDefault();
+                const newUrl = prompt("Enter new image URL to replace this image:", e.target.src);
+                if(newUrl && newUrl.trim() !== '') {
+                    e.target.src = newUrl;
+                    const cleanDoc = document.documentElement.cloneNode(true);
+                    window.parent.postMessage({ type: 'LIVE_EDIT_UPDATE', html: cleanDoc.outerHTML }, '*');
+                }
+            }
+        });
+
         document.addEventListener('input', (e) => {
             if(e.target.hasAttribute('contenteditable')) {
                 const cleanDoc = document.documentElement.cloneNode(true);
@@ -635,15 +816,22 @@
             }
         });
 
-        document.addEventListener('mouseenter', (e) => {
-            if(isEditMode && e.target.hasAttribute('contenteditable') && document.activeElement !== e.target) {
+        document.addEventListener('mouseover', (e) => {
+            if(!isEditMode) return;
+            if((e.target.hasAttribute('contenteditable') && document.activeElement !== e.target)) {
                 e.target.style.boxShadow = '0 0 0 2px rgba(168, 85, 247, 0.5)';
+            } else if (e.target.tagName === 'IMG') {
+                e.target.style.outline = '4px dashed #a855f7';
+                e.target.style.cursor = 'pointer';
             }
         }, true);
         
-        document.addEventListener('mouseleave', (e) => {
-            if(isEditMode && e.target.hasAttribute('contenteditable') && document.activeElement !== e.target) {
+        document.addEventListener('mouseout', (e) => {
+            if(!isEditMode) return;
+            if((e.target.hasAttribute('contenteditable') && document.activeElement !== e.target)) {
                 e.target.style.boxShadow = 'none';
+            } else if (e.target.tagName === 'IMG') {
+                e.target.style.outline = 'none';
             }
         }, true);
 
@@ -663,6 +851,8 @@
             if (event.data && event.data.type === 'TOGGLE_EDIT_MODE') {
                 isEditMode = event.data.value;
                 applyEditMode();
+                // Clear any lingering outlines
+                document.querySelectorAll('img').forEach(img => img.style.outline = 'none');
             }
         });
 
@@ -891,12 +1081,13 @@
                     `root@dbp-engine:~$ ./build --type="${form.type}" --hero="${form.heroStyle}"`,
                     `[OK] Auth Verified: ${isPro ? 'PRO' : 'FREE'} Tier.`,
                     `> fetching business_data: "${form.name.toUpperCase()}"`,
-                    form.hasPricing === 'yes' ? `> injecting pricing strategy: "${form.pricingDetails}"` : `> bypassing pricing strategy module...`,
+                    form.hasPricing === 'yes' ? `> computing tier structures for base value: "${form.pricingDetails}"` : `> bypassing pricing strategy module...`,
                     form.showTestimonials ? `> compiling dynamic testimonials layout...` : `> bypassing testimonials...`,
                     form.showFAQ ? `> generating smart contextual FAQs...` : `> bypassing FAQs...`,
+                    `> rendering completely unique DOM for architecture: ${form.template}`,
                     `> generating pure CSS architecture for extreme performance...`,
                     isPro && form.seo ? `> [PRO] injecting custom SEO tags...` : `> bypassing custom SEO (Free Tier)...`,
-                    `> rendering DOM elements for [Template: ${form.template}]`,
+                    `> fetching AI-seeded images for visual fidelity...`,
                     isPro ? `> [PRO] bypassing watermark payload...` : `> injecting standard watermark...`,
                     `[OK] Compile complete. Launching viewport.`
                 ];
@@ -941,7 +1132,7 @@
             };
             
             const deleteProject = async (docId) => {
-                if(confirm("Are you sure you want to permanently delete this project?")) {
+                if(window.confirm("Are you sure you want to permanently delete this project?")) {
                     try {
                         await db.collection('sites').doc(docId).delete();
                         showToast("Project deleted.", "info");
@@ -1024,7 +1215,7 @@
             };
             
             const adminDeleteUser = async (phone) => {
-                if(confirm("Are you sure you want to delete this user?")) {
+                if(window.confirm("Are you sure you want to delete this user?")) {
                     try {
                         await db.collection('users').doc(phone).delete();
                         showToast("User deleted.", "info");
@@ -1151,7 +1342,7 @@
                                     <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center pt-10 md:pt-0">
                                         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-500/10 text-brand-400 text-xs font-bold mb-8 border border-brand-500/20 shadow-[0_0_15px_rgba(139,92,246,0.15)]">
                                             <span className="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
-                                            V7 Engine: Pure CSS Generation
+                                            V8 Engine: Advanced CSS Generation
                                         </div>
                                         <h1 className="font-display text-5xl md:text-7xl lg:text-[6.5rem] font-black mb-8 tracking-tighter text-white leading-[1.05] drop-shadow-2xl">
                                             From Vision to Enterprise.<br/>
@@ -1246,7 +1437,7 @@
                                                                     <label className="block text-xs font-bold text-brand-400 mb-2 uppercase tracking-widest">Pricing Info *</label>
                                                                     <div className="input-wrapper">
                                                                         <i className="fa-solid fa-indian-rupee-sign input-icon text-brand-400"></i>
-                                                                        <input type="text" placeholder="e.g. Starts at ₹499" value={form.pricingDetails} onChange={e => setForm({...form, pricingDetails: e.target.value})} className="input-glass border-brand-500/30 focus:border-brand-500"/>
+                                                                        <input type="text" placeholder="e.g. 500, or Starts at ₹499" value={form.pricingDetails} onChange={e => setForm({...form, pricingDetails: e.target.value})} className="input-glass border-brand-500/30 focus:border-brand-500"/>
                                                                     </div>
                                                                 </div>
                                                             )}
@@ -1323,7 +1514,7 @@
                                                                     <div className="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
                                                                         <input type="checkbox" checked={form.showTestimonials} onChange={(e) => setForm({...form, showTestimonials: e.target.checked})} className="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 border-gray-600 appearance-none cursor-pointer transition-all duration-300 z-10"/>
                                                                         <label className="toggle-label block overflow-hidden h-5 rounded-full bg-gray-600 cursor-pointer transition-colors duration-300"></label>
-                                                                    </div>
+                                                                </div>
                                                                 </label>
                                                                 <label className="flex items-center justify-between p-3 rounded-xl border border-white/5 bg-black/30 cursor-pointer hover:bg-black/50 transition">
                                                                     <span className="text-sm font-medium"><i className="fa-solid fa-circle-question text-brand-400 w-6"></i> Smart FAQ</span>
@@ -1418,7 +1609,7 @@
                                                 </div>
                                             </div>
                                             <button onClick={handleGenerate} className="w-full mt-12 text-white font-display font-bold text-xl py-5 rounded-xl btn-shine flex justify-center items-center gap-4 tracking-widest shadow-[0_15px_40px_rgba(168,85,247,0.4)]">
-                                                <i className="fa-solid fa-microchip"></i> START BUILDING
+                                                <i className="fa-solid fa-microchip"></i> INITIALIZE COMPILATION
                                             </button>
                                         </div>
                                     </div>
@@ -1472,7 +1663,12 @@
                                 <div className="preview-outer-wrapper">
                                     {previewMode === 'mobile' && isEditMode && (
                                         <div className="absolute top-6 z-50 bg-brand-600 border border-brand-400 text-white text-xs font-bold tracking-widest px-5 py-2.5 rounded-lg shadow-[0_10px_25px_rgba(139,92,246,0.4)] flex items-center gap-3 animate-bounce pointer-events-none">
-                                            <i className="fa-solid fa-pen-nib"></i> CLICK TEXT TO EDIT
+                                            <i className="fa-solid fa-pen-nib"></i> CLICK ANY TEXT OR IMAGE TO EDIT
+                                        </div>
+                                    )}
+                                    {previewMode === 'desktop' && isEditMode && (
+                                        <div className="absolute top-6 z-50 bg-brand-600 border border-brand-400 text-white text-xs font-bold tracking-widest px-5 py-2.5 rounded-lg shadow-[0_10px_25px_rgba(139,92,246,0.4)] flex items-center gap-3 animate-bounce pointer-events-none">
+                                            <i className="fa-solid fa-pen-nib"></i> CLICK ANY TEXT OR IMAGE TO EDIT
                                         </div>
                                     )}
                                     <div className={`device-morph mode-${previewMode}`}>
@@ -1715,7 +1911,6 @@
                                                                 <li className="flex items-start gap-3 text-xs text-gray-300 leading-snug"><i className="fa-solid fa-check text-yellow-400 mt-0.5"></i> Unlocked Custom Hex/RGB Design Engine</li>
                                                                 <li className="flex items-start gap-3 text-xs text-gray-300 leading-snug"><i className="fa-solid fa-check text-yellow-400 mt-0.5"></i> Advanced SEO Meta Tag Injection</li>
                                                                 <li className="flex items-start gap-3 text-xs text-gray-300 leading-snug"><i className="fa-solid fa-check text-yellow-400 mt-0.5"></i> Granular Smart Section Control</li>
-<li className="flex items-start gap-3 text-xs text-gray-300 leading-snug"><i className="fa-solid fa-check text-yellow-400 mt-0.5"></i>Text Editing Enabled</li>
                                                             </ul>
                                                         </div>
                                                     ) : (
